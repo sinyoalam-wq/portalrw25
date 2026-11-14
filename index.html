@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistem Manajemen & Keuangan RW 025 Taman Cikas (2026–2031)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SheetJS (xlsx) Library untuk membaca & menulis file Excel (.xlsx) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-card, #printable-card * { visibility: visible; }
+      #printable-card {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 380px;
+        box-shadow: none !important;
+      }
+      .tab-content:not(.hidden) * { visibility: visible; }
+      .tab-content:not(.hidden) {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+      }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+  <!-- AUTHENTICATION / LOGIN OVERLAY MODAL -->
+  <div id="modal-login" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl border border-slate-100">
+      <div class="flex justify-between items-center mb-2">
+        <div></div>
+        <button onclick="closeModal('modal-login')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="text-center mb-6">
+        <div class="bg-emerald-600 w-14 h-14 rounded-2xl flex items-center justify-center text-white mx-auto mb-3 shadow-lg shadow-emerald-600/30">
+          <i data-lucide="shield-check" class="w-8 h-8"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-900">RW 025 Taman Cikas</h2>
+        <p class="text-xs text-slate-500 mt-1">Sistem Manajemen Warga, Keuangan & Unit Usaha (2026–2031)</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4 text-sm">
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Pilih Akun / Pengguna</label>
+          <select id="login-user-select" class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Kata Sandi (Password)</label>
+          <input type="password" id="login-password" value="" placeholder="Masukkan kata sandi..." required class="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="pt-2 flex flex-col gap-2">
+          <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition">
+            Masuk ke Sistem
+          </button>
+          <button type="button" onclick="handleGuestLogin()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition text-xs">
+            Masuk sebagai Tamu (Guest View-Only)
+          </button>
+        </div>
+      </form>
+      <div class="mt-6 text-center text-xs text-slate-400">
+        Periode Kepengurusan RW 025 • Bekasi Selatan
+      </div>
+    </div>
+  </div>
+
+  <div id="app-container" class="min-h-screen flex flex-col lg:flex-row">
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-emerald-900 text-white p-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
+      <div class="flex items-center gap-2.5">
+        <div class="bg-emerald-500/20 p-2 rounded-lg border border-emerald-400/30">
+          <i data-lucide="building-2" class="w-5 h-5 text-emerald-300"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-sm leading-tight">RW 025 Taman Cikas</h1>
+          <p id="mobile-role-badge" class="text-[11px] text-emerald-300">Role: Tamu</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <div id="mobile-auth-btn-container"></div>
+        <button onclick="toggleMobileMenu()" class="p-2 rounded-lg hover:bg-emerald-800">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-slate-900 text-slate-300 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-0 transition-transform duration-200 ease-in-out flex flex-col justify-between">
+      <div>
+        <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="bg-emerald-600 p-2.5 rounded-xl text-white shadow-lg shadow-emerald-900/50">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <h1 class="font-bold text-white text-base tracking-tight">RW 025</h1>
+              <p class="text-xs text-slate-400">Taman Cikas</p>
+            </div>
+          </div>
+          <div id="desktop-auth-btn-container"></div>
+        </div>
+
+        <div class="px-4 pt-4">
+          <div class="bg-slate-800/80 border border-slate-700/80 rounded-xl p-3">
+            <p class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-0.5">Pengguna Aktif</p>
+            <p id="sidebar-user-name" class="text-sm font-bold text-white truncate">Tamu Publik</p>
+            <p id="sidebar-user-role" class="text-xs text-emerald-400 font-medium truncate">Akses Terbatas</p>
+          </div>
+        </div>
+
+        <nav class="p-4 space-y-1.5" id="sidebar-nav"></nav>
+      </div>
+
+      <div class="p-4 border-t border-slate-800">
+        <div class="bg-slate-800/60 rounded-xl p-3 text-xs">
+          <p class="text-slate-400 mb-1">Periode 2026–2031</p>
+          <div class="flex items-center justify-between text-emerald-400 font-medium">
+            <span>Sistem Online</span>
+            <span id="sync-status" class="text-emerald-400 animate-pulse">Connected</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+      
+      <!-- TAB 1: DASHBOARD -->
+      <section id="tab-dashboard" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Dashboard Ringkasan RW 025</h2>
+            <p class="text-sm text-slate-500">Monitoring Keuangan RW, Iuran RT 01–09 & Unit Usaha Taman Cikas</p>
+          </div>
+          <div id="dashboard-action-btn" class="flex items-center gap-2">
+            <button onclick="openModal('modal-transaksi')" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Saldo Kas RW</span>
+              <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="landmark" class="w-4 h-4"></i></div>
+            </div>
+            <div id="kpi-saldo" class="text-2xl font-bold text-slate-900">Rp 0</div>
+            <p class="text-xs text-emerald-600 mt-1 flex items-center gap-1"><i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Kas Umum + Unit Usaha</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pemasukan (Nov 2026)</span>
+              <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="arrow-down-left" class="w-4 h-4"></i></div>
+            </div>
+            <div id="kpi-pemasukan" class="text-2xl font-bold text-slate-900">Rp 0</div>
+            <p class="text-xs text-slate-500 mt-1">IPL Warga & Pendapatan Usaha</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Pengeluaran (Nov 2026)</span>
+              <div class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
+            </div>
+            <div id="kpi-pengeluaran" class="text-2xl font-bold text-slate-900">Rp 0</div>
+            <p class="text-xs text-slate-500 mt-1">Operasional RW & Beban Usaha</p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Kepatuhan IPL Nov</span>
+              <div class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i data-lucide="pie-chart" class="w-4 h-4"></i></div>
+            </div>
+            <div id="kpi-kepatuhan" class="text-2xl font-bold text-slate-900">0%</div>
+            <p id="kpi-kepatuhan-detail" class="text-xs text-slate-500 mt-1">0 dari 0 KK Lunas</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <h3 class="font-bold text-slate-900">Arus Kas & Keuangan</h3>
+                  <p class="text-xs text-slate-500">Grafik perbandingan pemasukan vs pengeluaran</p>
+                </div>
+                <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium overflow-x-auto">
+                  <button onclick="setChartPeriod(6)" id="period-btn-6" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition">6 Bln</button>
+                  <button onclick="setChartPeriod(12)" id="period-btn-12" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">1 Thn</button>
+                  <button onclick="setChartPeriod(24)" id="period-btn-24" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">2 Thn</button>
+                  <button onclick="setChartPeriod(60)" id="period-btn-60" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">5 Thn</button>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 text-xs mb-2">
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-emerald-500 inline-block"></span> Pemasukan</span>
+                <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-rose-400 inline-block"></span> Pengeluaran</span>
+              </div>
+            </div>
+            <div id="cashflow-chart" class="h-60 flex items-end justify-between gap-2 pt-4 border-b border-slate-100 overflow-x-auto"></div>
+          </div>
+
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-slate-900 mb-1">Progres Iuran per RT (01–09)</h3>
+            <p class="text-xs text-slate-500 mb-4">Bulan Berjalan (November 2026)</p>
+            <div id="rt-progress-list" class="space-y-3 max-h-64 overflow-y-auto pr-1"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: DATA WARGA -->
+      <section id="tab-warga" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Database Warga Taman Cikas</h2>
+            <p class="text-sm text-slate-500">Manajemen Kepala Keluarga RT 01 – RT 09</p>
+          </div>
+          <div id="warga-action-buttons" class="flex flex-wrap items-center gap-2">
+            <button onclick="exportWargaExcel()" class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Unduh Excel
+            </button>
+            <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="printer" class="w-4 h-4"></i> Cetak PDF
+            </button>
+            <button onclick="openAddWargaModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="user-plus" class="w-4 h-4"></i> Tambah Warga
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 no-print">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="text" id="search-warga" onkeyup="renderWarga()" placeholder="Cari nama kepala keluarga, NIK, atau blok rumah..." class="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <select id="filter-rt" onchange="renderWarga()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="ALL">Semua RT (01 – 09)</option>
+            <option value="RT 01">RT 01</option><option value="RT 02">RT 02</option><option value="RT 03">RT 03</option>
+            <option value="RT 04">RT 04</option><option value="RT 05">RT 05</option><option value="RT 06">RT 06</option>
+            <option value="RT 07">RT 07</option><option value="RT 08">RT 08</option><option value="RT 09">RT 09</option>
+          </select>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <th class="py-3.5 px-4">NIK / ID</th>
+                  <th class="py-3.5 px-4">Nama Kepala Keluarga</th>
+                  <th class="py-3.5 px-4">Blok / Alamat</th>
+                  <th class="py-3.5 px-4">Wilayah</th>
+                  <th class="py-3.5 px-4">Status Hunian</th>
+                  <th class="py-3.5 px-4 text-right no-print">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="table-warga-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: BUKU KAS & UNIT USAHA -->
+      <section id="tab-kas" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Buku Kas Umum & Laporan Unit Usaha</h2>
+            <p class="text-sm text-slate-500">Pelaporan Kas RW, Setoran IPL, serta Pendapatan & Pengeluaran Unit Usaha</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="exportKasExcel()" class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Unduh Excel
+            </button>
+            <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="printer" class="w-4 h-4"></i> Cetak PDF
+            </button>
+            <button onclick="openModal('modal-transaksi')" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition no-print">
+              <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3 no-print">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, pelapor, atau kategori..." class="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+          <select id="filter-akun-kas" onchange="renderKas()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="ALL">Semua Pos / Unit</option>
+            <option value="Kas Umum RW">Kas Umum RW</option>
+            <option value="Unit Usaha">Semua Unit Usaha</option>
+            <option value="Kas Sosial">Kas Sosial</option>
+          </select>
+          <select id="filter-tipe-kas" onchange="renderKas()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="ALL">Semua Tipe</option>
+            <option value="MASUK">Pemasukan (+)</option>
+            <option value="KELUAR">Pengeluaran (-)</option>
+          </select>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <th class="py-3.5 px-4">Tanggal</th>
+                  <th class="py-3.5 px-4">Pos / Unit</th>
+                  <th class="py-3.5 px-4">Kategori & Keterangan</th>
+                  <th class="py-3.5 px-4">Pelapor</th>
+                  <th class="py-3.5 px-4 text-right">Nominal</th>
+                </tr>
+              </thead>
+              <tbody id="table-kas-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: MATRIKS IURAN BULANAN -->
+      <section id="tab-iuran" class="tab-content space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Matriks Iuran IPL Warga</h2>
+            <p class="text-sm text-slate-500">Tarif IPL: <strong>Rp 150.000 / bulan</strong>. Pantau riwayat kepatuhan iuran warga.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 no-print">
+            <button onclick="exportIuranExcel()" class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> Unduh Excel
+            </button>
+            <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="printer" class="w-4 h-4"></i> Cetak PDF
+            </button>
+            <select id="filter-iuran-range" onchange="renderIuran()" class="px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium text-slate-700">
+              <option value="6">Rentang: 6 Bulan Terakhir</option>
+              <option value="12" selected>Rentang: 1 Tahun (12 Bulan)</option>
+              <option value="24">Rentang: 2 Tahun (24 Bulan)</option>
+              <option value="60">Rentang: 5 Tahun (60 Bulan)</option>
+            </select>
+            <select id="filter-rt-iuran" onchange="renderIuran()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="ALL">Semua RT (01–09)</option>
+              <option value="RT 01">RT 01</option><option value="RT 02">RT 02</option><option value="RT 03">RT 03</option>
+              <option value="RT 04">RT 04</option><option value="RT 05">RT 05</option><option value="RT 06">RT 06</option>
+              <option value="RT 07">RT 07</option><option value="RT 08">RT 08</option><option value="RT 09">RT 09</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3 no-print">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="text" id="filter-blok-iuran" onkeyup="renderIuran()" placeholder="Filter berdasarkan Blok dan No. Rumah (misal: A6/1 atau Blok A)..." class="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr id="matrix-thead-row" class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider"></tr>
+              </thead>
+              <tbody id="table-iuran-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: MANAJEMEN USER -->
+      <section id="tab-users" class="tab-content hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-slate-900">Manajemen Akun Pengurus</h2>
+            <p class="text-sm text-slate-500">Kelola akun, edit profil, ubah password, atau hapus user pengurus</p>
+          </div>
+          <button onclick="openAddUserModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            Daftarkan User Baru
+          </button>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  <th class="py-3.5 px-4">Nama Lengkap</th>
+                  <th class="py-3.5 px-4">Username / Email</th>
+                  <th class="py-3.5 px-4">Peran (Role)</th>
+                  <th class="py-3.5 px-4">Lingkup Tugas / Unit</th>
+                  <th class="py-3.5 px-4">Kata Sandi</th>
+                  <th class="py-3.5 px-4 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="table-users-body" class="divide-y divide-slate-100 text-sm"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: KARTU QR -->
+  <div id="modal-qr" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4 no-print"><h3 class="font-bold text-slate-900">Kartu Digital Warga</h3><button onclick="closeModal('modal-qr')"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <div id="printable-card" class="bg-gradient-to-br from-emerald-900 to-teal-900 text-white rounded-2xl p-6 shadow-lg border border-emerald-700">
+        <div class="flex items-center justify-between border-b border-emerald-700/80 pb-3 mb-4">
+          <div><p class="text-[10px] uppercase text-emerald-300 font-semibold">Taman Cikas</p><h4 class="font-bold text-base">KARTU WARGA RW 025</h4></div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div id="qr-svg-container" class="bg-white p-2.5 rounded-xl shrink-0"></div>
+          <div class="space-y-1 text-xs">
+            <p class="text-emerald-300 text-[10px]">Nama Kepala Keluarga</p>
+            <p id="qr-nama" class="font-bold text-sm">-</p>
+            <p class="text-emerald-300 text-[10px]">NIK / ID</p>
+            <p id="qr-nik" class="font-mono">-</p>
+            <p id="qr-blok" class="font-semibold">-</p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 flex justify-end gap-2 no-print">
+        <button onclick="closeModal('modal-qr')" class="px-4 py-2 text-sm text-slate-600">Tutup</button>
+        <button onclick="window.print()" class="px-4 py-2 text-sm bg-emerald-600 text-white rounded-xl">Cetak PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TRANSAKSI -->
+  <div id="modal-transaksi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-900">Catat Transaksi Keuangan</h3><button onclick="closeModal('modal-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+      <form onsubmit="handleAddTransaksi(event)" class="space-y-4 text-sm">
+        <div><label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label><select id="trx-akun" class="w-full px-3.5 py-2 border rounded-xl"><option value="Kas Umum RW">Kas Umum RW</option><option value="Unit Usaha: Warung 007">Unit Usaha: Warung 007</option><option value="Kas Sosial">Kas Sosial</option></select></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Tipe</label><select id="trx-tipe" class="w-full px-3.5 py-2 border rounded-xl"><option value="MASUK">Pemasukan (+)</option><option value="KELUAR">Pengeluaran (-)</option></select></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Tanggal</label><input type="date" id="trx-tanggal" value="2026-11-14" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Kategori</label><input type="text" id="trx-kategori" placeholder="Contoh: IPL / Gaji" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Nominal (Rp)</label><input type="number" id="trx-nominal" min="1000" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Keterangan</label><input type="text" id="trx-keterangan" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div class="pt-2 flex justify-end gap-2"><button type="button" onclick="closeModal('modal-transaksi')" class="px-4 py-2 text-slate-600">Batal</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl">Simpan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: WARGA (TAMBAH / EDIT) -->
+  <div id="modal-warga" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="warga-modal-title" class="font-bold text-slate-900">Tambah Warga</h3>
+        <button onclick="closeModal('modal-warga')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleSaveWarga(event)" class="space-y-4 text-sm">
+        <input type="hidden" id="warga-edit-original-id" value="" />
+        <div><label class="block font-medium text-slate-700 mb-1">Nama Kepala Keluarga</label><input type="text" id="warga-nama" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">NIK / ID</label><input type="text" id="warga-nik" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Blok / Alamat Rumah</label><input type="text" id="warga-blok" placeholder="A6/1" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Wilayah RT</label>
+          <select id="warga-rt" class="w-full px-3.5 py-2 border rounded-xl">
+            <option value="RT 01">RT 01</option><option value="RT 02">RT 02</option><option value="RT 03">RT 03</option>
+            <option value="RT 04">RT 04</option><option value="RT 05">RT 05</option><option value="RT 06">RT 06</option>
+            <option value="RT 07">RT 07</option><option value="RT 08">RT 08</option><option value="RT 09">RT 09</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Status Hunian</label>
+          <select id="warga-status" class="w-full px-3.5 py-2 border rounded-xl">
+            <option value="TETAP">Tetap</option>
+            <option value="KONTRAK">Kontrak</option>
+          </select>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-warga')" class="px-4 py-2 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // --- API GOOGLE SCRIPT CLOUD ENDPOINT ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbyyEBCLehAnHi6HvQdRgl336FkNv_d_FoUslqCY2fpK-7oBMs4aMOE8yu72CCMAyygm/exec";
+
+    const IURAN_TARIF = 150000;
+    const ALL_MONTH_KEYS = [
+      '2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12',
+      '2022-01','2022-02','2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12',
+      '2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12',
+      '2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12',
+      '2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07','2026-08','2026-09','2026-10','2026-11','2026-12'
+    ];
+
+    let wargaList = [];
+    let transaksiList = [];
+
+    let userList = [
+      { id: 'USR-01', nama: 'Super Admin RW', email: 'admin@tamancikas.id', password: 'admin123', role: 'Admin RW', scope: 'Seluruh Wilayah' },
+      { id: 'USR-02', nama: 'Budi Santoso, S.T.', email: 'rt01@tamancikas.id', password: 'rt01pass', role: 'Bendahara RT', scope: 'RT 01' },
+      { id: 'USR-03', nama: 'Siti Aminah', email: 'warung007@tamancikas.id', password: 'warungpass', role: 'Pengelola Unit Usaha', scope: 'Warung 007' }
+    ];
+
+    let currentUser = null;
+    let currentChartMonths = 6;
+
+    // --- FUNGSI SINKRONISASI CLOUD (GOOGLE SHEETS) ---
+    async function loadDataFromCloud() {
+      try {
+        const syncBadge = document.getElementById('sync-status');
+        if(syncBadge) syncBadge.textContent = "Syncing...";
+        
+        let response = await fetch(`${API_URL}?action=getData`);
+        let result = await response.json();
+        
+        if (result.status === "success") {
+          if (result.warga && result.warga.length > 1) {
+            wargaList = result.warga.slice(1).map((row, idx) => {
+              let rawWilayah = String(row[3] || 'RT 01').trim();
+              if (rawWilayah.startsWith('RT') && !rawWilayah.includes(' ')) {
+                rawWilayah = 'RT ' + rawWilayah.replace('RT', '');
+              }
+
+              return {
+                id: row[0] || `NIK-${idx}`,
+                nik: row[0] || '-',
+                nama: row[1] || '',
+                blok: row[2] || 'A1/1',
+                rt: rawWilayah,
+                status: row[4] || 'TETAP',
+                iuran: row[5] ? JSON.parse(row[5]) : {}
+              };
+            }).filter(w => w.nama !== '');
+          }
+
+          if (result.transaksi && result.transaksi.length > 1) {
+            transaksiList = result.transaksi.slice(1).map((row) => ({
+              id: row[0] || `TRX-${Date.now()}`,
+              tanggal: row[1] || '2026-11-14',
+              tipe: row[2] || 'MASUK',
+              akun: row[3] || 'Kas Umum RW',
+              kategori: row[4] || 'Umum',
+              nominal: Number(row[5]) || 0,
+              keterangan: row[6] || '',
+              pelapor: row[7] || 'System'
+            })).filter(t => t.keterangan !== '');
+          }
+
+          if(syncBadge) {
+            syncBadge.textContent = "Connected";
+            syncBadge.className = "text-emerald-400";
+          }
+          refreshAll();
+        }
+      } catch (err) {
+        console.error("Gagal terhubung ke Cloud Google Sheets:", err);
+        const syncBadge = document.getElementById('sync-status');
+        if(syncBadge) {
+          syncBadge.textContent = "Offline Mode";
+          syncBadge.className = "text-rose-400";
+        }
+      }
+    }
+
+    async function saveDataToCloud() {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "saveWarga", wargaList: wargaList })
+        });
+      } catch (err) {
+        console.error("Gagal memperbarui data warga ke cloud:", err);
+      }
+    }
+
+    async function addTransaksiCloud(newTrx) {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "saveTransaksi", transaksi: newTrx })
+        });
+      } catch (err) {
+        console.error("Gagal mencatat transaksi ke cloud:", err);
+      }
+    }
+
+    // --- EXPORT EXCEL ---
+    function exportWargaExcel() {
+      const dataToExport = wargaList.map(w => ({
+        'NIK / ID': w.nik || w.id,
+        'Nama Kepala Keluarga': w.nama,
+        'Blok / Alamat': w.blok,
+        'Wilayah': w.rt,
+        'Status Hunian': w.status
+      }));
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Data Warga");
+      XLSX.writeFile(workbook, "Data_Warga_RW025_TamanCikas.xlsx");
+    }
+
+    function exportKasExcel() {
+      const dataToExport = transaksiList.map(t => ({
+        'Tanggal': t.tanggal,
+        'Pos / Unit': t.akun,
+        'Tipe': t.tipe,
+        'Kategori': t.kategori,
+        'Keterangan': t.keterangan,
+        'Pelapor': t.pelapor,
+        'Nominal (Rp)': t.nominal
+      }));
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Buku Kas & Unit Usaha");
+      XLSX.writeFile(workbook, "Buku_Kas_RW025_TamanCikas.xlsx");
+    }
+
+    function exportIuranExcel() {
+      const rangeCount = parseInt(document.getElementById('filter-iuran-range').value, 10);
+      const visibleMonths = ALL_MONTH_KEYS.slice(-rangeCount);
+
+      const dataToExport = wargaList.map(w => {
+        let row = { 'Nama Warga': w.nama, 'RT': w.rt, 'Blok': w.blok };
+        visibleMonths.forEach(m => {
+          row[m] = (w.iuran && w.iuran[m]) ? 'Lunas' : 'Belum';
+        });
+        return row;
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Matriks Iuran IPL");
+      XLSX.writeFile(workbook, "Matriks_Iuran_IPL_RW025.xlsx");
+    }
+
+    // --- AUTHENTICATION ---
+    function initLoginSelect() {
+      const select = document.getElementById('login-user-select');
+      select.innerHTML = '<option value="" disabled selected>-- Pilih Akun --</option>' + userList.map(u => `
+        <option value="${u.id}">${u.nama} (${u.role} - ${u.scope})</option>
+      `).join('');
+      document.getElementById('login-password').value = '';
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById('login-user-select').value;
+      const pwd = document.getElementById('login-password').value;
+      if (!id) { alert('Silakan pilih akun terlebih dahulu.'); return; }
+
+      const user = userList.find(u => u.id === id);
+      if (user && user.password === pwd) {
+        currentUser = user;
+        closeModal('modal-login');
+        applyRolePermissions();
+        refreshAll();
+        alert(`Berhasil login sebagai ${user.nama}`);
+      } else {
+        alert('Kata sandi salah.');
+      }
+    }
+
+    function handleGuestLogin() {
+      currentUser = null;
+      closeModal('modal-login');
+      applyRolePermissions();
+      refreshAll();
+      switchTab('iuran');
+    }
+
+    function handleLogout() {
+      currentUser = null;
+      applyRolePermissions();
+      refreshAll();
+      initLoginSelect();
+      switchTab('iuran');
+      alert('Anda telah keluar dari sistem.');
+    }
+
+    // --- RBAC & PERMISSIONS ---
+    function applyRolePermissions() {
+      const nav = document.getElementById('sidebar-nav');
+      let navHtml = `
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-emerald-600 text-white shadow-sm transition">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard Ringkasan
+        </button>
+        <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+          <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
+        </button>
+      `;
+
+      let authButtonHtml = '';
+      if (!currentUser) {
+        document.getElementById('sidebar-user-name').textContent = 'Tamu Publik (Guest)';
+        document.getElementById('sidebar-user-role').textContent = 'Akses Terbatas';
+        document.getElementById('mobile-role-badge').textContent = 'Role: Tamu';
+        document.getElementById('dashboard-action-btn').style.display = 'none';
+
+        authButtonHtml = `
+          <button onclick="openModal('modal-login')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+            <i data-lucide="log-in" class="w-3.5 h-3.5"></i> Login
+          </button>
+        `;
+      } else {
+        document.getElementById('sidebar-user-name').textContent = currentUser.nama;
+        document.getElementById('sidebar-user-role').textContent = `${currentUser.role} (${currentUser.scope})`;
+        document.getElementById('mobile-role-badge').textContent = `Role: ${currentUser.role}`;
+        document.getElementById('dashboard-action-btn').style.display = 'flex';
+
+        authButtonHtml = `
+          <button onclick="handleLogout()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i> Logout
+          </button>
+        `;
+
+        if (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT') {
+          navHtml += `
+            <button onclick="switchTab('warga')" id="nav-warga" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="users" class="w-4 h-4"></i> Data Warga
+            </button>
+          `;
+        }
+
+        if (currentUser.role === 'Admin RW' || currentUser.role === 'Pengelola Unit Usaha') {
+          navHtml += `
+            <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
+            </button>
+          `;
+        }
+
+        if (currentUser.role === 'Admin RW') {
+          navHtml += `
+            <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="user-cog" class="w-4 h-4"></i> Manajemen User
+            </button>
+          `;
+        }
+      }
+
+      nav.innerHTML = navHtml;
+      document.getElementById('desktop-auth-btn-container').innerHTML = authButtonHtml;
+      document.getElementById('mobile-auth-btn-container').innerHTML = authButtonHtml;
+      lucide.createIcons();
+    }
+
+    function switchTab(tabName) {
+      if (!currentUser && tabName !== 'dashboard' && tabName !== 'iuran') {
+        alert('Akses Terbatas: Silakan login terlebih dahulu untuk mengakses menu ini.');
+        switchTab('iuran');
+        return;
+      }
+
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-sm');
+        btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+      });
+      const activeBtn = document.getElementById(`nav-${tabName}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+        activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-sm');
+      }
+
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar && !sidebar.classList.contains('-translate-x-full') && window.innerWidth < 1024) {
+        sidebar.classList.add('-translate-x-full');
+      }
+    }
+
+    function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
+    function openModal(id) { 
+      if(id === 'modal-login') initLoginSelect();
+      document.getElementById(id).classList.remove('hidden'); 
+    }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    // --- DASHBOARD & CHART ---
+    function setChartPeriod(months) {
+      currentChartMonths = months;
+      [6, 12, 24, 60].forEach(m => {
+        const btn = document.getElementById(`period-btn-${m}`);
+        if (btn) btn.className = m === months ? 'px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition' : 'px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
+      });
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      let totalMasuk = 0, totalKeluar = 0, novMasuk = 0, novKeluar = 0;
+      transaksiList.forEach(t => {
+        if (t.tipe === 'MASUK') {
+          totalMasuk += t.nominal;
+          if (t.tanggal.startsWith('2026-11') && t.kategori !== 'Saldo Awal') novMasuk += t.nominal;
+        } else {
+          totalKeluar += t.nominal;
+          if (t.tanggal.startsWith('2026-11')) novKeluar += t.nominal;
+        }
+      });
+
+      document.getElementById('kpi-saldo').textContent = new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR', minimumFractionDigits: 0}).format(totalMasuk - totalKeluar);
+      document.getElementById('kpi-pemasukan').textContent = new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR', minimumFractionDigits: 0}).format(novMasuk);
+      document.getElementById('kpi-pengeluaran').textContent = new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR', minimumFractionDigits: 0}).format(novKeluar);
+
+      const totalWarga = wargaList.length;
+      const lunasNov = wargaList.filter(w => w.iuran && w.iuran['2026-11']).length;
+      const pctNov = totalWarga > 0 ? Math.round((lunasNov / totalWarga) * 100) : 0;
+      document.getElementById('kpi-kepatuhan').textContent = `${pctNov}%`;
+      document.getElementById('kpi-kepatuhan-detail').textContent = `${lunasNov} dari ${totalWarga} KK Lunas`;
+
+      const chartContainer = document.getElementById('cashflow-chart');
+      let chartData = [];
+      const baseMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      
+      for (let i = currentChartMonths - 1; i >= 0; i--) {
+        const mIdx = (10 - i + 120) % 12;
+        const label = `${baseMonths[mIdx]} '${String(26 - Math.floor((i)/12)).slice(-2)}`;
+        const factor = 1 + (Math.sin(i) * 0.2);
+        chartData.push({
+          label,
+          masuk: i === 0 ? novMasuk : Math.round(8500000 * factor),
+          keluar: i === 0 ? novKeluar : Math.round(6200000 * factor)
+        });
+      }
+
+      const maxVal = Math.max(...chartData.map(d => Math.max(d.masuk, d.keluar)), 10000000);
+      chartContainer.innerHTML = chartData.map(item => {
+        const hMasuk = Math.max(Math.round((item.masuk / maxVal) * 150), 4);
+        const hKeluar = Math.max(Math.round((item.keluar / maxVal) * 150), 4);
+        return `
+          <div class="flex-1 flex flex-col items-center gap-1.5 group min-w-[28px]">
+            <div class="w-full flex items-end justify-center gap-1 h-40">
+              <div style="height: ${hMasuk}px" title="Masuk: ${item.masuk}" class="w-2.5 sm:w-4 bg-emerald-500 rounded-t"></div>
+              <div style="height: ${hKeluar}px" title="Keluar: ${item.keluar}" class="w-2.5 sm:w-4 bg-rose-400 rounded-t"></div>
+            </div>
+            <span class="text-[9px] text-slate-500 truncate w-full text-center">${item.label}</span>
+          </div>
+        `;
+      }).join('');
+
+      const rts = Array.from({length: 9}, (_, i) => `RT 0${i+1}`);
+      document.getElementById('rt-progress-list').innerHTML = rts.map(rt => {
+        const rtw = wargaList.filter(w => w.rt === rt);
+        const lunas = rtw.filter(w => w.iuran && w.iuran['2026-11']).length;
+        const pct = rtw.length > 0 ? Math.round((lunas / rtw.length) * 100) : 0;
+        return `
+          <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+              <span>${rt} (${lunas}/${rtw.length})</span>
+              <span class="text-emerald-600 font-semibold">${pct}%</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-2"><div class="bg-emerald-500 h-2 rounded-full" style="width: ${pct}%"></div></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- RENDER & MANAJEMEN WARGA ---
+    function renderWarga() {
+      const keyword = document.getElementById('search-warga').value.toLowerCase();
+      const rtFilter = document.getElementById('filter-rt').value;
+      const filtered = wargaList.filter(w => {
+        const match = w.nama.toLowerCase().includes(keyword) || (w.nik && w.nik.toLowerCase().includes(keyword)) || (w.blok && w.blok.toLowerCase().includes(keyword));
+        const matchRt = rtFilter === 'ALL' || w.rt === rtFilter;
+        return match && matchRt;
+      });
+
+      const canManage = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT');
+
+      document.getElementById('table-warga-body').innerHTML = filtered.map(w => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4"><div class="font-semibold">${w.id}</div><div class="text-xs text-slate-400 font-mono">${w.nik}</div></td>
+          <td class="py-3 px-4 font-medium">${w.nama}</td>
+          <td class="py-3 px-4 text-slate-600">${w.blok}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs bg-slate-100 rounded">${w.rt}</span></td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded-full ${w.status==='TETAP'||w.status==='Tetap'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}">${w.status}</span></td>
+          <td class="py-3 px-4 text-right no-print space-x-1">
+            <button onclick="showQrCard('${w.id}')" class="px-2.5 py-1 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg font-medium">QR</button>
+            ${canManage ? `
+              <button onclick="openEditWargaModal('${w.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>
+              <button onclick="deleteWarga('${w.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function openAddWargaModal() {
+      document.getElementById('warga-modal-title').textContent = 'Tambah Warga Baru';
+      document.getElementById('warga-edit-original-id').value = '';
+      document.getElementById('warga-nama').value = '';
+      document.getElementById('warga-nik').value = '';
+      document.getElementById('warga-blok').value = '';
+      document.getElementById('warga-rt').value = 'RT 01';
+      document.getElementById('warga-status').value = 'TETAP';
+      openModal('modal-warga');
+    }
+
+    function openEditWargaModal(id) {
+      const w = wargaList.find(x => x.id === id);
+      if (!w) return;
+      document.getElementById('warga-modal-title').textContent = 'Edit Data Warga';
+      document.getElementById('warga-edit-original-id').value = w.id;
+      document.getElementById('warga-nama').value = w.nama;
+      document.getElementById('warga-nik').value = w.nik;
+      document.getElementById('warga-blok').value = w.blok;
+      document.getElementById('warga-rt').value = w.rt;
+      document.getElementById('warga-status').value = w.status;
+      openModal('modal-warga');
+    }
+
+    function handleSaveWarga(e) {
+      e.preventDefault();
+      const originalId = document.getElementById('warga-edit-original-id').value;
+      const newNama = document.getElementById('warga-nama').value;
+      const newNik = document.getElementById('warga-nik').value;
+      const newBlok = document.getElementById('warga-blok').value;
+      const newRt = document.getElementById('warga-rt').value;
+      const newStatus = document.getElementById('warga-status').value;
+
+      if (originalId) {
+        // Mode Edit
+        const w = wargaList.find(x => x.id === originalId);
+        if (w) {
+          w.id = newNik;
+          w.nik = newNik;
+          w.nama = newNama;
+          w.blok = newBlok;
+          w.rt = newRt;
+          w.status = newStatus;
+        }
+        alert('Data warga berhasil diperbarui!');
+      } else {
+        // Mode Tambah Baru
+        wargaList.push({
+          id: newNik,
+          nik: newNik,
+          nama: newNama,
+          blok: newBlok,
+          rt: newRt,
+          status: newStatus,
+          iuran: {}
+        });
+        alert('Warga baru berhasil ditambahkan!');
+      }
+
+      saveDataToCloud();
+      closeModal('modal-warga');
+      refreshAll();
+    }
+
+    function deleteWarga(id) {
+      const idx = wargaList.findIndex(w => w.id === id);
+      if (idx !== -1) {
+        if (confirm(`Apakah Anda yakin ingin menghapus data warga ${wargaList[idx].nama}?`)) {
+          wargaList.splice(idx, 1);
+          saveDataToCloud();
+          refreshAll();
+          alert('Data warga berhasil dihapus.');
+        }
+      }
+    }
+
+    function showQrCard(id) {
+      const w = wargaList.find(x => x.id === id);
+      if (!w) return;
+      document.getElementById('qr-nama').textContent = w.nama;
+      document.getElementById('qr-nik').textContent = `${w.id} • NIK`;
+      document.getElementById('qr-blok').textContent = `${w.rt} • ${w.blok}`;
+      
+      let rects = '';
+      for (let r=0; r<7; r++) {
+        for (let c=0; c<7; c++) {
+          if ((r<2&&c<2)||(r<2&&c>4)||(r>4&&c<2) || (r+c)%2===0) {
+            rects += `<rect x="${c*10+5}" y="${r*10+5}" width="8" height="8" fill="#064e3b" rx="1"/>`;
+          }
+        }
+      }
+      document.getElementById('qr-svg-container').innerHTML = `<svg width="70" height="70" viewBox="0 0 80 80">${rects}</svg>`;
+      openModal('modal-qr');
+    }
+
+    // --- RENDER KAS ---
+    function renderKas() {
+      const keyword = document.getElementById('search-kas').value.toLowerCase();
+      const akunFilter = document.getElementById('filter-akun-kas').value;
+      const tipeFilter = document.getElementById('filter-tipe-kas').value;
+
+      const filtered = transaksiList.filter(t => {
+        const match = t.keterangan.toLowerCase().includes(keyword) || t.pelapor.toLowerCase().includes(keyword);
+        const matchAkun = akunFilter === 'ALL' || (akunFilter === 'Unit Usaha' ? t.akun.includes('Unit Usaha') : t.akun === akunFilter);
+        const matchTipe = tipeFilter === 'ALL' || t.tipe === tipeFilter;
+        return match && matchAkun && matchTipe;
+      });
+
+      document.getElementById('table-kas-body').innerHTML = filtered.slice().reverse().map(t => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 text-xs font-mono text-slate-500">${t.tanggal}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100">${t.akun}</span></td>
+          <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
+          <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
+          <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+            ${t.tipe==='MASUK'?'+':'-'} ${new Intl.NumberFormat('id-ID', {style:'currency', currency:'IDR', minimumFractionDigits:0}).format(t.nominal)}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // --- RENDER MATRIKS IURAN ---
+    function renderIuran() {
+      const rangeCount = parseInt(document.getElementById('filter-iuran-range').value, 10);
+      const rtFilter = document.getElementById('filter-rt-iuran').value;
+      const blokKeyword = document.getElementById('filter-blok-iuran').value.toLowerCase();
+
+      const visibleMonths = ALL_MONTH_KEYS.slice(-rangeCount);
+
+      let theadHtml = `<th class="py-3.5 px-4 sticky left-0 bg-slate-50 z-10">Warga / Blok</th>`;
+      visibleMonths.forEach(m => {
+        const [yr, mn] = m.split('-');
+        const monthNames = {'01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'Mei','06':'Jun','07':'Jul','08':'Agu','09':'Sep','10':'Okt','11':'Nov','12':'Des'};
+        theadHtml += `<th class="py-3.5 px-2 text-center text-[11px]">${monthNames[mn]} '${yr.slice(-2)}</th>`;
+      });
+      document.getElementById('matrix-thead-row').innerHTML = theadHtml;
+
+      const filtered = wargaList.filter(w => {
+        const matchRt = rtFilter === 'ALL' || w.rt === rtFilter;
+        const matchBlok = (w.blok && w.blok.toLowerCase().includes(blokKeyword)) || (w.nama && w.nama.toLowerCase().includes(blokKeyword));
+        return matchRt && matchBlok;
+      });
+
+      const canToggle = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT');
+
+      document.getElementById('table-iuran-body').innerHTML = filtered.map(w => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 sticky left-0 bg-white font-semibold border-r text-xs">
+            <div>${w.nama}</div>
+            <div class="text-[11px] text-slate-400 font-normal">${w.rt} • ${w.blok}</div>
+          </td>
+          ${visibleMonths.map(m => {
+            const isLunas = w.iuran && w.iuran[m] || false;
+            if (canToggle) {
+              return `
+                <td class="py-3 px-1.5 text-center">
+                  <button onclick="toggleIuran('${w.id}', '${m}')" class="px-2 py-0.5 rounded-full text-[11px] font-semibold transition ${
+                    isLunas ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-rose-100 text-rose-700 hover:bg-rose-200'
+                  }">
+                    ${isLunas ? 'Lunas' : 'Belum'}
+                  </button>
+                </td>
+              `;
+            } else {
+              return `
+                <td class="py-3 px-1.5 text-center">
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                    isLunas ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+                  }">
+                    ${isLunas ? 'Lunas' : 'Belum'}
+                  </span>
+                </td>
+              `;
+            }
+          }).join('')}
+        </tr>
+      `).join('');
+    }
+
+    function toggleIuran(wargaId, bulanKey) {
+      if (!currentUser || (currentUser.role !== 'Admin RW' && currentUser.role !== 'Bendahara RT')) {
+        alert('Anda tidak memiliki hak akses untuk mengubah status pembayaran.');
+        return;
+      }
+
+      const warga = wargaList.find(w => w.id === wargaId);
+      if (!warga) return;
+
+      if (!warga.iuran) warga.iuran = {};
+      const currentState = warga.iuran[bulanKey] || false;
+      warga.iuran[bulanKey] = !currentState;
+
+      let newTrx = null;
+      if (!currentState) {
+        newTrx = {
+          id: `TRX-${Date.now().toString().slice(-4)}`,
+          tanggal: '2026-11-14',
+          tipe: 'MASUK',
+          akun: 'Kas Umum RW',
+          kategori: 'Iuran IPL Warga',
+          nominal: IURAN_TARIF,
+          keterangan: `Iuran IPL ${bulanKey} - ${warga.nama} (${warga.blok})`,
+          pelapor: `${currentUser.nama} (${currentUser.role})`
+        };
+        transaksiList.push(newTrx);
+      } else {
+        const idx = transaksiList.findIndex(t => t.keterangan.includes(bulanKey) && t.keterangan.includes(warga.nama));
+        if (idx !== -1) transaksiList.splice(idx, 1);
+      }
+
+      saveDataToCloud();
+      if(newTrx) addTransaksiCloud(newTrx);
+      refreshAll();
+    }
+
+    // --- USERS MANAGEMENT ---
+    function renderUsers() {
+      document.getElementById('table-users-body').innerHTML = userList.map(u => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="py-3 px-4 font-medium">${u.nama}</td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-600">${u.email}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 rounded">${u.role}</span></td>
+          <td class="py-3 px-4 text-xs text-slate-600">${u.scope}</td>
+          <td class="py-3 px-4 font-mono text-xs text-slate-500">${u.password}</td>
+          <td class="py-3 px-4 text-right space-x-1">
+            <button onclick="openEditUserModal('${u.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>
+            <button onclick="deleteUser('${u.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function openAddUserModal() {
+      document.getElementById('user-modal-title').textContent = 'Daftarkan Akun Pengurus Baru';
+      document.getElementById('usr-edit-id').value = '';
+      document.getElementById('usr-nama').value = '';
+      document.getElementById('usr-email').value = '';
+      document.getElementById('usr-pwd').value = '';
+      document.getElementById('usr-role').value = 'Bendahara RT';
+      document.getElementById('usr-scope-value').value = '';
+      openModal('modal-user-form');
+    }
+
+    function openEditUserModal(id) {
+      const user = userList.find(u => u.id === id);
+      if (!user) return;
+      document.getElementById('user-modal-title').textContent = 'Edit Akun Pengurus';
+      document.getElementById('usr-edit-id').value = user.id;
+      document.getElementById('usr-nama').value = user.nama;
+      document.getElementById('usr-email').value = user.email;
+      document.getElementById('usr-pwd').value = user.password;
+      document.getElementById('usr-role').value = user.role;
+      document.getElementById('usr-scope-value').value = user.scope;
+      openModal('modal-user-form');
+    }
+
+    function handleSaveUser(e) {
+      e.preventDefault();
+      const editId = document.getElementById('usr-edit-id').value;
+      const nama = document.getElementById('usr-nama').value;
+      const email = document.getElementById('usr-email').value;
+      const password = document.getElementById('usr-pwd').value;
+      const role = document.getElementById('usr-role').value;
+      const scope = document.getElementById('usr-scope-value').value;
+
+      if (editId) {
+        const user = userList.find(u => u.id === editId);
+        if (user) {
+          user.nama = nama; user.email = email; user.password = password; user.role = role; user.scope = scope;
+        }
+        alert(`Akun ${nama} berhasil diperbarui!`);
+      } else {
+        userList.push({ id: `USR-0${userList.length + 1}`, nama, email, password, role, scope });
+        alert(`Akun ${nama} berhasil ditambahkan!`);
+      }
+
+      closeModal('modal-user-form');
+      initLoginSelect();
+      renderUsers();
+      if (currentUser && currentUser.id === editId) applyRolePermissions();
+    }
+
+    function deleteUser(id) {
+      const idx = userList.findIndex(u => u.id === id);
+      if (idx !== -1) {
+        if (userList[idx].role === 'Admin RW' && userList.filter(u => u.role === 'Admin RW').length <= 1) {
+          alert('Tidak dapat menghapus Admin RW terakhir!');
+          return;
+        }
+        if (confirm(`Apakah Anda yakin ingin menghapus akun ${userList[idx].nama}?`)) {
+          userList.splice(idx, 1);
+          initLoginSelect();
+          renderUsers();
+          alert('Akun berhasil dihapus.');
+        }
+      }
+    }
+
+    // --- FORM HANDLERS ---
+    function handleAddTransaksi(e) {
+      e.preventDefault();
+      const newTrx = {
+        id: `TRX-${Date.now().toString().slice(-4)}`,
+        tanggal: document.getElementById('trx-tanggal').value,
+        tipe: document.getElementById('trx-tipe').value,
+        akun: document.getElementById('trx-akun').value,
+        kategori: document.getElementById('trx-kategori').value,
+        nominal: parseInt(document.getElementById('trx-nominal').value, 10),
+        keterangan: document.getElementById('trx-keterangan').value,
+        pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
+      };
+
+      transaksiList.push(newTrx);
+      addTransaksiCloud(newTrx);
+      e.target.reset();
+      closeModal('modal-transaksi');
+      refreshAll();
+    }
+
+    function refreshAll() {
+      renderDashboard();
+      renderWarga();
+      renderKas();
+      renderIuran();
+      renderUsers();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyRolePermissions();
+      loadDataFromCloud();
+      switchTab('iuran');
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
