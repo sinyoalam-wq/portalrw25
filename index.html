@@ -152,9 +152,7 @@
             <p class="text-sm text-slate-500">Monitoring Keuangan RW, Iuran RT 01–09 & Unit Usaha Taman Cikas</p>
           </div>
           <div id="dashboard-action-btn" class="flex items-center gap-2">
-            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
-              <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
-            </button>
+            <!-- Tombol catat transaksi sesuai hak akses -->
           </div>
         </div>
 
@@ -227,7 +225,7 @@
         </div>
       </section>
 
-      <!-- TAB 2: DATA WARGA -->
+      <!-- TAB 2: DATA WARGA (Hanya Admin) -->
       <section id="tab-warga" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -279,7 +277,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: BUKU KAS & UNIT USAHA -->
+      <!-- TAB 3: BUKU KAS & UNIT USAHA (Admin, Pengelola Usaha, & Bendahara RT) -->
       <section id="tab-kas" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -293,9 +291,9 @@
             <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
               <i data-lucide="printer" class="w-4 h-4"></i> Cetak PDF
             </button>
-            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition no-print">
-              <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
-            </button>
+            <div id="kas-action-btn-container">
+              <!-- Tombol catat laporan muncul untuk Admin, Pengelola Usaha, dan Bendahara RT -->
+            </div>
           </div>
         </div>
 
@@ -330,7 +328,7 @@
                   <th class="py-3.5 px-4">Kategori & Keterangan</th>
                   <th class="py-3.5 px-4">Pelapor</th>
                   <th class="py-3.5 px-4 text-right">Nominal</th>
-                  <th class="py-3.5 px-4 text-right no-print">Aksi</th>
+                  <th class="py-3.5 px-4 text-right no-print" id="th-aksi-kas">Aksi</th>
                 </tr>
               </thead>
               <tbody id="table-kas-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -339,8 +337,8 @@
         </div>
       </section>
 
-      <!-- TAB 4: MATRIKS IURAN BULANAN -->
-      <section id="tab-iuran" class="tab-content space-y-6">
+      <!-- TAB 4: MATRIKS IURAN BULANAN (Admin & Bendahara RT) -->
+      <section id="tab-iuran" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 class="text-2xl font-bold text-slate-900">Matriks Iuran IPL Warga</h2>
@@ -387,7 +385,7 @@
         </div>
       </section>
 
-      <!-- TAB 5: MANAJEMEN USER -->
+      <!-- TAB 5: MANAJEMEN USER (Hanya Admin) -->
       <section id="tab-users" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -818,7 +816,7 @@
       closeModal('modal-login');
       applyRolePermissions();
       refreshAll();
-      switchTab('iuran');
+      switchTab('dashboard');
     }
 
     function handleLogout() {
@@ -826,7 +824,7 @@
       applyRolePermissions();
       refreshAll();
       initLoginSelect();
-      switchTab('iuran');
+      switchTab('dashboard');
       alert('Anda telah keluar dari sistem.');
     }
 
@@ -837,17 +835,17 @@
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium bg-emerald-600 text-white shadow-sm transition">
           <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard Ringkasan
         </button>
-        <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
-          <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
-        </button>
       `;
 
       let authButtonHtml = '';
+      let dashboardBtnHtml = '';
+      let kasBtnHtml = '';
+
       if (!currentUser) {
+        // Tamu Publik: Hanya Dashboard
         document.getElementById('sidebar-user-name').textContent = 'Tamu Publik (Guest)';
         document.getElementById('sidebar-user-role').textContent = 'Akses Terbatas';
         document.getElementById('mobile-role-badge').textContent = 'Role: Tamu';
-        document.getElementById('dashboard-action-btn').style.display = 'none';
 
         authButtonHtml = `
           <button onclick="openModal('modal-login')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
@@ -858,7 +856,6 @@
         document.getElementById('sidebar-user-name').textContent = currentUser.nama;
         document.getElementById('sidebar-user-role').textContent = `${currentUser.role} (${currentUser.scope})`;
         document.getElementById('mobile-role-badge').textContent = `Role: ${currentUser.role}`;
-        document.getElementById('dashboard-action-btn').style.display = 'flex';
 
         authButtonHtml = `
           <button onclick="handleLogout()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
@@ -866,26 +863,69 @@
           </button>
         `;
 
-        if (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT') {
+        if (currentUser.role === 'Admin RW') {
+          // Admin RW: Akses Semua Menu & Tombol Aksi Penuh
           navHtml += `
+            <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
+            </button>
             <button onclick="switchTab('warga')" id="nav-warga" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
               <i data-lucide="users" class="w-4 h-4"></i> Data Warga
             </button>
+            <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
+            </button>
+            <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="user-cog" class="w-4 h-4"></i> Manajemen User
+            </button>
           `;
-        }
-
-        if (currentUser.role === 'Admin RW' || currentUser.role === 'Pengelola Unit Usaha') {
+          dashboardBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
+            </button>
+          `;
+          kasBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
+            </button>
+          `;
+        } 
+        else if (currentUser.role === 'Bendahara RT') {
+          // Bendahara RT: Dashboard, Matriks Iuran IPL, dan Buku Kas & Unit Usaha (Dapat mencatat laporan, fitur aksi edit/hapus baris disembunyikan)
+          navHtml += `
+            <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
+            </button>
+            <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+              <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
+            </button>
+          `;
+          dashboardBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
+            </button>
+          `;
+          kasBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
+            </button>
+          `;
+        } 
+        else if (currentUser.role === 'Pengelola Unit Usaha') {
+          // Pengelola Unit Usaha: Hanya Dashboard & Buku Kas & Unit Usaha (Dapat mencatat laporan, fitur aksi edit/hapus baris disembunyikan)
           navHtml += `
             <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
               <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
             </button>
           `;
-        }
-
-        if (currentUser.role === 'Admin RW') {
-          navHtml += `
-            <button onclick="switchTab('users')" id="nav-users" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
-              <i data-lucide="user-cog" class="w-4 h-4"></i> Manajemen User
+          dashboardBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
+            </button>
+          `;
+          kasBtnHtml = `
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
             </button>
           `;
         }
@@ -894,14 +934,29 @@
       nav.innerHTML = navHtml;
       document.getElementById('desktop-auth-btn-container').innerHTML = authButtonHtml;
       document.getElementById('mobile-auth-btn-container').innerHTML = authButtonHtml;
+      document.getElementById('dashboard-action-btn').innerHTML = dashboardBtnHtml;
+      document.getElementById('kas-action-btn-container').innerHTML = kasBtnHtml;
+
       lucide.createIcons();
     }
 
     function switchTab(tabName) {
-      if (!currentUser && tabName !== 'dashboard' && tabName !== 'iuran') {
+      if (!currentUser && tabName !== 'dashboard') {
         alert('Akses Terbatas: Silakan login terlebih dahulu untuk mengakses menu ini.');
-        switchTab('iuran');
+        switchTab('dashboard');
         return;
+      }
+
+      // Validasi pembatasan menu sesuai role
+      if (currentUser) {
+        if (currentUser.role === 'Bendahara RT' && (tabName === 'warga' || tabName === 'users')) {
+          alert('Akses ditolak: Bendahara RT tidak dapat mengakses menu Data Warga atau Manajemen User.');
+          return;
+        }
+        if (currentUser.role === 'Pengelola Unit Usaha' && (tabName === 'iuran' || tabName === 'warga' || tabName === 'users')) {
+          alert('Akses ditolak: Pengelola Unit Usaha hanya dapat mengakses Dashboard dan Buku Kas & Unit Usaha.');
+          return;
+        }
       }
 
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -1037,7 +1092,7 @@
         return match && matchRt;
       });
 
-      const canManage = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT');
+      const canManage = currentUser && currentUser.role === 'Admin RW';
 
       document.getElementById('table-warga-body').innerHTML = filtered.map(w => `
         <tr class="hover:bg-slate-50 transition">
@@ -1166,7 +1221,10 @@
         return match && matchAkun && matchTipe;
       });
 
-      const canManageKas = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Pengelola Unit Usaha');
+      // Fitur aksi baris (Edit & Hapus) HANYA untuk Admin RW. Sembunyikan untuk Bendahara RT & Pengelola Usaha.
+      const canManageKas = currentUser && currentUser.role === 'Admin RW';
+      const thAksi = document.getElementById('th-aksi-kas');
+      if (thAksi) thAksi.style.display = canManageKas ? '' : 'none';
 
       document.getElementById('table-kas-body').innerHTML = filtered.slice().reverse().map(t => `
         <tr class="hover:bg-slate-50 transition">
@@ -1177,12 +1235,12 @@
           <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
             ${t.tipe==='MASUK'?'+':'-'} ${new Intl.NumberFormat('id-ID', {style:'currency', currency:'IDR', minimumFractionDigits:0}).format(t.nominal)}
           </td>
-          <td class="py-3 px-4 text-right no-print space-x-1">
-            ${canManageKas ? `
+          ${canManageKas ? `
+            <td class="py-3 px-4 text-right no-print space-x-1">
               <button onclick="openEditTransaksiModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>
               <button onclick="deleteTransaksi('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>
-            ` : '<span class="text-xs text-slate-300">-</span>'}
-          </td>
+            </td>
+          ` : ''}
         </tr>
       `).join('');
     }
@@ -1200,6 +1258,10 @@
     }
 
     function openEditTransaksiModal(id) {
+      if (!currentUser || currentUser.role !== 'Admin RW') {
+        alert('Akses ditolak: Hanya Admin RW yang dapat mengedit data transaksi.');
+        return;
+      }
       const trx = transaksiList.find(t => t.id === id);
       if (!trx) return;
       document.getElementById('trx-modal-title').textContent = 'Edit Transaksi Keuangan';
@@ -1231,6 +1293,10 @@
       const keterangan = document.getElementById('trx-keterangan').value;
 
       if (editId) {
+        if (!currentUser || currentUser.role !== 'Admin RW') {
+          alert('Akses ditolak.');
+          return;
+        }
         const trx = transaksiList.find(t => t.id === editId);
         if (trx) {
           trx.akun = akun;
@@ -1264,6 +1330,10 @@
     }
 
     function deleteTransaksi(id) {
+      if (!currentUser || currentUser.role !== 'Admin RW') {
+        alert('Akses ditolak: Hanya Admin RW yang dapat menghapus data transaksi.');
+        return;
+      }
       const idx = transaksiList.findIndex(t => t.id === id);
       if (idx !== -1) {
         if (confirm(`Apakah Anda yakin ingin menghapus transaksi "${transaksiList[idx].keterangan}"?`)) {
@@ -1297,6 +1367,7 @@
         return matchRt && matchBlok;
       });
 
+      // Role Admin RW & Bendahara RT dapat merubah status IPL (Sudah/Belum bayar)
       const canToggle = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT');
 
       document.getElementById('table-iuran-body').innerHTML = filtered.map(w => `
@@ -1469,7 +1540,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       applyRolePermissions();
       loadDataFromCloud();
-      switchTab('iuran');
+      switchTab('dashboard');
       lucide.createIcons();
     });
   </script>
