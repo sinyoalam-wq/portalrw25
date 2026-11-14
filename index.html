@@ -277,7 +277,7 @@
         </div>
       </section>
 
-      <!-- TAB 3: BUKU KAS & UNIT USAHA (Admin, Pengelola Usaha, & Bendahara RT) -->
+      <!-- TAB 3: BUKU KAS & UNIT USAHA (Admin, Pengelola Usaha, Bendahara RT, & Tamu) -->
       <section id="tab-kas" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -337,7 +337,7 @@
         </div>
       </section>
 
-      <!-- TAB 4: MATRIKS IURAN BULANAN (Admin & Bendahara RT) -->
+      <!-- TAB 4: MATRIKS IURAN BULANAN (Semua User termasuk Tamu) -->
       <section id="tab-iuran" class="tab-content hidden space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -842,10 +842,19 @@
       let kasBtnHtml = '';
 
       if (!currentUser) {
-        // Tamu Publik: Hanya Dashboard
+        // Tamu Publik / Guest: Dashboard, Matriks Iuran IPL (View-Only), dan Buku Kas (View-Only)
         document.getElementById('sidebar-user-name').textContent = 'Tamu Publik (Guest)';
         document.getElementById('sidebar-user-role').textContent = 'Akses Terbatas';
         document.getElementById('mobile-role-badge').textContent = 'Role: Tamu';
+
+        navHtml += `
+          <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
+          </button>
+          <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
+            <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
+          </button>
+        `;
 
         authButtonHtml = `
           <button onclick="openModal('modal-login')" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg shadow-sm transition">
@@ -891,7 +900,7 @@
           `;
         } 
         else if (currentUser.role === 'Bendahara RT') {
-          // Bendahara RT: Dashboard, Matriks Iuran IPL, dan Buku Kas & Unit Usaha (Dapat mencatat laporan, fitur aksi edit/hapus baris disembunyikan)
+          // Bendahara RT: Dashboard, Matriks Iuran IPL, dan Buku Kas & Unit Usaha
           navHtml += `
             <button onclick="switchTab('iuran')" id="nav-iuran" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
               <i data-lucide="calendar-check-2" class="w-4 h-4"></i> Matriks Iuran IPL
@@ -912,7 +921,7 @@
           `;
         } 
         else if (currentUser.role === 'Pengelola Unit Usaha') {
-          // Pengelola Unit Usaha: Hanya Dashboard & Buku Kas & Unit Usaha (Dapat mencatat laporan, fitur aksi edit/hapus baris disembunyikan)
+          // Pengelola Unit Usaha: Hanya Dashboard & Buku Kas & Unit Usaha
           navHtml += `
             <button onclick="switchTab('kas')" id="nav-kas" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white transition">
               <i data-lucide="wallet" class="w-4 h-4"></i> Buku Kas & Unit Usaha
@@ -941,7 +950,8 @@
     }
 
     function switchTab(tabName) {
-      if (!currentUser && tabName !== 'dashboard') {
+      // Tamu publik kini diizinkan mengakses Dashboard, Matriks Iuran IPL, dan Buku Kas & Unit Usaha
+      if (!currentUser && tabName !== 'dashboard' && tabName !== 'iuran' && tabName !== 'kas') {
         alert('Akses Terbatas: Silakan login terlebih dahulu untuk mengakses menu ini.');
         switchTab('dashboard');
         return;
@@ -1221,7 +1231,7 @@
         return match && matchAkun && matchTipe;
       });
 
-      // Fitur aksi baris (Edit & Hapus) HANYA untuk Admin RW. Sembunyikan untuk Bendahara RT & Pengelola Usaha.
+      // Fitur aksi baris (Edit & Hapus) HANYA untuk Admin RW. Sembunyikan untuk Bendahara RT, Pengelola Usaha, & Tamu.
       const canManageKas = currentUser && currentUser.role === 'Admin RW';
       const thAksi = document.getElementById('th-aksi-kas');
       if (thAksi) thAksi.style.display = canManageKas ? '' : 'none';
@@ -1246,6 +1256,10 @@
     }
 
     function openAddTransaksiModal() {
+      if (!currentUser) {
+        alert('Akses Terbatas: Tamu tidak dapat mencatat transaksi.');
+        return;
+      }
       document.getElementById('trx-modal-title').textContent = 'Catat Transaksi Keuangan';
       document.getElementById('trx-edit-id').value = '';
       document.getElementById('trx-akun').value = 'IPL Warga';
@@ -1367,7 +1381,7 @@
         return matchRt && matchBlok;
       });
 
-      // Role Admin RW & Bendahara RT dapat merubah status IPL (Sudah/Belum bayar)
+      // Role Admin RW & Bendahara RT dapat merubah status IPL (Sudah/Belum bayar). Tamu / Guest hanya melihat (view-only).
       const canToggle = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Bendahara RT');
 
       document.getElementById('table-iuran-body').innerHTML = filtered.map(w => `
@@ -1406,7 +1420,7 @@
 
     function toggleIuran(wargaId, bulanKey) {
       if (!currentUser || (currentUser.role !== 'Admin RW' && currentUser.role !== 'Bendahara RT')) {
-        alert('Anda tidak memiliki hak akses untuk mengubah status pembayaran.');
+        alert('Akses Terbatas: Tamu/Guest hanya dapat melihat status pembayaran (view-only).');
         return;
       }
 
