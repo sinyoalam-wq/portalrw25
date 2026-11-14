@@ -152,7 +152,7 @@
             <p class="text-sm text-slate-500">Monitoring Keuangan RW, Iuran RT 01–09 & Unit Usaha Taman Cikas</p>
           </div>
           <div id="dashboard-action-btn" class="flex items-center gap-2">
-            <button onclick="openModal('modal-transaksi')" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
               <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Transaksi / Laporan
             </button>
           </div>
@@ -202,7 +202,7 @@
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
                   <h3 class="font-bold text-slate-900">Arus Kas & Keuangan</h3>
-                  <p class="text-xs text-slate-500">Grafik perbandingan pemasukan vs pengeluaran</p>
+                  <p class="text-xs text-slate-500">Grafik perbandingan pemasukan vs pengeluaran riil</p>
                 </div>
                 <div class="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-medium overflow-x-auto">
                   <button onclick="setChartPeriod(6)" id="period-btn-6" class="px-3 py-1.5 rounded-lg bg-white text-slate-900 shadow-sm transition">6 Bln</button>
@@ -293,7 +293,7 @@
             <button onclick="window.print()" class="inline-flex items-center gap-1.5 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium px-3.5 py-2.5 rounded-xl shadow-sm transition no-print">
               <i data-lucide="printer" class="w-4 h-4"></i> Cetak PDF
             </button>
-            <button onclick="openModal('modal-transaksi')" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition no-print">
+            <button onclick="openAddTransaksiModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition no-print">
               <i data-lucide="plus" class="w-4 h-4"></i> Catat Laporan Keuangan
             </button>
           </div>
@@ -305,10 +305,13 @@
             <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, pelapor, atau kategori..." class="w-full pl-10 pr-4 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
           </div>
           <select id="filter-akun-kas" onchange="renderKas()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="ALL">Semua Pos / Unit</option>
-            <option value="Kas Umum RW">Kas Umum RW</option>
-            <option value="Unit Usaha">Semua Unit Usaha</option>
-            <option value="Kas Sosial">Kas Sosial</option>
+            <option value="ALL">Semua Pos Keuangan</option>
+            <option value="IPL Warga">IPL Warga</option>
+            <option value="Unit usaha kolam renang">Unit usaha kolam renang</option>
+            <option value="Unit usaha tennis">Unit usaha tennis</option>
+            <option value="Unit usaha carwash">Unit usaha carwash</option>
+            <option value="Sosial">Sosial</option>
+            <option value="Dan lain-lain">Dan lain-lain</option>
           </select>
           <select id="filter-tipe-kas" onchange="renderKas()" class="px-3.5 py-2 text-sm border border-slate-200 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <option value="ALL">Semua Tipe</option>
@@ -323,10 +326,11 @@
               <thead>
                 <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   <th class="py-3.5 px-4">Tanggal</th>
-                  <th class="py-3.5 px-4">Pos / Unit</th>
+                  <th class="py-3.5 px-4">Pos Keuangan</th>
                   <th class="py-3.5 px-4">Kategori & Keterangan</th>
                   <th class="py-3.5 px-4">Pelapor</th>
                   <th class="py-3.5 px-4 text-right">Nominal</th>
+                  <th class="py-3.5 px-4 text-right no-print">Aksi</th>
                 </tr>
               </thead>
               <tbody id="table-kas-body" class="divide-y divide-slate-100 text-sm"></tbody>
@@ -444,18 +448,55 @@
     </div>
   </div>
 
-  <!-- MODAL: TRANSAKSI -->
+  <!-- MODAL: TRANSAKSI (TAMBAH / EDIT) -->
   <div id="modal-transaksi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
-      <div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-900">Catat Transaksi Keuangan</h3><button onclick="closeModal('modal-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button></div>
-      <form onsubmit="handleAddTransaksi(event)" class="space-y-4 text-sm">
-        <div><label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label><select id="trx-akun" class="w-full px-3.5 py-2 border rounded-xl"><option value="Kas Umum RW">Kas Umum RW</option><option value="Unit Usaha: Warung 007">Unit Usaha: Warung 007</option><option value="Kas Sosial">Kas Sosial</option></select></div>
-        <div><label class="block font-medium text-slate-700 mb-1">Tipe</label><select id="trx-tipe" class="w-full px-3.5 py-2 border rounded-xl"><option value="MASUK">Pemasukan (+)</option><option value="KELUAR">Pengeluaran (-)</option></select></div>
-        <div><label class="block font-medium text-slate-700 mb-1">Tanggal</label><input type="date" id="trx-tanggal" value="2026-11-14" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
-        <div><label class="block font-medium text-slate-700 mb-1">Kategori</label><input type="text" id="trx-kategori" placeholder="Contoh: IPL / Gaji" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
-        <div><label class="block font-medium text-slate-700 mb-1">Nominal (Rp)</label><input type="number" id="trx-nominal" min="1000" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
-        <div><label class="block font-medium text-slate-700 mb-1">Keterangan</label><input type="text" id="trx-keterangan" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
-        <div class="pt-2 flex justify-end gap-2"><button type="button" onclick="closeModal('modal-transaksi')" class="px-4 py-2 text-slate-600">Batal</button><button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl">Simpan</button></div>
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="trx-modal-title" class="font-bold text-slate-900">Catat Transaksi Keuangan</h3>
+        <button onclick="closeModal('modal-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleSaveTransaksi(event)" class="space-y-4 text-sm">
+        <input type="hidden" id="trx-edit-id" value="" />
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label>
+          <select id="trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="IPL Warga">IPL Warga</option>
+            <option value="Unit usaha kolam renang">Unit usaha kolam renang</option>
+            <option value="Unit usaha tennis">Unit usaha tennis</option>
+            <option value="Unit usaha carwash">Unit usaha carwash</option>
+            <option value="Sosial">Sosial</option>
+            <option value="Dan lain-lain">Dan lain-lain</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Tipe</label>
+          <select id="trx-tipe" onchange="updateKategoriOptions()" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="MASUK">Pemasukan (+)</option>
+            <option value="KELUAR">Pengeluaran (-)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Tanggal</label>
+          <input type="date" id="trx-tanggal" value="2026-11-14" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Kategori</label>
+          <select id="trx-kategori" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <!-- Populated dynamically based on Tipe -->
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Nominal (Rp)</label>
+          <input type="number" id="trx-nominal" min="1000" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Keterangan</label>
+          <input type="text" id="trx-keterangan" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-transaksi')" class="px-4 py-2 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
+        </div>
       </form>
     </div>
   </div>
@@ -495,9 +536,38 @@
     </div>
   </div>
 
+  <!-- MODAL: USER FORM (TAMBAH / EDIT) -->
+  <div id="modal-user-form" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="user-modal-title" class="font-bold text-slate-900">Daftarkan Akun Pengurus Baru</h3>
+        <button onclick="closeModal('modal-user-form')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleSaveUser(event)" class="space-y-4 text-sm">
+        <input type="hidden" id="usr-edit-id" value="" />
+        <div><label class="block font-medium text-slate-700 mb-1">Nama Lengkap</label><input type="text" id="usr-nama" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Username / Email</label><input type="text" id="usr-email" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div><label class="block font-medium text-slate-700 mb-1">Kata Sandi</label><input type="text" id="usr-pwd" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Peran (Role)</label>
+          <select id="usr-role" class="w-full px-3.5 py-2 border rounded-xl">
+            <option value="Admin RW">Admin RW</option>
+            <option value="Bendahara RT">Bendahara RT</option>
+            <option value="Pengelola Unit Usaha">Pengelola Unit Usaha</option>
+          </select>
+        </div>
+        <div><label class="block font-medium text-slate-700 mb-1">Lingkup Tugas / Unit</label><input type="text" id="usr-scope-value" placeholder="Misal: RT 01 atau Unit usaha kolam renang" required class="w-full px-3.5 py-2 border rounded-xl" /></div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-user-form')" class="px-4 py-2 text-slate-600">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-xl">Simpan User</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // --- API GOOGLE SCRIPT CLOUD ENDPOINT ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbzQRqCyufEYrawvXeX8b0x1Z54CPZL21RTHYmXfa5xFZ-PZRpqLo2n8uOHrRuqKRuaT/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyEjOMfwT0ti-o-xAxRyzR74nplyZHvfCUdRhl3dDCdPdFNLAPxzPmqBF_gQtrGPfeS/exec";
 
     const IURAN_TARIF = 150000;
     const ALL_MONTH_KEYS = [
@@ -510,11 +580,10 @@
 
     let wargaList = [];
     let transaksiList = [];
-
     let userList = [
       { id: 'USR-01', nama: 'Super Admin RW', email: 'admin@tamancikas.id', password: 'admin123', role: 'Admin RW', scope: 'Seluruh Wilayah' },
       { id: 'USR-02', nama: 'Budi Santoso, S.T.', email: 'rt01@tamancikas.id', password: 'rt01pass', role: 'Bendahara RT', scope: 'RT 01' },
-      { id: 'USR-03', nama: 'Siti Aminah', email: 'warung007@tamancikas.id', password: 'warungpass', role: 'Pengelola Unit Usaha', scope: 'Warung 007' }
+      { id: 'USR-03', nama: 'Siti Aminah', email: 'usaha@tamancikas.id', password: 'usahapass', role: 'Pengelola Unit Usaha', scope: 'Unit Usaha' }
     ];
 
     let currentUser = null;
@@ -524,7 +593,7 @@
     async function loadDataFromCloud() {
       try {
         const syncBadge = document.getElementById('sync-status');
-        if(syncBadge) syncBadge.textContent = "Syncing...";
+        if (syncBadge) syncBadge.textContent = "Syncing...";
         
         let response = await fetch(`${API_URL}?action=getData`);
         let result = await response.json();
@@ -554,15 +623,26 @@
               id: row[0] || `TRX-${Date.now()}`,
               tanggal: row[1] || '2026-11-14',
               tipe: row[2] || 'MASUK',
-              akun: row[3] || 'Kas Umum RW',
-              kategori: row[4] || 'Umum',
+              akun: row[3] || 'IPL Warga',
+              kategori: row[4] || 'Operasional RW',
               nominal: Number(row[5]) || 0,
               keterangan: row[6] || '',
               pelapor: row[7] || 'System'
             })).filter(t => t.keterangan !== '');
           }
 
-          if(syncBadge) {
+          if (result.users && result.users.length > 1) {
+            userList = result.users.slice(1).map((row, idx) => ({
+              id: row[0] || `USR-0${idx+1}`,
+              nama: row[1] || '',
+              email: row[2] || '',
+              password: row[3] || '',
+              role: row[4] || 'Bendahara RT',
+              scope: row[5] || ''
+            })).filter(u => u.nama !== '');
+          }
+
+          if (syncBadge) {
             syncBadge.textContent = "Connected";
             syncBadge.className = "text-emerald-400";
           }
@@ -571,7 +651,7 @@
       } catch (err) {
         console.error("Gagal terhubung ke Cloud Google Sheets:", err);
         const syncBadge = document.getElementById('sync-status');
-        if(syncBadge) {
+        if (syncBadge) {
           syncBadge.textContent = "Offline Mode";
           syncBadge.className = "text-rose-400";
         }
@@ -600,6 +680,63 @@
       }
     }
 
+    async function syncAllTransaksiCloud() {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "saveAllTransaksi", transaksiList: transaksiList })
+        });
+      } catch (err) {
+        console.error("Gagal menyinkronkan perubahan daftar transaksi ke cloud:", err);
+      }
+    }
+
+    async function saveUsersToCloud() {
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ action: "saveUsers", userList: userList })
+        });
+      } catch (err) {
+        console.error("Gagal memperbarui data user ke cloud:", err);
+      }
+    }
+
+    // --- DYNAMIC KATEGORI OPTIONS ---
+    function updateKategoriOptions(selectedCategory = '') {
+      const tipe = document.getElementById('trx-tipe').value;
+      const kategoriSelect = document.getElementById('trx-kategori');
+      
+      let options = [];
+      if (tipe === 'MASUK') {
+        options = [
+          'IPL Warga',
+          'Penjualan tiket kolam renang',
+          'Sewa lapangan tennis',
+          'Jasa carwash',
+          'Dana hibah',
+          'Lain-lain'
+        ];
+      } else {
+        options = [
+          'Gaji Satpam',
+          'THR Satpam',
+          'Gaji Pegawai Kolam renang',
+          'Gaji pegawai tennis',
+          'Gaji pegawai carwash',
+          'Acara/event warga',
+          'Kesekretariatan',
+          'Pemeliharaan lingkungan dan kebersihan',
+          'Operasional RW',
+          'Lain-lain'
+        ];
+      }
+
+      kategoriSelect.innerHTML = options.map(opt => `
+        <option value="${opt}" ${opt === selectedCategory ? 'selected' : ''}>${opt}</option>
+      `).join('');
+    }
+
     // --- EXPORT EXCEL ---
     function exportWargaExcel() {
       const dataToExport = wargaList.map(w => ({
@@ -618,7 +755,7 @@
     function exportKasExcel() {
       const dataToExport = transaksiList.map(t => ({
         'Tanggal': t.tanggal,
-        'Pos / Unit': t.akun,
+        'Pos Keuangan': t.akun,
         'Tipe': t.tipe,
         'Kategori': t.kategori,
         'Keterangan': t.keterangan,
@@ -788,12 +925,12 @@
 
     function toggleMobileMenu() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
     function openModal(id) { 
-      if(id === 'modal-login') initLoginSelect();
+      if (id === 'modal-login') initLoginSelect();
       document.getElementById(id).classList.remove('hidden'); 
     }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // --- DASHBOARD & CHART ---
+    // --- DASHBOARD & CHART (RIIL SESUAI INPUT) ---
     function setChartPeriod(months) {
       currentChartMonths = months;
       [6, 12, 24, 60].forEach(m => {
@@ -805,13 +942,24 @@
 
     function renderDashboard() {
       let totalMasuk = 0, totalKeluar = 0, novMasuk = 0, novKeluar = 0;
+      let monthlyData = {};
+
       transaksiList.forEach(t => {
+        const nominal = Number(t.nominal) || 0;
+        const bulanKey = t.tanggal ? t.tanggal.slice(0, 7) : '2026-11';
+
+        if (!monthlyData[bulanKey]) {
+          monthlyData[bulanKey] = { masuk: 0, keluar: 0 };
+        }
+
         if (t.tipe === 'MASUK') {
-          totalMasuk += t.nominal;
-          if (t.tanggal.startsWith('2026-11') && t.kategori !== 'Saldo Awal') novMasuk += t.nominal;
+          totalMasuk += nominal;
+          monthlyData[bulanKey].masuk += nominal;
+          if (bulanKey === '2026-11' && t.kategori !== 'Saldo Awal') novMasuk += nominal;
         } else {
-          totalKeluar += t.nominal;
-          if (t.tanggal.startsWith('2026-11')) novKeluar += t.nominal;
+          totalKeluar += nominal;
+          monthlyData[bulanKey].keluar += nominal;
+          if (bulanKey === '2026-11') novKeluar += nominal;
         }
       });
 
@@ -827,28 +975,35 @@
 
       const chartContainer = document.getElementById('cashflow-chart');
       let chartData = [];
-      const baseMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const baseMonths = {'01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'Mei','06':'Jun','07':'Jul','08':'Agu','09':'Sep','10':'Okt','11':'Nov','12':'Des'};
       
+      const now = new Date(2026, 10, 1); // November 2026
       for (let i = currentChartMonths - 1; i >= 0; i--) {
-        const mIdx = (10 - i + 120) % 12;
-        const label = `${baseMonths[mIdx]} '${String(26 - Math.floor((i)/12)).slice(-2)}`;
-        const factor = 1 + (Math.sin(i) * 0.2);
+        let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        let yr = d.getFullYear();
+        let mn = String(d.getMonth() + 1).padStart(2, '0');
+        let key = `${yr}-${mn}`;
+        let label = `${baseMonths[mn]} '${String(yr).slice(-2)}`;
+
+        let dataBulan = monthlyData[key] || { masuk: 0, keluar: 0 };
         chartData.push({
           label,
-          masuk: i === 0 ? novMasuk : Math.round(8500000 * factor),
-          keluar: i === 0 ? novKeluar : Math.round(6200000 * factor)
+          masuk: dataBulan.masuk,
+          keluar: dataBulan.keluar
         });
       }
 
-      const maxVal = Math.max(...chartData.map(d => Math.max(d.masuk, d.keluar)), 10000000);
+      const maxVal = Math.max(...chartData.map(d => Math.max(d.masuk, d.keluar)), 1000000);
       chartContainer.innerHTML = chartData.map(item => {
-        const hMasuk = Math.max(Math.round((item.masuk / maxVal) * 150), 4);
-        const hKeluar = Math.max(Math.round((item.keluar / maxVal) * 150), 4);
+        const hMasuk = Math.max(Math.round((item.masuk / maxVal) * 150), item.masuk > 0 ? 6 : 2);
+        const hKeluar = Math.max(Math.round((item.keluar / maxVal) * 150), item.keluar > 0 ? 6 : 2);
+        const formatRupiah = (val) => new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR', minimumFractionDigits:0}).format(val);
+        
         return `
           <div class="flex-1 flex flex-col items-center gap-1.5 group min-w-[28px]">
             <div class="w-full flex items-end justify-center gap-1 h-40">
-              <div style="height: ${hMasuk}px" title="Masuk: ${item.masuk}" class="w-2.5 sm:w-4 bg-emerald-500 rounded-t"></div>
-              <div style="height: ${hKeluar}px" title="Keluar: ${item.keluar}" class="w-2.5 sm:w-4 bg-rose-400 rounded-t"></div>
+              <div style="height: ${hMasuk}px" title="Masuk: ${formatRupiah(item.masuk)}" class="w-2.5 sm:w-4 bg-emerald-500 rounded-t"></div>
+              <div style="height: ${hKeluar}px" title="Keluar: ${formatRupiah(item.keluar)}" class="w-2.5 sm:w-4 bg-rose-400 rounded-t"></div>
             </div>
             <span class="text-[9px] text-slate-500 truncate w-full text-center">${item.label}</span>
           </div>
@@ -937,7 +1092,6 @@
       const newStatus = document.getElementById('warga-status').value;
 
       if (originalId) {
-        // Mode Edit
         const w = wargaList.find(x => x.id === originalId);
         if (w) {
           w.id = newNik;
@@ -949,7 +1103,6 @@
         }
         alert('Data warga berhasil diperbarui!');
       } else {
-        // Mode Tambah Baru
         wargaList.push({
           id: newNik,
           nik: newNik,
@@ -998,18 +1151,22 @@
       openModal('modal-qr');
     }
 
-    // --- RENDER KAS ---
+    // --- RENDER & MANAJEMEN KAS ---
     function renderKas() {
       const keyword = document.getElementById('search-kas').value.toLowerCase();
       const akunFilter = document.getElementById('filter-akun-kas').value;
       const tipeFilter = document.getElementById('filter-tipe-kas').value;
 
       const filtered = transaksiList.filter(t => {
-        const match = t.keterangan.toLowerCase().includes(keyword) || t.pelapor.toLowerCase().includes(keyword);
-        const matchAkun = akunFilter === 'ALL' || (akunFilter === 'Unit Usaha' ? t.akun.includes('Unit Usaha') : t.akun === akunFilter);
+        const match = (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
+                      (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
+                      (t.kategori && t.kategori.toLowerCase().includes(keyword));
+        const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchTipe = tipeFilter === 'ALL' || t.tipe === tipeFilter;
         return match && matchAkun && matchTipe;
       });
+
+      const canManageKas = currentUser && (currentUser.role === 'Admin RW' || currentUser.role === 'Pengelola Unit Usaha');
 
       document.getElementById('table-kas-body').innerHTML = filtered.slice().reverse().map(t => `
         <tr class="hover:bg-slate-50 transition">
@@ -1020,8 +1177,102 @@
           <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
             ${t.tipe==='MASUK'?'+':'-'} ${new Intl.NumberFormat('id-ID', {style:'currency', currency:'IDR', minimumFractionDigits:0}).format(t.nominal)}
           </td>
+          <td class="py-3 px-4 text-right no-print space-x-1">
+            ${canManageKas ? `
+              <button onclick="openEditTransaksiModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>
+              <button onclick="deleteTransaksi('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>
+            ` : '<span class="text-xs text-slate-300">-</span>'}
+          </td>
         </tr>
       `).join('');
+    }
+
+    function openAddTransaksiModal() {
+      document.getElementById('trx-modal-title').textContent = 'Catat Transaksi Keuangan';
+      document.getElementById('trx-edit-id').value = '';
+      document.getElementById('trx-akun').value = 'IPL Warga';
+      document.getElementById('trx-tipe').value = 'MASUK';
+      document.getElementById('trx-tanggal').value = '2026-11-14';
+      updateKategoriOptions('IPL Warga');
+      document.getElementById('trx-nominal').value = '';
+      document.getElementById('trx-keterangan').value = '';
+      openModal('modal-transaksi');
+    }
+
+    function openEditTransaksiModal(id) {
+      const trx = transaksiList.find(t => t.id === id);
+      if (!trx) return;
+      document.getElementById('trx-modal-title').textContent = 'Edit Transaksi Keuangan';
+      document.getElementById('trx-edit-id').value = trx.id;
+      
+      const akunSelect = document.getElementById('trx-akun');
+      if (![...akunSelect.options].some(o => o.value === trx.akun)) {
+        akunSelect.add(new Option(trx.akun, trx.akun));
+      }
+      akunSelect.value = trx.akun;
+
+      document.getElementById('trx-tipe').value = trx.tipe;
+      updateKategoriOptions(trx.kategori);
+
+      document.getElementById('trx-tanggal').value = trx.tanggal;
+      document.getElementById('trx-nominal').value = trx.nominal;
+      document.getElementById('trx-keterangan').value = trx.keterangan;
+      openModal('modal-transaksi');
+    }
+
+    function handleSaveTransaksi(e) {
+      e.preventDefault();
+      const editId = document.getElementById('trx-edit-id').value;
+      const akun = document.getElementById('trx-akun').value;
+      const tipe = document.getElementById('trx-tipe').value;
+      const tanggal = document.getElementById('trx-tanggal').value;
+      const kategori = document.getElementById('trx-kategori').value;
+      const nominal = parseInt(document.getElementById('trx-nominal').value, 10);
+      const keterangan = document.getElementById('trx-keterangan').value;
+
+      if (editId) {
+        const trx = transaksiList.find(t => t.id === editId);
+        if (trx) {
+          trx.akun = akun;
+          trx.tipe = tipe;
+          trx.tanggal = tanggal;
+          trx.kategori = kategori;
+          trx.nominal = nominal;
+          trx.keterangan = keterangan;
+        }
+        syncAllTransaksiCloud();
+        alert('Data transaksi berhasil diperbarui!');
+      } else {
+        const newTrx = {
+          id: `TRX-${Date.now().toString().slice(-4)}`,
+          tanggal,
+          tipe,
+          akun,
+          kategori,
+          nominal,
+          keterangan,
+          pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
+        };
+        transaksiList.push(newTrx);
+        addTransaksiCloud(newTrx);
+        alert('Transaksi baru berhasil dicatat!');
+      }
+
+      e.target.reset();
+      closeModal('modal-transaksi');
+      refreshAll();
+    }
+
+    function deleteTransaksi(id) {
+      const idx = transaksiList.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        if (confirm(`Apakah Anda yakin ingin menghapus transaksi "${transaksiList[idx].keterangan}"?`)) {
+          transaksiList.splice(idx, 1);
+          syncAllTransaksiCloud();
+          refreshAll();
+          alert('Transaksi berhasil dihapus.');
+        }
+      }
     }
 
     // --- RENDER MATRIKS IURAN ---
@@ -1101,8 +1352,8 @@
           id: `TRX-${Date.now().toString().slice(-4)}`,
           tanggal: '2026-11-14',
           tipe: 'MASUK',
-          akun: 'Kas Umum RW',
-          kategori: 'Iuran IPL Warga',
+          akun: 'IPL Warga',
+          kategori: 'IPL Warga',
           nominal: IURAN_TARIF,
           keterangan: `Iuran IPL ${bulanKey} - ${warga.nama} (${warga.blok})`,
           pelapor: `${currentUser.nama} (${currentUser.role})`
@@ -1114,7 +1365,11 @@
       }
 
       saveDataToCloud();
-      if(newTrx) addTransaksiCloud(newTrx);
+      if (newTrx) {
+        addTransaksiCloud(newTrx);
+      } else {
+        syncAllTransaksiCloud();
+      }
       refreshAll();
     }
 
@@ -1179,6 +1434,7 @@
         alert(`Akun ${nama} berhasil ditambahkan!`);
       }
 
+      saveUsersToCloud();
       closeModal('modal-user-form');
       initLoginSelect();
       renderUsers();
@@ -1194,32 +1450,12 @@
         }
         if (confirm(`Apakah Anda yakin ingin menghapus akun ${userList[idx].nama}?`)) {
           userList.splice(idx, 1);
+          saveUsersToCloud();
           initLoginSelect();
           renderUsers();
           alert('Akun berhasil dihapus.');
         }
       }
-    }
-
-    // --- FORM HANDLERS ---
-    function handleAddTransaksi(e) {
-      e.preventDefault();
-      const newTrx = {
-        id: `TRX-${Date.now().toString().slice(-4)}`,
-        tanggal: document.getElementById('trx-tanggal').value,
-        tipe: document.getElementById('trx-tipe').value,
-        akun: document.getElementById('trx-akun').value,
-        kategori: document.getElementById('trx-kategori').value,
-        nominal: parseInt(document.getElementById('trx-nominal').value, 10),
-        keterangan: document.getElementById('trx-keterangan').value,
-        pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
-      };
-
-      transaksiList.push(newTrx);
-      addTransaksiCloud(newTrx);
-      e.target.reset();
-      closeModal('modal-transaksi');
-      refreshAll();
     }
 
     function refreshAll() {
