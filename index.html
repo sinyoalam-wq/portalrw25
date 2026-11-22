@@ -396,6 +396,39 @@
               </div>
             </div>
           </div>
+
+          <!-- LIST DATA TRANSAKSI DI HALAMAN DASHBOARD KAS RW -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
+            <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="font-bold text-slate-900">List Data Transaksi Kas RW</h3>
+                <p class="text-xs text-slate-500">Daftar transaksi keuangan terbaru RW 025 beserta metode transaksi</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto no-print">
+                <select id="filter-metode-dash" onchange="renderDashboard()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white">
+                  <option value="ALL">Semua Metode</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Transfer">Transfer</option>
+                </select>
+                <input type="text" id="search-dash-trx" onkeyup="renderDashboard()" placeholder="Cari pos, kategori, metode, keterangan..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl w-full sm:w-64" />
+              </div>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                    <th class="py-3 px-4">Tanggal</th>
+                    <th class="py-3 px-4">Pos Keuangan</th>
+                    <th class="py-3 px-4">Metode Transaksi</th>
+                    <th class="py-3 px-4">Kategori & Keterangan</th>
+                    <th class="py-3 px-4">Pelapor</th>
+                    <th class="py-3 px-4 text-right">Nominal</th>
+                  </tr>
+                </thead>
+                <tbody id="table-dash-trx-body" class="divide-y divide-slate-100 text-sm"></tbody>
+              </table>
+            </div>
+          </div>
         </section>
 
         <!-- TAB 2: MATRIKS IURAN IPL -->
@@ -466,16 +499,7 @@
 
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center gap-2 no-print">
             <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, kategori, metode, pelapor..." class="px-3 py-2 text-xs border border-slate-200 rounded-xl flex-1 min-w-[200px]" />
-            <select id="filter-akun-kas" onchange="renderKas()" class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white">
-              <option value="ALL">Semua Pos Keuangan</option>
-              <option value="Kas RW">Kas RW</option>
-              <option value="IPL Warga">IPL Warga</option>
-              <option value="Unit usaha kolam renang">Unit usaha kolam renang</option>
-              <option value="Unit usaha tennis">Unit usaha tennis</option>
-              <option value="Unit usaha carwash">Unit usaha carwash</option>
-              <option value="Unit Usaha Cafe">Unit Usaha Cafe</option>
-              <option value="Retribusi Parkir">Retribusi Parkir</option>
-            </select>
+            <select id="filter-akun-kas" onchange="renderKas()" class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white"></select>
             <select id="filter-tipe-kas" onchange="renderKas()" class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white">
               <option value="ALL">Semua Tipe</option>
               <option value="MASUK">Pemasukan (+)</option>
@@ -939,8 +963,8 @@
         <section id="tab-users" class="tab-content hidden space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h2 class="text-2xl font-bold text-slate-900">Manajemen Akun Pengurus & Hak Akses</h2>
-              <p class="text-sm text-slate-500">Atur akun, ubah password, dan tentukan akses halaman serta fitur secara dinamis (termasuk Tamu Publik).</p>
+              <h2 class="text-2xl font-bold text-slate-900">Manajemen Akun Pengurus & Pengaturan Referensi Keuangan</h2>
+              <p class="text-sm text-slate-500">Atur akun pengurus, hak akses halaman, serta kelola daftar pilihan Pos Keuangan dan Kategori Pemasukan/Pengeluaran.</p>
             </div>
             <button onclick="openAddUserModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
               <i data-lucide="user-plus" class="w-4 h-4"></i> Daftarkan User Baru
@@ -962,6 +986,81 @@
                 </thead>
                 <tbody id="table-users-body" class="divide-y divide-slate-100 text-sm"></tbody>
               </table>
+            </div>
+          </div>
+
+          <!-- PENGATURAN LIST POS KEUANGAN & KATEGORI PEMASUKAN / PENGELUARAN -->
+          <div class="pt-2 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900">Pengaturan Daftar Pos Keuangan & Kategori Transaksi</h3>
+                <p class="text-xs text-slate-500">Tambah, ubah, atau hapus pilihan dropdown yang muncul pada pencatatan laporan keuangan.</p>
+              </div>
+              <button type="button" onclick="resetMasterFinanceOptions()" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Default
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <!-- Card 1: Pos Keuangan -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div class="flex items-center gap-2">
+                      <div class="p-1.5 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="landmark" class="w-4 h-4"></i></div>
+                      <h4 class="font-bold text-sm text-slate-900">List Pos Keuangan</h4>
+                    </div>
+                    <span id="count-pos-keuangan" class="text-[11px] font-semibold px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full">0</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <input type="text" id="input-new-pos" onkeydown="if(event.key==='Enter'){event.preventDefault();addMasterOption('pos');}" placeholder="Tambah pos keuangan..." class="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    <button type="button" onclick="addMasterOption('pos')" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition shrink-0">
+                      + Tambah
+                    </button>
+                  </div>
+                  <div id="list-manage-pos" class="space-y-1.5 max-h-72 overflow-y-auto pr-1"></div>
+                </div>
+              </div>
+
+              <!-- Card 2: Kategori Pemasukan -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div class="flex items-center gap-2">
+                      <div class="p-1.5 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="arrow-down-left" class="w-4 h-4"></i></div>
+                      <h4 class="font-bold text-sm text-slate-900">Kategori Pemasukan (+)</h4>
+                    </div>
+                    <span id="count-kat-masuk" class="text-[11px] font-semibold px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full">0</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <input type="text" id="input-new-kat-masuk" onkeydown="if(event.key==='Enter'){event.preventDefault();addMasterOption('masuk');}" placeholder="Tambah kategori pemasukan..." class="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    <button type="button" onclick="addMasterOption('masuk')" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition shrink-0">
+                      + Tambah
+                    </button>
+                  </div>
+                  <div id="list-manage-kat-masuk" class="space-y-1.5 max-h-72 overflow-y-auto pr-1"></div>
+                </div>
+              </div>
+
+              <!-- Card 3: Kategori Pengeluaran -->
+              <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-4">
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+                    <div class="flex items-center gap-2">
+                      <div class="p-1.5 bg-rose-50 text-rose-600 rounded-lg"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
+                      <h4 class="font-bold text-sm text-slate-900">Kategori Pengeluaran (-)</h4>
+                    </div>
+                    <span id="count-kat-keluar" class="text-[11px] font-semibold px-2 py-0.5 bg-rose-50 text-rose-700 rounded-full">0</span>
+                  </div>
+                  <div class="flex gap-2">
+                    <input type="text" id="input-new-kat-keluar" onkeydown="if(event.key==='Enter'){event.preventDefault();addMasterOption('keluar');}" placeholder="Tambah kategori pengeluaran..." class="flex-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    <button type="button" onclick="addMasterOption('keluar')" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-xl transition shrink-0">
+                      + Tambah
+                    </button>
+                  </div>
+                  <div id="list-manage-kat-keluar" class="space-y-1.5 max-h-72 overflow-y-auto pr-1"></div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1007,15 +1106,7 @@
         <input type="hidden" id="trx-edit-id" value="" />
         <div>
           <label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label>
-          <select id="trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="Kas RW">Kas RW</option>
-            <option value="IPL Warga">IPL Warga</option>
-            <option value="Unit usaha kolam renang">Unit usaha kolam renang</option>
-            <option value="Unit usaha tennis">Unit usaha tennis</option>
-            <option value="Unit usaha carwash">Unit usaha carwash</option>
-            <option value="Unit Usaha Cafe">Unit Usaha Cafe</option>
-            <option value="Retribusi Parkir">Retribusi Parkir</option>
-          </select>
+          <select id="trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -1068,15 +1159,7 @@
         <input type="hidden" id="unit-trx-edit-id" value="" />
         <div>
           <label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label>
-          <select id="unit-trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <option value="Kas RW">Kas RW</option>
-            <option value="IPL Warga">IPL Warga</option>
-            <option value="Unit usaha kolam renang">Unit usaha kolam renang</option>
-            <option value="Unit usaha tennis">Unit usaha tennis</option>
-            <option value="Unit usaha carwash">Unit usaha carwash</option>
-            <option value="Unit Usaha Cafe">Unit Usaha Cafe</option>
-            <option value="Retribusi Parkir">Retribusi Parkir</option>
-          </select>
+          <select id="unit-trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
@@ -1216,6 +1299,224 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxj3GUnsJUryrEYSRLy9PcwAptICrvaxLMoRtUJGTWERTrRRu7d_GhKWA06XnR6IG87/exec";
     const CURRENT_MONTH_KEY = "2026-11";
+    const STORAGE_MASTER_FINANCE_KEY = "rw025_master_finance_options_v1";
+
+    const DEFAULT_POS_KEUANGAN = [
+      'Kas RW',
+      'IPL Warga',
+      'Unit usaha kolam renang',
+      'Unit usaha tennis',
+      'Unit usaha carwash',
+      'Unit Usaha Cafe',
+      'Retribusi Parkir'
+    ];
+
+    const DEFAULT_KATEGORI_MASUK = [
+      'IPL Warga',
+      'Penjualan tiket kolam renang',
+      'Sewa lapangan tennis',
+      'Jasa carwash',
+      'Sewa Parkir',
+      'Cafe',
+      'Dana hibah',
+      'Lain-lain'
+    ];
+
+    const DEFAULT_KATEGORI_KELUAR = [
+      'Gaji Satpam',
+      'THR Satpam',
+      'Gaji Pegawai Kolam renang',
+      'Gaji pegawai tennis',
+      'Gaji pegawai carwash',
+      'Gaji petugas waduk',
+      'Insentif BABINSA',
+      'Insentif BIMASPOL',
+      'Gaji Petugas Kebersihan',
+      'Listrik',
+      'BBM mesin waduk',
+      'Maintenance mesin waduk',
+      'BPK2',
+      'Iuran Sampah PEMKOT',
+      'Internet',
+      'Konsumsi rapat',
+      'Acara/event warga',
+      'Kesekretariatan',
+      'Pemeliharaan lingkungan dan kebersihan',
+      'Perawatan kolam',
+      'Perawatan lapangan',
+      'Perawatan fasilitas Carwash',
+      'Perawatan fasilitas cafe',
+      'Uang lembur',
+      'Uang makan',
+      'Kasbon',
+      'Operasional RW',
+      'Lain-lain'
+    ];
+
+    let posKeuanganList = [...DEFAULT_POS_KEUANGAN];
+    let kategoriMasukList = [...DEFAULT_KATEGORI_MASUK];
+    let kategoriKeluarList = [...DEFAULT_KATEGORI_KELUAR];
+
+    function loadMasterFinanceOptions() {
+      try {
+        const saved = localStorage.getItem(STORAGE_MASTER_FINANCE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed.pos) && parsed.pos.length > 0) posKeuanganList = parsed.pos;
+          if (Array.isArray(parsed.masuk) && parsed.masuk.length > 0) kategoriMasukList = parsed.masuk;
+          if (Array.isArray(parsed.keluar) && parsed.keluar.length > 0) kategoriKeluarList = parsed.keluar;
+        }
+      } catch (e) {
+        console.warn('Gagal memuat referensi keuangan lokal:', e);
+      }
+    }
+
+    function saveMasterFinanceOptions() {
+      try {
+        localStorage.setItem(STORAGE_MASTER_FINANCE_KEY, JSON.stringify({
+          pos: posKeuanganList,
+          masuk: kategoriMasukList,
+          keluar: kategoriKeluarList
+        }));
+      } catch (e) {
+        console.warn('Gagal menyimpan referensi keuangan lokal:', e);
+      }
+    }
+
+    function syncPosKeuanganDropdowns() {
+      const filterKasEl = document.getElementById('filter-akun-kas');
+      if (filterKasEl) {
+        const prevVal = filterKasEl.value || 'ALL';
+        filterKasEl.innerHTML = `<option value="ALL">Semua Pos Keuangan</option>` +
+          posKeuanganList.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        filterKasEl.value = (prevVal === 'ALL' || posKeuanganList.includes(prevVal)) ? prevVal : 'ALL';
+      }
+
+      ['trx-akun', 'unit-trx-akun'].forEach(selId => {
+        const el = document.getElementById(selId);
+        if (el) {
+          const prevVal = el.value;
+          el.innerHTML = posKeuanganList.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+          if (prevVal && posKeuanganList.includes(prevVal)) {
+            el.value = prevVal;
+          }
+        }
+      });
+    }
+
+    function renderMasterFinanceSettings() {
+      const renderListItems = (items, type, containerId, countId) => {
+        const container = document.getElementById(containerId);
+        const countEl = document.getElementById(countId);
+        if (countEl) countEl.textContent = `${items.length} item`;
+        if (!container) return;
+
+        if (items.length === 0) {
+          container.innerHTML = `<div class="text-xs text-slate-400 italic py-4 text-center">Belum ada item terdaftar.</div>`;
+          return;
+        }
+
+        container.innerHTML = items.map((item, idx) => `
+          <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-50 hover:bg-slate-100/80 border border-slate-100 text-xs transition group">
+            <span class="font-medium text-slate-700 truncate" title="${item}">${item}</span>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="editMasterOption('${type}', ${idx})" title="Edit" class="p-1 text-slate-500 hover:text-emerald-600 hover:bg-white rounded-lg transition">
+                <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+              </button>
+              <button type="button" onclick="deleteMasterOption('${type}', ${idx})" title="Hapus" class="p-1 text-slate-500 hover:text-rose-600 hover:bg-white rounded-lg transition">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      };
+
+      renderListItems(posKeuanganList, 'pos', 'list-manage-pos', 'count-pos-keuangan');
+      renderListItems(kategoriMasukList, 'masuk', 'list-manage-kat-masuk', 'count-kat-masuk');
+      renderListItems(kategoriKeluarList, 'keluar', 'list-manage-kat-keluar', 'count-kat-keluar');
+      syncPosKeuanganDropdowns();
+      updateKategoriOptions();
+      updateUnitKategoriOptions();
+      lucide.createIcons();
+    }
+
+    function addMasterOption(type) {
+      let inputId = '';
+      let targetArr = null;
+      if (type === 'pos') {
+        inputId = 'input-new-pos';
+        targetArr = posKeuanganList;
+      } else if (type === 'masuk') {
+        inputId = 'input-new-kat-masuk';
+        targetArr = kategoriMasukList;
+      } else if (type === 'keluar') {
+        inputId = 'input-new-kat-keluar';
+        targetArr = kategoriKeluarList;
+      }
+      const inputEl = document.getElementById(inputId);
+      if (!inputEl || !targetArr) return;
+      const val = inputEl.value.trim();
+      if (!val) {
+        alert('Nama item tidak boleh kosong.');
+        return;
+      }
+      const isDuplicate = targetArr.some(item => item.toLowerCase() === val.toLowerCase());
+      if (isDuplicate) {
+        alert(`"${val}" sudah ada dalam daftar.`);
+        return;
+      }
+      targetArr.push(val);
+      inputEl.value = '';
+      saveMasterFinanceOptions();
+      renderMasterFinanceSettings();
+    }
+
+    function editMasterOption(type, index) {
+      let targetArr = type === 'pos' ? posKeuanganList : (type === 'masuk' ? kategoriMasukList : kategoriKeluarList);
+      if (!targetArr || index < 0 || index >= targetArr.length) return;
+      const oldVal = targetArr[index];
+      const newVal = prompt('Ubah nama pilihan:', oldVal);
+      if (newVal === null) return;
+      const trimmed = newVal.trim();
+      if (!trimmed) {
+        alert('Nama pilihan tidak boleh kosong.');
+        return;
+      }
+      const isDuplicate = targetArr.some((item, idx) => idx !== index && item.toLowerCase() === trimmed.toLowerCase());
+      if (isDuplicate) {
+        alert(`"${trimmed}" sudah ada dalam daftar.`);
+        return;
+      }
+      targetArr[index] = trimmed;
+      saveMasterFinanceOptions();
+      renderMasterFinanceSettings();
+    }
+
+    function deleteMasterOption(type, index) {
+      let targetArr = type === 'pos' ? posKeuanganList : (type === 'masuk' ? kategoriMasukList : kategoriKeluarList);
+      if (!targetArr || index < 0 || index >= targetArr.length) return;
+      if (targetArr.length <= 1) {
+        alert('Minimal harus tersisa 1 pilihan dalam daftar.');
+        return;
+      }
+      const itemName = targetArr[index];
+      if (confirm(`Hapus "${itemName}" dari daftar pilihan?`)) {
+        targetArr.splice(index, 1);
+        saveMasterFinanceOptions();
+        renderMasterFinanceSettings();
+      }
+    }
+
+    function resetMasterFinanceOptions() {
+      if (confirm('Kembalikan daftar Pos Keuangan dan Kategori Pemasukan/Pengeluaran ke pengaturan awal?')) {
+        posKeuanganList = [...DEFAULT_POS_KEUANGAN];
+        kategoriMasukList = [...DEFAULT_KATEGORI_MASUK];
+        kategoriKeluarList = [...DEFAULT_KATEGORI_KELUAR];
+        saveMasterFinanceOptions();
+        renderMasterFinanceSettings();
+        alert('Daftar pilihan berhasil dikembalikan ke pengaturan awal.');
+      }
+    }
 
     const ALL_MONTH_KEYS = [
       '2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12',
@@ -1780,56 +2081,25 @@
     }
 
     function getStandardKategoriOptions(tipe, selectedCategory = '') {
-      let options = (tipe === 'MASUK') ? [
-        'IPL Warga', 
-        'Penjualan tiket kolam renang', 
-        'Sewa lapangan tennis', 
-        'Jasa carwash', 
-        'Sewa Parkir', 
-        'Cafe', 
-        'Dana hibah', 
-        'Lain-lain'
-      ] : [
-        'Gaji Satpam', 
-        'THR Satpam', 
-        'Gaji Pegawai Kolam renang', 
-        'Gaji pegawai tennis', 
-        'Gaji pegawai carwash', 
-        'Gaji petugas waduk', 
-        'Insentif BABINSA', 
-        'Insentif BIMASPOL', 
-        'Gaji Petugas Kebersihan', 
-        'Listrik', 
-        'BBM mesin waduk', 
-        'Maintenance mesin waduk', 
-        'BPK2', 
-        'Iuran Sampah PEMKOT', 
-        'Internet', 
-        'Konsumsi rapat', 
-        'Acara/event warga', 
-        'Kesekretariatan', 
-        'Pemeliharaan lingkungan dan kebersihan', 
-        'Perawatan kolam',
-        'Perawatan lapangan',
-        'Perawatan fasilitas Carwash',
-        'Perawatan fasilitas cafe',
-        'Uang lembur',
-        'Uang makan',
-        'Kasbon',
-        'Operasional RW', 
-        'Lain-lain'
-      ];
+      let options = (tipe === 'MASUK') ? [...kategoriMasukList] : [...kategoriKeluarList];
+      if (selectedCategory && !options.includes(selectedCategory)) {
+        options.unshift(selectedCategory);
+      }
       return options.map(opt => `<option value="${opt}" ${opt === selectedCategory ? 'selected' : ''}>${opt}</option>`).join('');
     }
 
     function updateKategoriOptions(selectedCategory = '') {
-      const tipe = document.getElementById('trx-tipe').value;
-      document.getElementById('trx-kategori').innerHTML = getStandardKategoriOptions(tipe, selectedCategory);
+      const tipeEl = document.getElementById('trx-tipe');
+      const katEl = document.getElementById('trx-kategori');
+      if (!tipeEl || !katEl) return;
+      katEl.innerHTML = getStandardKategoriOptions(tipeEl.value, selectedCategory);
     }
 
     function updateUnitKategoriOptions(selectedCategory = '') {
-      const tipe = document.getElementById('unit-trx-tipe').value;
-      document.getElementById('unit-trx-kategori').innerHTML = getStandardKategoriOptions(tipe, selectedCategory);
+      const tipeEl = document.getElementById('unit-trx-tipe');
+      const katEl = document.getElementById('unit-trx-kategori');
+      if (!tipeEl || !katEl) return;
+      katEl.innerHTML = getStandardKategoriOptions(tipeEl.value, selectedCategory);
     }
 
     function exportWargaExcel() {
@@ -2421,6 +2691,42 @@
         legendId: 'dash-expense-legend',
         pieContainerId: 'dash-expense-pie-container'
       });
+
+      // 3. List Data Transaksi di Halaman Dashboard Kas RW
+      const dashTrxBody = document.getElementById('table-dash-trx-body');
+      if (dashTrxBody) {
+        const keywordDash = (document.getElementById('search-dash-trx')?.value || '').toLowerCase();
+        const metodeDashFilter = document.getElementById('filter-metode-dash')?.value || 'ALL';
+
+        const filteredDashTrx = transaksiList.filter(t => {
+          const normMetode = normalizeMetode(t.metode);
+          const matchMetode = metodeDashFilter === 'ALL' || normMetode === metodeDashFilter;
+          const matchKeyword = !keywordDash ||
+            (t.akun && t.akun.toLowerCase().includes(keywordDash)) ||
+            (t.kategori && t.kategori.toLowerCase().includes(keywordDash)) ||
+            (t.keterangan && t.keterangan.toLowerCase().includes(keywordDash)) ||
+            (t.pelapor && t.pelapor.toLowerCase().includes(keywordDash)) ||
+            normMetode.toLowerCase().includes(keywordDash);
+          return matchMetode && matchKeyword;
+        });
+
+        if (filteredDashTrx.length === 0) {
+          dashTrxBody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi yang sesuai dengan filter.</td></tr>`;
+        } else {
+          dashTrxBody.innerHTML = filteredDashTrx.slice().reverse().map(t => `
+            <tr class="hover:bg-slate-50 transition">
+              <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+              <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
+              <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
+              <td class="py-3 px-4"><div class="font-medium text-slate-800">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
+              <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
+              <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+                ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
     }
 
     // --- MODULE UNIT USAHA ---
@@ -2470,7 +2776,6 @@
       document.getElementById('unit-cafe-in').textContent = formatCurr(unitStats['Unit Usaha Cafe'].masuk);
       document.getElementById('unit-cafe-out').textContent = formatCurr(unitStats['Unit Usaha Cafe'].keluar);
 
-      document.getElementById('unit-kpi-parkir').textContent = formatCurr(unitStats['Retribusi Parkir'].masuk - unitStats['Retribusi Parkir'].keluar);
       document.getElementById('unit-kpi-parkir').textContent = formatCurr(unitStats['Retribusi Parkir'].masuk - unitStats['Retribusi Parkir'].keluar);
       document.getElementById('unit-parkir-in').textContent = formatCurr(unitStats['Retribusi Parkir'].masuk);
       document.getElementById('unit-parkir-out').textContent = formatCurr(unitStats['Retribusi Parkir'].keluar);
@@ -2847,13 +3152,15 @@
 
     function openAddUnitTrxModal() {
       if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
+      syncPosKeuanganDropdowns();
       document.getElementById('unit-trx-modal-title').textContent = 'Catat Laporan Keuangan';
       document.getElementById('unit-trx-edit-id').value = '';
-      document.getElementById('unit-trx-akun').value = 'Unit usaha kolam renang';
+      const defaultUnit = posKeuanganList.includes('Unit usaha kolam renang') ? 'Unit usaha kolam renang' : posKeuanganList[0];
+      document.getElementById('unit-trx-akun').value = defaultUnit;
       document.getElementById('unit-trx-tipe').value = 'MASUK';
       document.getElementById('unit-trx-metode').value = 'Cash';
       document.getElementById('unit-trx-tanggal').value = '2026-11-20';
-      updateUnitKategoriOptions('Penjualan tiket kolam renang');
+      updateUnitKategoriOptions(kategoriMasukList[1] || kategoriMasukList[0] || '');
       document.getElementById('unit-trx-nominal').value = '';
       document.getElementById('unit-trx-keterangan').value = '';
       openModal('modal-unit-transaksi');
@@ -2863,9 +3170,14 @@
       if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
       const t = unitTransaksiList.find(x => x.id === id);
       if (!t) return;
+      syncPosKeuanganDropdowns();
       document.getElementById('unit-trx-modal-title').textContent = 'Edit Laporan Keuangan';
       document.getElementById('unit-trx-edit-id').value = t.id;
-      document.getElementById('unit-trx-akun').value = t.akun;
+      const akunEl = document.getElementById('unit-trx-akun');
+      if (t.akun && !posKeuanganList.includes(t.akun)) {
+        akunEl.insertAdjacentHTML('afterbegin', `<option value="${t.akun}">${t.akun}</option>`);
+      }
+      akunEl.value = t.akun;
       document.getElementById('unit-trx-tipe').value = t.tipe;
       document.getElementById('unit-trx-metode').value = normalizeMetode(t.metode);
       document.getElementById('unit-trx-tanggal').value = formatDate(t.tanggal);
@@ -2877,13 +3189,15 @@
 
     function openAddIplModTrxModal() {
       if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
+      syncPosKeuanganDropdowns();
       document.getElementById('unit-trx-modal-title').textContent = 'Catat Laporan Keuangan IPL';
       document.getElementById('unit-trx-edit-id').value = '';
-      document.getElementById('unit-trx-akun').value = 'IPL Warga';
+      const defaultIpl = posKeuanganList.includes('IPL Warga') ? 'IPL Warga' : posKeuanganList[0];
+      document.getElementById('unit-trx-akun').value = defaultIpl;
       document.getElementById('unit-trx-tipe').value = 'MASUK';
       document.getElementById('unit-trx-metode').value = 'Cash';
       document.getElementById('unit-trx-tanggal').value = '2026-11-20';
-      updateUnitKategoriOptions('IPL Warga');
+      updateUnitKategoriOptions(kategoriMasukList[0] || '');
       document.getElementById('unit-trx-nominal').value = '';
       document.getElementById('unit-trx-keterangan').value = '';
       openModal('modal-unit-transaksi');
@@ -3085,13 +3399,15 @@
 
     function openAddTransaksiModal() {
       if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
+      syncPosKeuanganDropdowns();
       document.getElementById('trx-modal-title').textContent = 'Catat Laporan Keuangan';
       document.getElementById('trx-edit-id').value = '';
-      document.getElementById('trx-akun').value = 'Kas RW';
+      const defaultPos = posKeuanganList.includes('Kas RW') ? 'Kas RW' : posKeuanganList[0];
+      document.getElementById('trx-akun').value = defaultPos;
       document.getElementById('trx-tipe').value = 'MASUK';
       document.getElementById('trx-metode').value = 'Cash';
       document.getElementById('trx-tanggal').value = '2026-11-20';
-      updateKategoriOptions('IPL Warga');
+      updateKategoriOptions(kategoriMasukList[0] || '');
       document.getElementById('trx-nominal').value = '';
       document.getElementById('trx-keterangan').value = '';
       openModal('modal-transaksi');
@@ -3101,9 +3417,14 @@
       if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
       const trx = transaksiList.find(t => t.id === id);
       if (!trx) return;
+      syncPosKeuanganDropdowns();
       document.getElementById('trx-modal-title').textContent = 'Edit Laporan Keuangan';
       document.getElementById('trx-edit-id').value = trx.id;
-      document.getElementById('trx-akun').value = trx.akun;
+      const akunEl = document.getElementById('trx-akun');
+      if (trx.akun && !posKeuanganList.includes(trx.akun)) {
+        akunEl.insertAdjacentHTML('afterbegin', `<option value="${trx.akun}">${trx.akun}</option>`);
+      }
+      akunEl.value = trx.akun;
       document.getElementById('trx-tipe').value = trx.tipe;
       document.getElementById('trx-metode').value = normalizeMetode(trx.metode);
       updateKategoriOptions(trx.kategori);
@@ -3283,6 +3604,7 @@
           </tr>
         `;
       }).join('');
+      renderMasterFinanceSettings();
     }
 
     function openAddUserModal() {
@@ -3399,6 +3721,7 @@
     }
 
     function refreshAll() {
+      syncPosKeuanganDropdowns();
       renderDashboard();
       renderWarga();
       renderKas();
@@ -3409,6 +3732,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      loadMasterFinanceOptions();
+      syncPosKeuanganDropdowns();
       ensureGuestUserInList();
       initLoginSelect();
       applyRolePermissions();
