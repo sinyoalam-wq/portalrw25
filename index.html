@@ -398,19 +398,31 @@
           </div>
 
           <!-- LIST DATA TRANSAKSI DI HALAMAN DASHBOARD KAS RW -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-            <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <h3 class="font-bold text-slate-900">List Data Transaksi Kas RW</h3>
-                <p class="text-xs text-slate-500">Daftar transaksi keuangan terbaru RW 025 beserta metode transaksi</p>
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 sm:p-6 border-b border-slate-100 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-bold text-slate-900">List Data Transaksi Kas RW</h3>
+                  <p class="text-xs text-slate-500">Daftar transaksi keuangan terbaru RW 025 berdasarkan tanggal, pos keuangan, dan metode</p>
+                </div>
+                <button type="button" onclick="resetDashTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
+                  Reset Filter
+                </button>
               </div>
-              <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto no-print">
+              <div class="flex flex-wrap items-center gap-2 no-print">
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1">
+                  <span class="text-[11px] font-medium text-slate-500">Tgl:</span>
+                  <input type="date" id="filter-date-start-dash" onchange="renderDashboard()" title="Tanggal Awal" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                  <span class="text-slate-400 text-xs">-</span>
+                  <input type="date" id="filter-date-end-dash" onchange="renderDashboard()" title="Tanggal Akhir" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                </div>
+                <select id="filter-akun-dash" onchange="renderDashboard()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white"></select>
                 <select id="filter-metode-dash" onchange="renderDashboard()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white">
                   <option value="ALL">Semua Metode</option>
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-dash-trx" onkeyup="renderDashboard()" placeholder="Cari pos, kategori, metode, keterangan..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl w-full sm:w-64" />
+                <input type="text" id="search-dash-trx" onkeyup="renderDashboard()" placeholder="Cari kategori, keterangan, pelapor..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
@@ -498,7 +510,12 @@
           </div>
 
           <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center gap-2 no-print">
-            <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, kategori, metode, pelapor..." class="px-3 py-2 text-xs border border-slate-200 rounded-xl flex-1 min-w-[200px]" />
+            <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5">
+              <span class="text-[11px] font-medium text-slate-500">Tgl:</span>
+              <input type="date" id="filter-date-start-kas" onchange="renderKas()" title="Tanggal Awal" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+              <span class="text-slate-400 text-xs">-</span>
+              <input type="date" id="filter-date-end-kas" onchange="renderKas()" title="Tanggal Akhir" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+            </div>
             <select id="filter-akun-kas" onchange="renderKas()" class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white"></select>
             <select id="filter-tipe-kas" onchange="renderKas()" class="px-3 py-2 text-xs border border-slate-200 rounded-xl bg-white">
               <option value="ALL">Semua Tipe</option>
@@ -510,6 +527,10 @@
               <option value="Cash">Cash</option>
               <option value="Transfer">Transfer</option>
             </select>
+            <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, kategori, pelapor..." class="px-3 py-2 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
+            <button type="button" onclick="resetKasFilter()" class="px-3 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
+              Reset
+            </button>
           </div>
 
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto">
@@ -725,16 +746,31 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-            <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <h3 class="font-bold text-slate-900">Riwayat Transaksi Unit Usaha</h3>
-              <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 sm:p-6 border-b border-slate-100 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-bold text-slate-900">List Data Transaksi Unit Usaha</h3>
+                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan seluruh unit usaha berdasarkan tanggal dan pos keuangan</p>
+                </div>
+                <button type="button" onclick="resetUnitTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
+                  Reset Filter
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 no-print">
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1">
+                  <span class="text-[11px] font-medium text-slate-500">Tgl:</span>
+                  <input type="date" id="filter-date-start-unit" onchange="renderUnitDashboard()" title="Tanggal Awal" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                  <span class="text-slate-400 text-xs">-</span>
+                  <input type="date" id="filter-date-end-unit" onchange="renderUnitDashboard()" title="Tanggal Akhir" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                </div>
+                <select id="filter-akun-unit" onchange="renderUnitDashboard()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white"></select>
                 <select id="filter-metode-unit" onchange="renderUnitDashboard()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white">
                   <option value="ALL">Semua Metode</option>
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-unit-trx" onkeyup="renderUnitDashboard()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl w-full sm:w-64" />
+                <input type="text" id="search-unit-trx" onkeyup="renderUnitDashboard()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
@@ -928,16 +964,31 @@
             </div>
           </div>
 
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden space-y-4">
-            <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <h3 class="font-bold text-slate-900">Riwayat Transaksi Pos Keuangan: IPL Warga</h3>
-              <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 sm:p-6 border-b border-slate-100 space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <h3 class="font-bold text-slate-900">List Data Transaksi Module IPL</h3>
+                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan pos IPL Warga berdasarkan tanggal dan pos keuangan</p>
+                </div>
+                <button type="button" onclick="resetIplTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
+                  Reset Filter
+                </button>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 no-print">
+                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1">
+                  <span class="text-[11px] font-medium text-slate-500">Tgl:</span>
+                  <input type="date" id="filter-date-start-ipl" onchange="renderIplModule()" title="Tanggal Awal" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                  <span class="text-slate-400 text-xs">-</span>
+                  <input type="date" id="filter-date-end-ipl" onchange="renderIplModule()" title="Tanggal Akhir" class="text-xs bg-transparent focus:outline-none text-slate-700" />
+                </div>
+                <select id="filter-akun-ipl" onchange="renderIplModule()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white"></select>
                 <select id="filter-metode-ipl" onchange="renderIplModule()" class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl bg-white">
                   <option value="ALL">Semua Metode</option>
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-ipl-mod-trx" onkeyup="renderIplModule()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl w-full sm:w-64" />
+                <input type="text" id="search-ipl-mod-trx" onkeyup="renderIplModule()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
@@ -1384,13 +1435,25 @@
     }
 
     function syncPosKeuanganDropdowns() {
-      const filterKasEl = document.getElementById('filter-akun-kas');
-      if (filterKasEl) {
-        const prevVal = filterKasEl.value || 'ALL';
-        filterKasEl.innerHTML = `<option value="ALL">Semua Pos Keuangan</option>` +
-          posKeuanganList.map(pos => `<option value="${pos}">${pos}</option>`).join('');
-        filterKasEl.value = (prevVal === 'ALL' || posKeuanganList.includes(prevVal)) ? prevVal : 'ALL';
-      }
+      // Sinkronkan filter Pos Keuangan di semua halaman yang memiliki tabel transaksi
+      ['filter-akun-kas', 'filter-akun-dash', 'filter-akun-unit', 'filter-akun-ipl'].forEach(filterId => {
+        const filterEl = document.getElementById(filterId);
+        if (!filterEl) return;
+        const prevVal = filterEl.value || 'ALL';
+        let optionsSource = [...posKeuanganList];
+
+        if (filterId === 'filter-akun-unit') {
+          const unitOptions = posKeuanganList.filter(p => p !== 'IPL Warga' && p !== 'Kas RW');
+          if (unitOptions.length > 0) optionsSource = unitOptions;
+        } else if (filterId === 'filter-akun-ipl') {
+          const iplOptions = posKeuanganList.filter(p => p.toLowerCase().includes('ipl'));
+          if (iplOptions.length > 0) optionsSource = iplOptions;
+        }
+
+        filterEl.innerHTML = `<option value="ALL">Semua Pos Keuangan</option>` +
+          optionsSource.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        filterEl.value = (prevVal === 'ALL' || optionsSource.includes(prevVal)) ? prevVal : 'ALL';
+      });
 
       ['trx-akun', 'unit-trx-akun'].forEach(selId => {
         const el = document.getElementById(selId);
@@ -1596,12 +1659,69 @@
 
     let activeChartContext = 'dash';
 
+
+    function getDefaultLatestMonthRecentTransactions(list, limit = 10) {
+      if (!Array.isArray(list) || list.length === 0) return [];
+      const months = [...new Set(
+        list.map(t => (formatDate(t.tanggal) || '').slice(0, 7)).filter(m => /^\d{4}-\d{2}$/.test(m))
+      )].sort().reverse();
+      if (months.length === 0) return list.slice(-limit).reverse();
+      const latestMonth = months[0];
+      const latestMonthItems = list.filter(t => (formatDate(t.tanggal) || '').startsWith(latestMonth));
+      return latestMonthItems.slice().reverse().slice(0, limit);
+    }
+
     function formatDate(dateString) {
       if (!dateString) return '-';
       if (typeof dateString === 'string' && dateString.includes('T')) {
         return dateString.split('T')[0];
       }
       return dateString;
+    }
+
+    function isDateInRange(dateStr, startDate, endDate) {
+      const cleanDate = formatDate(dateStr);
+      if (!cleanDate || cleanDate === '-') return false;
+      if (startDate && cleanDate < startDate) return false;
+      if (endDate && cleanDate > endDate) return false;
+      return true;
+    }
+
+    function resetDashTrxFilter() {
+      document.getElementById('filter-date-start-dash').value = '';
+      document.getElementById('filter-date-end-dash').value = '';
+      document.getElementById('filter-akun-dash').value = 'ALL';
+      document.getElementById('filter-metode-dash').value = 'ALL';
+      document.getElementById('search-dash-trx').value = '';
+      renderDashboard();
+    }
+
+    function resetKasFilter() {
+      document.getElementById('filter-date-start-kas').value = '';
+      document.getElementById('filter-date-end-kas').value = '';
+      document.getElementById('filter-akun-kas').value = 'ALL';
+      document.getElementById('filter-tipe-kas').value = 'ALL';
+      document.getElementById('filter-metode-kas').value = 'ALL';
+      document.getElementById('search-kas').value = '';
+      renderKas();
+    }
+
+    function resetUnitTrxFilter() {
+      document.getElementById('filter-date-start-unit').value = '';
+      document.getElementById('filter-date-end-unit').value = '';
+      document.getElementById('filter-akun-unit').value = 'ALL';
+      document.getElementById('filter-metode-unit').value = 'ALL';
+      document.getElementById('search-unit-trx').value = '';
+      renderUnitDashboard();
+    }
+
+    function resetIplTrxFilter() {
+      document.getElementById('filter-date-start-ipl').value = '';
+      document.getElementById('filter-date-end-ipl').value = '';
+      document.getElementById('filter-akun-ipl').value = 'ALL';
+      document.getElementById('filter-metode-ipl').value = 'ALL';
+      document.getElementById('search-ipl-mod-trx').value = '';
+      renderIplModule();
     }
 
     function formatCurr(val) {
@@ -2697,9 +2817,14 @@
       if (dashTrxBody) {
         const keywordDash = (document.getElementById('search-dash-trx')?.value || '').toLowerCase();
         const metodeDashFilter = document.getElementById('filter-metode-dash')?.value || 'ALL';
+        const akunDashFilter = document.getElementById('filter-akun-dash')?.value || 'ALL';
+        const startDashDate = document.getElementById('filter-date-start-dash')?.value || '';
+        const endDashDate = document.getElementById('filter-date-end-dash')?.value || '';
 
         const filteredDashTrx = transaksiList.filter(t => {
           const normMetode = normalizeMetode(t.metode);
+          const matchDate = isDateInRange(t.tanggal, startDashDate, endDashDate);
+          const matchAkun = akunDashFilter === 'ALL' || t.akun === akunDashFilter;
           const matchMetode = metodeDashFilter === 'ALL' || normMetode === metodeDashFilter;
           const matchKeyword = !keywordDash ||
             (t.akun && t.akun.toLowerCase().includes(keywordDash)) ||
@@ -2707,13 +2832,18 @@
             (t.keterangan && t.keterangan.toLowerCase().includes(keywordDash)) ||
             (t.pelapor && t.pelapor.toLowerCase().includes(keywordDash)) ||
             normMetode.toLowerCase().includes(keywordDash);
-          return matchMetode && matchKeyword;
+          return matchDate && matchAkun && matchMetode && matchKeyword;
         });
 
-        if (filteredDashTrx.length === 0) {
+        const isDashDefaultUnfiltered = !keywordDash && akunDashFilter === 'ALL' && metodeDashFilter === 'ALL' && !startDashDate && !endDashDate;
+        const displayDashTrx = isDashDefaultUnfiltered
+          ? getDefaultLatestMonthRecentTransactions(filteredDashTrx, 10)
+          : filteredDashTrx.slice().reverse();
+
+        if (displayDashTrx.length === 0) {
           dashTrxBody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi yang sesuai dengan filter.</td></tr>`;
         } else {
-          dashTrxBody.innerHTML = filteredDashTrx.slice().reverse().map(t => `
+          dashTrxBody.innerHTML = displayDashTrx.map(t => `
             <tr class="hover:bg-slate-50 transition">
               <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
               <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
@@ -2734,15 +2864,23 @@
       const keyword = document.getElementById('search-unit-trx').value.toLowerCase();
       const metodeFilterEl = document.getElementById('filter-metode-unit');
       const metodeFilter = metodeFilterEl ? metodeFilterEl.value : 'ALL';
+      const akunFilterEl = document.getElementById('filter-akun-unit');
+      const akunFilter = akunFilterEl ? akunFilterEl.value : 'ALL';
+      const startUnitDate = document.getElementById('filter-date-start-unit')?.value || '';
+      const endUnitDate = document.getElementById('filter-date-end-unit')?.value || '';
 
       let filteredTrx = unitTransaksiList.filter(t => {
         const isIpl = t.akun === 'IPL Warga';
         const normMetode = normalizeMetode(t.metode);
+        const matchDate = isDateInRange(t.tanggal, startUnitDate, endUnitDate);
+        const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
-        const matchKeyword = (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
+        const matchKeyword = !keyword ||
+          (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
+          (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           normMetode.toLowerCase().includes(keyword);
-        return !isIpl && matchMetode && matchKeyword;
+        return !isIpl && matchDate && matchAkun && matchMetode && matchKeyword;
       });
 
       let unitStats = {
@@ -2930,24 +3068,35 @@
       const thAksiUnit = document.getElementById('th-aksi-unit-trx');
       if (thAksiUnit) thAksiUnit.style.display = (canEdit || canDelete) ? '' : 'none';
 
-      document.getElementById('table-unit-trx-body').innerHTML = filteredTrx.slice().reverse().map(t => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
-          <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
-          <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
-          <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-          <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
-            ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
-          </td>
-          ${(canEdit || canDelete) ? `
-            <td class="py-3 px-4 text-right no-print space-x-1">
-              ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
-              ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+      const isUnitDefaultUnfiltered = !keyword && akunFilter === 'ALL' && metodeFilter === 'ALL' && !startUnitDate && !endUnitDate;
+      const displayUnitTrx = isUnitDefaultUnfiltered
+        ? getDefaultLatestMonthRecentTransactions(filteredTrx, 10)
+        : filteredTrx.slice().reverse();
+
+      const unitBodyEl = document.getElementById('table-unit-trx-body');
+      if (displayUnitTrx.length === 0) {
+        const colSpan = (canEdit || canDelete) ? 7 : 6;
+        unitBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi unit usaha yang sesuai dengan filter.</td></tr>`;
+      } else {
+        unitBodyEl.innerHTML = displayUnitTrx.map(t => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
+            <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
+            <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
+            <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
+            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+              ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
-          ` : ''}
-        </tr>
-      `).join('');
+            ${(canEdit || canDelete) ? `
+              <td class="py-3 px-4 text-right no-print space-x-1">
+                ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
+                ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+              </td>
+            ` : ''}
+          </tr>
+        `).join('');
+      }
       lucide.createIcons();
     }
 
@@ -2956,15 +3105,24 @@
       const keyword = document.getElementById('search-ipl-mod-trx').value.toLowerCase();
       const metodeFilterEl = document.getElementById('filter-metode-ipl');
       const metodeFilter = metodeFilterEl ? metodeFilterEl.value : 'ALL';
+      const akunFilterEl = document.getElementById('filter-akun-ipl');
+      const akunFilter = akunFilterEl ? akunFilterEl.value : 'ALL';
+      const startIplDate = document.getElementById('filter-date-start-ipl')?.value || '';
+      const endIplDate = document.getElementById('filter-date-end-ipl')?.value || '';
+
       let iplTrxList = unitTransaksiList.filter(t => t.akun === 'IPL Warga');
 
       let filteredTrx = iplTrxList.filter(t => {
         const normMetode = normalizeMetode(t.metode);
+        const matchDate = isDateInRange(t.tanggal, startIplDate, endIplDate);
+        const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
-        const matchKeyword = (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
+        const matchKeyword = !keyword ||
+          (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
+          (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           normMetode.toLowerCase().includes(keyword);
-        return matchMetode && matchKeyword;
+        return matchDate && matchAkun && matchMetode && matchKeyword;
       });
 
       let totalIn = 0, totalOut = 0;
@@ -3129,24 +3287,35 @@
       const thAksiIpl = document.getElementById('th-aksi-ipl-mod');
       if (thAksiIpl) thAksiIpl.style.display = (canEdit || canDelete) ? '' : 'none';
 
-      document.getElementById('table-ipl-mod-trx-body').innerHTML = filteredTrx.slice().reverse().map(t => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-emerald-50 text-emerald-700 font-medium">${t.akun}</span></td>
-          <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
-          <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
-          <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-          <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
-            ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
-          </td>
-          ${(canEdit || canDelete) ? `
-            <td class="py-3 px-4 text-right no-print space-x-1">
-              ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
-              ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+      const isIplDefaultUnfiltered = !keyword && akunFilter === 'ALL' && metodeFilter === 'ALL' && !startIplDate && !endIplDate;
+      const displayIplTrx = isIplDefaultUnfiltered
+        ? getDefaultLatestMonthRecentTransactions(filteredTrx, 10)
+        : filteredTrx.slice().reverse();
+
+      const iplBodyEl = document.getElementById('table-ipl-mod-trx-body');
+      if (displayIplTrx.length === 0) {
+        const colSpan = (canEdit || canDelete) ? 7 : 6;
+        iplBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi IPL yang sesuai dengan filter.</td></tr>`;
+      } else {
+        iplBodyEl.innerHTML = displayIplTrx.map(t => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-emerald-50 text-emerald-700 font-medium">${t.akun}</span></td>
+            <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
+            <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
+            <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
+            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+              ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
-          ` : ''}
-        </tr>
-      `).join('');
+            ${(canEdit || canDelete) ? `
+              <td class="py-3 px-4 text-right no-print space-x-1">
+                ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
+                ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+              </td>
+            ` : ''}
+          </tr>
+        `).join('');
+      }
       lucide.createIcons();
     }
 
@@ -3359,17 +3528,21 @@
       const tipeFilter = document.getElementById('filter-tipe-kas').value;
       const metodeFilterEl = document.getElementById('filter-metode-kas');
       const metodeFilter = metodeFilterEl ? metodeFilterEl.value : 'ALL';
+      const startKasDate = document.getElementById('filter-date-start-kas')?.value || '';
+      const endKasDate = document.getElementById('filter-date-end-kas')?.value || '';
 
       const filtered = transaksiList.filter(t => {
         const normMetode = normalizeMetode(t.metode);
-        const match = (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
+        const matchDate = isDateInRange(t.tanggal, startKasDate, endKasDate);
+        const match = !keyword ||
+          (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
           (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
           normMetode.toLowerCase().includes(keyword);
         const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchTipe = tipeFilter === 'ALL' || t.tipe === tipeFilter;
         const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
-        return match && matchAkun && matchTipe && matchMetode;
+        return matchDate && match && matchAkun && matchTipe && matchMetode;
       });
 
       const canEdit = hasPermission('canEdit');
@@ -3377,24 +3550,35 @@
       const thAksi = document.getElementById('th-aksi-kas');
       if (thAksi) thAksi.style.display = (canEdit || canDelete) ? '' : 'none';
 
-      document.getElementById('table-kas-body').innerHTML = filtered.slice().reverse().map(t => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100">${t.akun}</span></td>
-          <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
-          <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
-          <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-          <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
-            ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
-          </td>
-          ${(canEdit || canDelete) ? `
-            <td class="py-3 px-4 text-right no-print space-x-1">
-              ${canEdit ? `<button onclick="openEditTransaksiModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
-              ${canDelete ? `<button onclick="deleteTransaksi('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+      const isKasDefaultUnfiltered = !keyword && akunFilter === 'ALL' && tipeFilter === 'ALL' && metodeFilter === 'ALL' && !startKasDate && !endKasDate;
+      const displayKasTrx = isKasDefaultUnfiltered
+        ? getDefaultLatestMonthRecentTransactions(filtered, 10)
+        : filtered.slice().reverse();
+
+      const kasBodyEl = document.getElementById('table-kas-body');
+      if (displayKasTrx.length === 0) {
+        const colSpan = (canEdit || canDelete) ? 7 : 6;
+        kasBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi kas RW yang sesuai dengan filter.</td></tr>`;
+      } else {
+        kasBodyEl.innerHTML = displayKasTrx.map(t => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100">${t.akun}</span></td>
+            <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
+            <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
+            <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
+            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+              ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
-          ` : ''}
-        </tr>
-      `).join('');
+            ${(canEdit || canDelete) ? `
+              <td class="py-3 px-4 text-right no-print space-x-1">
+                ${canEdit ? `<button onclick="openEditTransaksiModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
+                ${canDelete ? `<button onclick="deleteTransaksi('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+              </td>
+            ` : ''}
+          </tr>
+        `).join('');
+      }
     }
 
     function openAddTransaksiModal() {
