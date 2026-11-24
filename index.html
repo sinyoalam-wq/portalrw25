@@ -2848,8 +2848,8 @@
           }
         }
 
+        const maxUVal = Math.max(...chartCols.map(col => Math.max(col.inVal, col.outVal)), 100000);
         let mBars = chartCols.map(col => {
-          const maxUVal = 5000000;
           const hIn = Math.max(Math.round((col.inVal / maxUVal) * 100), col.inVal > 0 ? 4 : 2);
           const hOut = Math.max(Math.round((col.outVal / maxUVal) * 100), col.outVal > 0 ? 4 : 2);
           return `
