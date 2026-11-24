@@ -326,18 +326,21 @@
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Komposisi Pemasukan Kas RW -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pemasukan Kas RW</h3>
-                  <p id="dash-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="dash-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="dash-income-filter-month" value="2026-11" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="dash-income-filter-pos" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="dash-income-filter-month" value="2026-11" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="dash-income-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="dash-income-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -361,18 +364,21 @@
               </div>
             </div>
 
+            <!-- Komposisi Pengeluaran Kas RW -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pengeluaran Kas RW</h3>
-                  <p id="dash-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="dash-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="dash-expense-filter-month" value="2026-11" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="dash-expense-filter-pos" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="dash-expense-filter-month" value="2026-11" onchange="renderDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="dash-expense-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="dash-expense-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -676,17 +682,19 @@
           <!-- KOMPOSISI PEMASUKAN & PENGELUARAN UNIT USAHA -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pemasukan Unit Usaha</h3>
-                  <p id="unit-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="unit-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="unit-income-filter-month" value="2026-11" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="unit-income-filter-pos" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="unit-income-filter-month" value="2026-11" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="unit-income-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="unit-income-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -711,17 +719,19 @@
             </div>
 
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pengeluaran Unit Usaha</h3>
-                  <p id="unit-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="unit-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="unit-expense-filter-month" value="2026-11" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="unit-expense-filter-pos" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="unit-expense-filter-month" value="2026-11" onchange="renderUnitDashboard()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="unit-expense-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="unit-expense-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -894,17 +904,19 @@
           <!-- KOMPOSISI PEMASUKAN PER RT & KOMPOSISI PENGELUARAN IPL -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pemasukan IPL Per RT</h3>
-                  <p id="ipl-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="ipl-income-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="ipl-income-filter-month" value="2026-11" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="ipl-income-filter-pos" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="ipl-income-filter-month" value="2026-11" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="ipl-income-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="ipl-income-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -929,17 +941,19 @@
             </div>
 
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 border-b border-slate-100 pb-3">
                 <div>
                   <h3 class="font-bold text-slate-900">Komposisi Pengeluaran IPL</h3>
-                  <p id="ipl-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026</p>
+                  <p id="ipl-expense-filter-subtitle" class="text-xs text-slate-500">Periode Bulan: November 2026 • Pos: Semua Pos Keuangan</p>
                 </div>
-                <input type="month" id="ipl-expense-filter-month" value="2026-11" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                <div class="flex flex-wrap items-center gap-2 no-print">
+                  <select id="ipl-expense-filter-pos" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+                  <input type="month" id="ipl-expense-filter-month" value="2026-11" onchange="renderIplModule()" class="text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-medium" />
+                </div>
               </div>
               <div class="flex flex-col sm:flex-row items-center gap-6">
                 <div class="flex flex-col items-center">
                   <div id="ipl-expense-pie-container" class="relative w-40 h-40 flex items-center justify-center"></div>
-                  <div id="ipl-expense-legend" class="flex flex-wrap justify-center gap-2 mt-3 text-[11px]"></div>
                 </div>
                 <div class="flex-1 w-full overflow-x-auto">
                   <table class="w-full text-left border-collapse">
@@ -1435,7 +1449,6 @@
     }
 
     function syncPosKeuanganDropdowns() {
-      // Sinkronkan filter Pos Keuangan di semua halaman yang memiliki tabel transaksi
       ['filter-akun-kas', 'filter-akun-dash', 'filter-akun-unit', 'filter-akun-ipl'].forEach(filterId => {
         const filterEl = document.getElementById(filterId);
         if (!filterEl) return;
@@ -1453,6 +1466,33 @@
         filterEl.innerHTML = `<option value="ALL">Semua Pos Keuangan</option>` +
           optionsSource.map(pos => `<option value="${pos}">${pos}</option>`).join('');
         filterEl.value = (prevVal === 'ALL' || optionsSource.includes(prevVal)) ? prevVal : 'ALL';
+      });
+
+      // Sinkronkan filter Pos Keuangan pada grafik komposisi pemasukan & pengeluaran di semua module
+      [
+        'dash-income-filter-pos',
+        'dash-expense-filter-pos',
+        'unit-income-filter-pos',
+        'unit-expense-filter-pos',
+        'ipl-income-filter-pos',
+        'ipl-expense-filter-pos'
+      ].forEach(compPosId => {
+        const compPosEl = document.getElementById(compPosId);
+        if (!compPosEl) return;
+        const prevVal = compPosEl.value || 'ALL';
+        let optionsSource = [...posKeuanganList];
+
+        if (compPosId.startsWith('unit-')) {
+          const unitOptions = posKeuanganList.filter(p => p !== 'IPL Warga' && p !== 'Kas RW');
+          if (unitOptions.length > 0) optionsSource = unitOptions;
+        } else if (compPosId.startsWith('ipl-')) {
+          const iplOptions = posKeuanganList.filter(p => p.toLowerCase().includes('ipl'));
+          if (iplOptions.length > 0) optionsSource = iplOptions;
+        }
+
+        compPosEl.innerHTML = `<option value="ALL">Semua Pos Keuangan</option>` +
+          optionsSource.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        compPosEl.value = (prevVal === 'ALL' || optionsSource.includes(prevVal)) ? prevVal : 'ALL';
       });
 
       ['trx-akun', 'unit-trx-akun'].forEach(selId => {
@@ -1659,7 +1699,6 @@
 
     let activeChartContext = 'dash';
 
-
     function getDefaultLatestMonthRecentTransactions(list, limit = 10) {
       if (!Array.isArray(list) || list.length === 0) return [];
       const months = [...new Set(
@@ -1813,7 +1852,6 @@
       const sorted = [...entries].sort((a, b) => b[1] - a[1]);
 
       let tableHtml = '';
-      let legendHtml = '';
       let svgHtml = '';
       let angle = 0;
 
@@ -1836,13 +1874,6 @@
             </tr>
           `;
 
-          legendHtml += `
-            <div class="flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: ${color}"></span>
-              <span class="text-slate-600 font-medium">${label} (${ratio}%)</span>
-            </div>
-          `;
-
           const percentage = totalVal > 0 ? (val / totalVal) : 0;
           const dashArray = `${percentage * 251.2} 251.2`;
           const dashOffset = -angle * 251.2;
@@ -1853,7 +1884,10 @@
       }
 
       document.getElementById(tableBodyId).innerHTML = tableHtml;
-      document.getElementById(legendId).innerHTML = legendHtml;
+      if (legendId) {
+        const legendEl = document.getElementById(legendId);
+        if (legendEl) legendEl.innerHTML = '';
+      }
       document.getElementById(pieContainerId).innerHTML = `
         <svg viewBox="0 0 100 100" class="w-40 h-40 transform -rotate-90">${svgHtml}</svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
@@ -2764,12 +2798,15 @@
 
       // 1. Pemasukan Kas RW
       const dashIncomeMonth = document.getElementById('dash-income-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('dash-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(dashIncomeMonth)}`;
+      const dashIncomePos = document.getElementById('dash-income-filter-pos')?.value || 'ALL';
+      const dashIncomePosLabel = dashIncomePos === 'ALL' ? 'Semua Pos Keuangan' : dashIncomePos;
+      document.getElementById('dash-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(dashIncomeMonth)} • Pos: ${dashIncomePosLabel}`;
       let dashIncomeCats = {};
       let totalDashIncome = 0;
       transaksiList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
-        if (t.tipe === 'MASUK' && tDate.startsWith(dashIncomeMonth)) {
+        let matchPos = dashIncomePos === 'ALL' || t.akun === dashIncomePos;
+        if (t.tipe === 'MASUK' && tDate.startsWith(dashIncomeMonth) && matchPos) {
           let nom = Number(t.nominal) || 0;
           let cat = t.kategori || 'Lain-lain';
           dashIncomeCats[cat] = (dashIncomeCats[cat] || 0) + nom;
@@ -2780,7 +2817,7 @@
         entries: Object.entries(dashIncomeCats),
         totalVal: totalDashIncome,
         valueColorClass: 'text-emerald-600',
-        emptyText: 'Belum ada data pemasukan Kas RW pada bulan ini.',
+        emptyText: 'Belum ada data pemasukan Kas RW pada filter ini.',
         tableBodyId: 'dash-income-table-body',
         totalNominalId: 'dash-income-total-nominal',
         legendId: 'dash-income-legend',
@@ -2789,12 +2826,15 @@
 
       // 2. Pengeluaran Kas RW
       const dashExpenseMonth = document.getElementById('dash-expense-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('dash-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(dashExpenseMonth)}`;
+      const dashExpensePos = document.getElementById('dash-expense-filter-pos')?.value || 'ALL';
+      const dashExpensePosLabel = dashExpensePos === 'ALL' ? 'Semua Pos Keuangan' : dashExpensePos;
+      document.getElementById('dash-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(dashExpenseMonth)} • Pos: ${dashExpensePosLabel}`;
       let dashExpenseCats = {};
       let totalDashExpense = 0;
       transaksiList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
-        if (t.tipe === 'KELUAR' && tDate.startsWith(dashExpenseMonth)) {
+        let matchPos = dashExpensePos === 'ALL' || t.akun === dashExpensePos;
+        if (t.tipe === 'KELUAR' && tDate.startsWith(dashExpenseMonth) && matchPos) {
           let nom = Number(t.nominal) || 0;
           let cat = t.kategori || 'Lain-lain';
           dashExpenseCats[cat] = (dashExpenseCats[cat] || 0) + nom;
@@ -2805,7 +2845,7 @@
         entries: Object.entries(dashExpenseCats),
         totalVal: totalDashExpense,
         valueColorClass: 'text-rose-600',
-        emptyText: 'Belum ada data pengeluaran Kas RW pada bulan ini.',
+        emptyText: 'Belum ada data pengeluaran Kas RW pada filter ini.',
         tableBodyId: 'dash-expense-table-body',
         totalNominalId: 'dash-expense-total-nominal',
         legendId: 'dash-expense-legend',
@@ -3015,12 +3055,15 @@
 
       // Komposisi Pemasukan Unit Usaha
       const unitIncomeMonth = document.getElementById('unit-income-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('unit-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitIncomeMonth)}`;
+      const unitIncomePos = document.getElementById('unit-income-filter-pos')?.value || 'ALL';
+      const unitIncomePosLabel = unitIncomePos === 'ALL' ? 'Semua Pos Keuangan' : unitIncomePos;
+      document.getElementById('unit-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitIncomeMonth)} • Pos: ${unitIncomePosLabel}`;
       let unitIncomeCats = {};
       let totalUnitIncome = 0;
       nonIplTrxList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
-        if (t.tipe === 'MASUK' && tDate.startsWith(unitIncomeMonth)) {
+        let matchPos = unitIncomePos === 'ALL' || t.akun === unitIncomePos;
+        if (t.tipe === 'MASUK' && tDate.startsWith(unitIncomeMonth) && matchPos) {
           let nom = Number(t.nominal) || 0;
           let cat = t.kategori || 'Lain-lain';
           unitIncomeCats[cat] = (unitIncomeCats[cat] || 0) + nom;
@@ -3031,7 +3074,7 @@
         entries: Object.entries(unitIncomeCats),
         totalVal: totalUnitIncome,
         valueColorClass: 'text-emerald-600',
-        emptyText: 'Belum ada data pemasukan Unit Usaha pada bulan ini.',
+        emptyText: 'Belum ada data pemasukan Unit Usaha pada filter ini.',
         tableBodyId: 'unit-income-table-body',
         totalNominalId: 'unit-income-total-nominal',
         legendId: 'unit-income-legend',
@@ -3040,12 +3083,15 @@
 
       // Komposisi Pengeluaran Unit Usaha
       const unitExpenseMonth = document.getElementById('unit-expense-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('unit-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitExpenseMonth)}`;
+      const unitExpensePos = document.getElementById('unit-expense-filter-pos')?.value || 'ALL';
+      const unitExpensePosLabel = unitExpensePos === 'ALL' ? 'Semua Pos Keuangan' : unitExpensePos;
+      document.getElementById('unit-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitExpenseMonth)} • Pos: ${unitExpensePosLabel}`;
       let unitExpenseCats = {};
       let totalUnitExpense = 0;
       nonIplTrxList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
-        if (t.tipe === 'KELUAR' && tDate.startsWith(unitExpenseMonth)) {
+        let matchPos = unitExpensePos === 'ALL' || t.akun === unitExpensePos;
+        if (t.tipe === 'KELUAR' && tDate.startsWith(unitExpenseMonth) && matchPos) {
           let nom = Number(t.nominal) || 0;
           let cat = t.kategori || 'Lain-lain';
           unitExpenseCats[cat] = (unitExpenseCats[cat] || 0) + nom;
@@ -3056,7 +3102,7 @@
         entries: Object.entries(unitExpenseCats),
         totalVal: totalUnitExpense,
         valueColorClass: 'text-rose-600',
-        emptyText: 'Belum ada data pengeluaran Unit Usaha pada bulan ini.',
+        emptyText: 'Belum ada data pengeluaran Unit Usaha pada filter ini.',
         tableBodyId: 'unit-expense-table-body',
         totalNominalId: 'unit-expense-total-nominal',
         legendId: 'unit-expense-legend',
@@ -3230,24 +3276,28 @@
 
       // Komposisi Pemasukan IPL Per RT
       const iplIncomeMonth = document.getElementById('ipl-income-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('ipl-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(iplIncomeMonth)}`;
+      const iplIncomePos = document.getElementById('ipl-income-filter-pos')?.value || 'ALL';
+      const iplIncomePosLabel = iplIncomePos === 'ALL' ? 'Semua Pos Keuangan' : iplIncomePos;
+      document.getElementById('ipl-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(iplIncomeMonth)} • Pos: ${iplIncomePosLabel}`;
       const iplIncomeByRt = {};
       let totalIplIncomeByRt = 0;
 
-      rts.forEach(rt => {
-        const lunasRtCount = wargaList.filter(w => w.rt === rt && w.iuran && w.iuran[iplIncomeMonth]).length;
-        const nominalRt = lunasRtCount * 100000;
-        if (nominalRt > 0) {
-          iplIncomeByRt[rt] = nominalRt;
-          totalIplIncomeByRt += nominalRt;
-        }
-      });
+      if (iplIncomePos === 'ALL' || iplIncomePos === 'IPL Warga') {
+        rts.forEach(rt => {
+          const lunasRtCount = wargaList.filter(w => w.rt === rt && w.iuran && w.iuran[iplIncomeMonth]).length;
+          const nominalRt = lunasRtCount * 100000;
+          if (nominalRt > 0) {
+            iplIncomeByRt[rt] = nominalRt;
+            totalIplIncomeByRt += nominalRt;
+          }
+        });
+      }
 
       renderCompositionPieAndTable({
         entries: Object.entries(iplIncomeByRt),
         totalVal: totalIplIncomeByRt,
         valueColorClass: 'text-emerald-600',
-        emptyText: 'Belum ada pembayaran IPL per RT pada bulan ini.',
+        emptyText: 'Belum ada pembayaran IPL per RT pada filter ini.',
         tableBodyId: 'ipl-income-table-body',
         totalNominalId: 'ipl-income-total-nominal',
         legendId: 'ipl-income-legend',
@@ -3256,14 +3306,17 @@
 
       // Komposisi Pengeluaran IPL
       const expenseMonthInput = document.getElementById('ipl-expense-filter-month').value || CURRENT_MONTH_KEY;
-      document.getElementById('ipl-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(expenseMonthInput)}`;
+      const iplExpensePos = document.getElementById('ipl-expense-filter-pos')?.value || 'ALL';
+      const iplExpensePosLabel = iplExpensePos === 'ALL' ? 'Semua Pos Keuangan' : iplExpensePos;
+      document.getElementById('ipl-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(expenseMonthInput)} • Pos: ${iplExpensePosLabel}`;
 
       let monthlyExpenseCategories = {};
       let totalMonthlyExpense = 0;
 
       iplTrxList.forEach(t => {
         const tDate = formatDate(t.tanggal) || '2026-11-20';
-        if (t.tipe === 'KELUAR' && tDate.startsWith(expenseMonthInput)) {
+        const matchPos = iplExpensePos === 'ALL' || t.akun === iplExpensePos;
+        if (t.tipe === 'KELUAR' && tDate.startsWith(expenseMonthInput) && matchPos) {
           let nominal = Number(t.nominal) || 0;
           let cat = t.kategori || 'Lain-lain';
           monthlyExpenseCategories[cat] = (monthlyExpenseCategories[cat] || 0) + nominal;
@@ -3275,7 +3328,7 @@
         entries: Object.entries(monthlyExpenseCategories),
         totalVal: totalMonthlyExpense,
         valueColorClass: 'text-rose-600',
-        emptyText: 'Belum ada data pengeluaran IPL pada bulan ini.',
+        emptyText: 'Belum ada data pengeluaran IPL pada filter ini.',
         tableBodyId: 'ipl-expense-table-body',
         totalNominalId: 'ipl-expense-total-nominal',
         legendId: 'ipl-expense-legend',
@@ -3820,16 +3873,17 @@
       document.getElementById('usr-pwd').value = user.password;
       document.getElementById('usr-role').value = user.role;
 
+      const userMenus = user.menus || [];
       document.querySelectorAll('#modal-user-form input[id^="chk-menu-"]').forEach(chk => {
-        chk.checked = (user.menus || []).includes(chk.value);
+        chk.checked = userMenus.includes(chk.value);
       });
 
-      let p = user.permissions || {};
-      document.getElementById('chk-feat-edit').checked = !!p.canEdit;
-      document.getElementById('chk-feat-delete').checked = !!p.canDelete;
-      document.getElementById('chk-feat-download').checked = !!p.canDownload;
-      document.getElementById('chk-feat-add').checked = !!p.canAdd;
-      document.getElementById('chk-feat-rekap-pdf').checked = !!p.canRekapPdf;
+      const perms = user.permissions || {};
+      document.getElementById('chk-feat-edit').checked = perms.canEdit === true;
+      document.getElementById('chk-feat-delete').checked = perms.canDelete === true;
+      document.getElementById('chk-feat-download').checked = perms.canDownload === true;
+      document.getElementById('chk-feat-add').checked = perms.canAdd === true;
+      document.getElementById('chk-feat-rekap-pdf').checked = perms.canRekapPdf === true;
 
       openModal('modal-user-form');
     }
@@ -3842,12 +3896,17 @@
       const password = document.getElementById('usr-pwd').value;
       const role = document.getElementById('usr-role').value;
 
-      let selectedMenus = [];
+      if (!role) {
+        alert('Silakan pilih Nama Peran (Role) terlebih dahulu.');
+        return;
+      }
+
+      const menus = [];
       document.querySelectorAll('#modal-user-form input[id^="chk-menu-"]:checked').forEach(chk => {
-        selectedMenus.push(chk.value);
+        menus.push(chk.value);
       });
 
-      let permissions = {
+      const permissions = {
         canEdit: document.getElementById('chk-feat-edit').checked,
         canDelete: document.getElementById('chk-feat-delete').checked,
         canDownload: document.getElementById('chk-feat-download').checked,
@@ -3857,48 +3916,42 @@
 
       if (editId) {
         const user = userList.find(u => u.id === editId);
-        if (user) { 
-          user.nama = nama; 
-          user.email = email; 
-          user.password = password; 
-          user.role = role; 
-          user.menus = selectedMenus;
+        if (user) {
+          user.nama = nama;
+          user.email = email;
+          user.password = password;
+          user.role = role;
+          user.menus = menus;
           user.permissions = permissions;
         }
-        alert(`Akun ${nama} berhasil diperbarui!`);
+        if (currentUser && currentUser.id === editId) {
+          currentUser = user;
+        }
+        alert('Data akun pengurus & hak akses berhasil diperbarui!');
       } else {
         const newUser = {
           id: `USR-${Date.now().toString().slice(-4)}`,
-          nama, email, password, role,
-          menus: selectedMenus,
-          permissions: permissions
+          nama, email, password, role, menus, permissions
         };
         userList.push(newUser);
-        alert(`Akun ${nama} berhasil ditambahkan!`);
+        alert('Akun pengurus baru berhasil didaftarkan!');
       }
+
       saveUsersToCloud();
       closeModal('modal-user-form');
       initLoginSelect();
-      renderUsers();
-      if (!currentUser || (currentUser && currentUser.id === editId)) {
-        applyRolePermissions();
-        refreshAll();
-      }
+      applyRolePermissions();
+      refreshAll();
     }
 
     function deleteUser(id) {
       const idx = userList.findIndex(u => u.id === id);
       if (idx !== -1) {
-        if (userList[idx].role.toLowerCase().includes('admin') && userList.filter(u => u.role.toLowerCase().includes('admin')).length <= 1) {
-          alert('Tidak dapat menghapus Admin terakhir!');
-          return;
-        }
         if (confirm(`Apakah Anda yakin ingin menghapus akun ${userList[idx].nama}?`)) {
           userList.splice(idx, 1);
-          ensureGuestUserInList();
           saveUsersToCloud();
+          refreshAll();
           initLoginSelect();
-          renderUsers();
           alert('Akun berhasil dihapus.');
         }
       }
@@ -3907,23 +3960,23 @@
     function refreshAll() {
       syncPosKeuanganDropdowns();
       renderDashboard();
-      renderWarga();
-      renderKas();
       renderIuran();
+      renderKas();
       renderUnitDashboard();
       renderIplModule();
+      renderWarga();
       renderUsers();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       loadMasterFinanceOptions();
       syncPosKeuanganDropdowns();
-      ensureGuestUserInList();
+      updateKategoriOptions(kategoriMasukList[0] || '');
+      updateUnitKategoriOptions(kategoriMasukList[1] || kategoriMasukList[0] || '');
       initLoginSelect();
       applyRolePermissions();
-      loadDataFromCloud();
       switchTab('dashboard');
-      lucide.createIcons();
+      loadDataFromCloud();
     });
   </script>
 </body>
