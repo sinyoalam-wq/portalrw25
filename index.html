@@ -226,9 +226,9 @@
 
       <div class="p-4 border-t border-slate-800">
         <div class="bg-slate-800/60 rounded-xl p-3 text-xs">
-          <p class="text-slate-400 mb-1">Periode Kepengurusan</p>
+          <p class="text-slate-400 mb-1">Status Sinkronisasi</p>
           <div class="flex items-center justify-between text-emerald-400 font-medium">
-            <span>Sistem Online</span>
+            <span>Google Sheets</span>
             <span id="sync-status" class="text-emerald-400 animate-pulse">Connected</span>
           </div>
         </div>
@@ -409,7 +409,7 @@
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 class="font-bold text-slate-900">List Data Transaksi Kas RW</h3>
-                  <p class="text-xs text-slate-500">Daftar transaksi keuangan terbaru RW 025 berdasarkan tanggal, pos keuangan, dan metode</p>
+                  <p class="text-xs text-slate-500">Daftar transaksi keuangan terbaru RW 025 berdasarkan ID, tanggal, pos keuangan, dan metode</p>
                 </div>
                 <button type="button" onclick="resetDashTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
                   Reset Filter
@@ -428,13 +428,14 @@
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-dash-trx" onkeyup="renderDashboard()" placeholder="Cari kategori, keterangan, pelapor..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
+                <input type="text" id="search-dash-trx" onkeyup="renderDashboard()" placeholder="Cari ID, kategori, keterangan, pelapor..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                    <th class="py-3 px-4">ID</th>
                     <th class="py-3 px-4">Tanggal</th>
                     <th class="py-3 px-4">Pos Keuangan</th>
                     <th class="py-3 px-4">Metode Transaksi</th>
@@ -533,7 +534,7 @@
               <option value="Cash">Cash</option>
               <option value="Transfer">Transfer</option>
             </select>
-            <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari keterangan, kategori, pelapor..." class="px-3 py-2 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
+            <input type="text" id="search-kas" onkeyup="renderKas()" placeholder="Cari ID, keterangan, kategori, pelapor..." class="px-3 py-2 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
             <button type="button" onclick="resetKasFilter()" class="px-3 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition">
               Reset
             </button>
@@ -543,6 +544,7 @@
             <table class="w-full text-left border-collapse">
               <thead>
                 <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                  <th class="py-3 px-4">ID</th>
                   <th class="py-3 px-4">Tanggal</th>
                   <th class="py-3 px-4">Pos Keuangan</th>
                   <th class="py-3 px-4">Metode</th>
@@ -761,7 +763,7 @@
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 class="font-bold text-slate-900">List Data Transaksi Unit Usaha</h3>
-                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan seluruh unit usaha berdasarkan tanggal dan pos keuangan</p>
+                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan seluruh unit usaha (tersimpan terpisah pada sheet Transaksi_Unit_Usaha)</p>
                 </div>
                 <button type="button" onclick="resetUnitTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
                   Reset Filter
@@ -780,13 +782,14 @@
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-unit-trx" onkeyup="renderUnitDashboard()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
+                <input type="text" id="search-unit-trx" onkeyup="renderUnitDashboard()" placeholder="Cari ID, keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                    <th class="py-3 px-4">ID</th>
                     <th class="py-3 px-4">Tanggal</th>
                     <th class="py-3 px-4">Pos Keuangan</th>
                     <th class="py-3 px-4">Metode</th>
@@ -822,7 +825,7 @@
                 </button>
               </div>
               <button id="btn-add-ipl-trx" onclick="openAddIplModTrxModal()" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-sm transition">
-                <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Laporan Keuangan
+                <i data-lucide="plus-circle" class="w-4 h-4"></i> Catat Laporan Keuangan IPL
               </button>
             </div>
           </div>
@@ -983,7 +986,7 @@
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <h3 class="font-bold text-slate-900">List Data Transaksi Module IPL</h3>
-                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan pos IPL Warga berdasarkan tanggal dan pos keuangan</p>
+                  <p class="text-xs text-slate-500">Riwayat transaksi keuangan khusus IPL Warga (tersimpan terpisah pada sheet Transaksi_IPL)</p>
                 </div>
                 <button type="button" onclick="resetIplTrxFilter()" class="self-start sm:self-auto px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition no-print">
                   Reset Filter
@@ -1002,13 +1005,14 @@
                   <option value="Cash">Cash</option>
                   <option value="Transfer">Transfer</option>
                 </select>
-                <input type="text" id="search-ipl-mod-trx" onkeyup="renderIplModule()" placeholder="Cari keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
+                <input type="text" id="search-ipl-mod-trx" onkeyup="renderIplModule()" placeholder="Cari ID, keterangan atau kategori..." class="px-3 py-1.5 text-xs border border-slate-200 rounded-xl flex-1 min-w-[180px]" />
               </div>
             </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left border-collapse">
                 <thead>
                   <tr class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase">
+                    <th class="py-3 px-4">ID</th>
                     <th class="py-3 px-4">Tanggal</th>
                     <th class="py-3 px-4">Pos Keuangan</th>
                     <th class="py-3 px-4">Metode</th>
@@ -1160,11 +1164,11 @@
     </div>
   </div>
 
-  <!-- MODAL: TRANSAKSI (BUKU KAS) -->
+  <!-- MODAL: TRANSAKSI (BUKU KAS RW) -->
   <div id="modal-transaksi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
       <div class="flex items-center justify-between mb-4">
-        <h3 id="trx-modal-title" class="font-bold text-slate-900">Catat Laporan Keuangan</h3>
+        <h3 id="trx-modal-title" class="font-bold text-slate-900">Catat Laporan Keuangan Kas RW</h3>
         <button onclick="closeModal('modal-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleSaveTransaksi(event)" class="space-y-4 text-sm">
@@ -1207,23 +1211,23 @@
         </div>
         <div class="pt-2 flex justify-end gap-2">
           <button type="button" onclick="closeModal('modal-transaksi')" class="px-4 py-2 text-slate-600">Batal</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
+          <button type="submit" id="btn-submit-trx" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: TRANSAKSI UNIT USAHA & MODUL IPL -->
+  <!-- MODAL: TRANSAKSI UNIT USAHA -->
   <div id="modal-unit-transaksi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
       <div class="flex items-center justify-between mb-4">
-        <h3 id="unit-trx-modal-title" class="font-bold text-slate-900">Catat Laporan Keuangan</h3>
+        <h3 id="unit-trx-modal-title" class="font-bold text-slate-900">Catat Laporan Keuangan Unit Usaha</h3>
         <button onclick="closeModal('modal-unit-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button>
       </div>
       <form onsubmit="handleSaveUnitTransaksi(event)" class="space-y-4 text-sm">
         <input type="hidden" id="unit-trx-edit-id" value="" />
         <div>
-          <label class="block font-medium text-slate-700 mb-1">Pos Keuangan</label>
+          <label class="block font-medium text-slate-700 mb-1">Pos Keuangan (Unit Usaha)</label>
           <select id="unit-trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1260,7 +1264,60 @@
         </div>
         <div class="pt-2 flex justify-end gap-2">
           <button type="button" onclick="closeModal('modal-unit-transaksi')" class="px-4 py-2 text-slate-600">Batal</button>
-          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
+          <button type="submit" id="btn-submit-unit-trx" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TRANSAKSI MODULE IPL (TERPISAH DARI UNIT USAHA) -->
+  <div id="modal-ipl-transaksi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 id="ipl-trx-modal-title" class="font-bold text-slate-900">Catat Laporan Keuangan IPL</h3>
+        <button onclick="closeModal('modal-ipl-transaksi')"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <form onsubmit="handleSaveIplTransaksi(event)" class="space-y-4 text-sm">
+        <input type="hidden" id="ipl-trx-edit-id" value="" />
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Pos Keuangan (IPL)</label>
+          <select id="ipl-trx-akun" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Tipe</label>
+            <select id="ipl-trx-tipe" onchange="updateIplKategoriOptions()" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="MASUK">Pemasukan (+)</option>
+              <option value="KELUAR">Pengeluaran (-)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-medium text-slate-700 mb-1">Metode Transaksi</label>
+            <select id="ipl-trx-metode" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Cash">Cash</option>
+              <option value="Transfer">Transfer</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Tanggal</label>
+          <input type="date" id="ipl-trx-tanggal" value="2026-11-20" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Kategori</label>
+          <select id="ipl-trx-kategori" class="w-full px-3.5 py-2 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"></select>
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Nominal (Rp)</label>
+          <input type="number" id="ipl-trx-nominal" min="1000" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div>
+          <label class="block font-medium text-slate-700 mb-1">Keterangan</label>
+          <input type="text" id="ipl-trx-keterangan" required class="w-full px-3.5 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeModal('modal-ipl-transaksi')" class="px-4 py-2 text-slate-600">Batal</button>
+          <button type="submit" id="btn-submit-ipl-trx" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl">Simpan</button>
         </div>
       </form>
     </div>
@@ -1422,6 +1479,42 @@
     let kategoriMasukList = [...DEFAULT_KATEGORI_MASUK];
     let kategoriKeluarList = [...DEFAULT_KATEGORI_KELUAR];
 
+    // Generator ID unik berbasis tanggal + milidetik + 3 karakter acak (anti tabrakan / duplikasi)
+    function generateUniqueTransactionId(prefix) {
+      const now = new Date();
+      const pad = (n, len = 2) => String(n).padStart(len, '0');
+      const stamp = `${String(now.getFullYear()).slice(-2)}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      const rand = Math.random().toString(36).substring(2, 5).toUpperCase();
+      return `${prefix}-${stamp}-${rand}`;
+    }
+
+    // Deduplikasi array transaksi berdasarkan ID untuk mencegah ganda di sisi frontend
+    function deduplicateById(list) {
+      const map = new Map();
+      (list || []).forEach(item => {
+        const cleanId = String(item.id || '').trim();
+        if (cleanId) {
+          map.set(cleanId, { ...item, id: cleanId });
+        }
+      });
+      return Array.from(map.values());
+    }
+
+    function setSyncStatus(status, customText = '') {
+      const syncBadge = document.getElementById('sync-status');
+      if (!syncBadge) return;
+      if (status === 'syncing') {
+        syncBadge.textContent = customText || 'Menyimpan...';
+        syncBadge.className = 'text-amber-400 font-medium animate-pulse';
+      } else if (status === 'connected') {
+        syncBadge.textContent = customText || 'Connected';
+        syncBadge.className = 'text-emerald-400 font-medium';
+      } else {
+        syncBadge.textContent = customText || 'Offline / Error';
+        syncBadge.className = 'text-rose-400 font-medium';
+      }
+    }
+
     function loadMasterFinanceOptions() {
       try {
         const saved = localStorage.getItem(STORAGE_MASTER_FINANCE_KEY);
@@ -1456,7 +1549,7 @@
         let optionsSource = [...posKeuanganList];
 
         if (filterId === 'filter-akun-unit') {
-          const unitOptions = posKeuanganList.filter(p => p !== 'IPL Warga' && p !== 'Kas RW');
+          const unitOptions = posKeuanganList.filter(p => !p.toLowerCase().includes('ipl') && p !== 'Kas RW');
           if (unitOptions.length > 0) optionsSource = unitOptions;
         } else if (filterId === 'filter-akun-ipl') {
           const iplOptions = posKeuanganList.filter(p => p.toLowerCase().includes('ipl'));
@@ -1468,7 +1561,6 @@
         filterEl.value = (prevVal === 'ALL' || optionsSource.includes(prevVal)) ? prevVal : 'ALL';
       });
 
-      // Sinkronkan filter Pos Keuangan pada grafik komposisi pemasukan & pengeluaran di semua module
       [
         'dash-income-filter-pos',
         'dash-expense-filter-pos',
@@ -1483,7 +1575,7 @@
         let optionsSource = [...posKeuanganList];
 
         if (compPosId.startsWith('unit-')) {
-          const unitOptions = posKeuanganList.filter(p => p !== 'IPL Warga' && p !== 'Kas RW');
+          const unitOptions = posKeuanganList.filter(p => !p.toLowerCase().includes('ipl') && p !== 'Kas RW');
           if (unitOptions.length > 0) optionsSource = unitOptions;
         } else if (compPosId.startsWith('ipl-')) {
           const iplOptions = posKeuanganList.filter(p => p.toLowerCase().includes('ipl'));
@@ -1495,16 +1587,33 @@
         compPosEl.value = (prevVal === 'ALL' || optionsSource.includes(prevVal)) ? prevVal : 'ALL';
       });
 
-      ['trx-akun', 'unit-trx-akun'].forEach(selId => {
-        const el = document.getElementById(selId);
-        if (el) {
-          const prevVal = el.value;
-          el.innerHTML = posKeuanganList.map(pos => `<option value="${pos}">${pos}</option>`).join('');
-          if (prevVal && posKeuanganList.includes(prevVal)) {
-            el.value = prevVal;
-          }
-        }
-      });
+      // Dropdown Pos Keuangan untuk Buku Kas RW
+      const kasAkunEl = document.getElementById('trx-akun');
+      if (kasAkunEl) {
+        const prevVal = kasAkunEl.value;
+        kasAkunEl.innerHTML = posKeuanganList.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        if (prevVal && posKeuanganList.includes(prevVal)) kasAkunEl.value = prevVal;
+      }
+
+      // Dropdown Pos Keuangan khusus Unit Usaha (tanpa IPL Warga & Kas RW)
+      const unitAkunEl = document.getElementById('unit-trx-akun');
+      if (unitAkunEl) {
+        const prevVal = unitAkunEl.value;
+        const unitOptions = posKeuanganList.filter(p => !p.toLowerCase().includes('ipl') && p !== 'Kas RW');
+        const listToUse = unitOptions.length > 0 ? unitOptions : posKeuanganList;
+        unitAkunEl.innerHTML = listToUse.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        if (prevVal && listToUse.includes(prevVal)) unitAkunEl.value = prevVal;
+      }
+
+      // Dropdown Pos Keuangan khusus Module IPL
+      const iplAkunEl = document.getElementById('ipl-trx-akun');
+      if (iplAkunEl) {
+        const prevVal = iplAkunEl.value;
+        const iplOptions = posKeuanganList.filter(p => p.toLowerCase().includes('ipl'));
+        const listToUse = iplOptions.length > 0 ? iplOptions : ['IPL Warga'];
+        iplAkunEl.innerHTML = listToUse.map(pos => `<option value="${pos}">${pos}</option>`).join('');
+        if (prevVal && listToUse.includes(prevVal)) iplAkunEl.value = prevVal;
+      }
     }
 
     function renderMasterFinanceSettings() {
@@ -1540,6 +1649,7 @@
       syncPosKeuanganDropdowns();
       updateKategoriOptions();
       updateUnitKategoriOptions();
+      updateIplKategoriOptions();
       lucide.createIcons();
     }
 
@@ -1647,6 +1757,9 @@
     let wargaList = [];
     let transaksiList = [];
     let unitTransaksiList = [];
+    let iplTransaksiList = []; // Penyimpanan terpisah untuk Module IPL
+    let isCloudSaving = false;
+
     let userList = [
       { 
         id: 'USR-01', 
@@ -1715,7 +1828,7 @@
       if (typeof dateString === 'string' && dateString.includes('T')) {
         return dateString.split('T')[0];
       }
-      return dateString;
+      return String(dateString).trim();
     }
 
     function isDateInRange(dateStr, startDate, endDate) {
@@ -1985,27 +2098,27 @@
         const monthTrx = transaksiList.filter(t => formatDate(t.tanggal).startsWith(selectedMonth));
         doc.autoTable({
           startY: doc.lastAutoTable.finalY + 8,
-          head: [['Tanggal', 'Pos Keuangan', 'Metode', 'Tipe', 'Kategori & Keterangan', 'Nominal']],
+          head: [['ID', 'Tanggal', 'Pos Keuangan', 'Metode', 'Tipe', 'Kategori & Keterangan', 'Nominal']],
           body: monthTrx.length > 0 ? monthTrx.map(t => [
+            t.id,
             formatDate(t.tanggal),
             t.akun,
             normalizeMetode(t.metode),
             t.tipe,
             `${t.kategori} - ${t.keterangan}`,
             `${t.tipe === 'MASUK' ? '+' : '-'} ${formatCurr(t.nominal)}`
-          ]) : [['-', '-', '-', '-', 'Tidak ada transaksi pada periode ini', 'Rp 0']],
+          ]) : [['-', '-', '-', '-', '-', 'Tidak ada transaksi pada periode ini', 'Rp 0']],
           theme: 'striped',
-          styles: { fontSize: 8 }
+          styles: { fontSize: 7.5 }
         });
 
         doc.save(`Rekapitulasi_Kas_RW_${selectedMonth}.pdf`);
       } else if (activeRekapModule === 'unit') {
-        const nonIpl = unitTransaksiList.filter(t => t.akun !== 'IPL Warga');
         const units = ['Unit usaha kolam renang', 'Unit usaha tennis', 'Unit usaha carwash', 'Unit Usaha Cafe', 'Retribusi Parkir'];
 
         const unitRows = units.map(uKey => {
           let uIn = 0, uOut = 0;
-          nonIpl.filter(t => t.akun === uKey && formatDate(t.tanggal).startsWith(selectedMonth)).forEach(t => {
+          unitTransaksiList.filter(t => t.akun === uKey && formatDate(t.tanggal).startsWith(selectedMonth)).forEach(t => {
             if (t.tipe === 'MASUK') uIn += Number(t.nominal) || 0;
             else uOut += Number(t.nominal) || 0;
           });
@@ -2020,27 +2133,27 @@
           styles: { fontSize: 8.5 }
         });
 
-        const monthUnitTrx = nonIpl.filter(t => formatDate(t.tanggal).startsWith(selectedMonth));
+        const monthUnitTrx = unitTransaksiList.filter(t => formatDate(t.tanggal).startsWith(selectedMonth));
         doc.autoTable({
           startY: doc.lastAutoTable.finalY + 8,
-          head: [['Tanggal', 'Unit Usaha', 'Metode', 'Tipe', 'Kategori & Keterangan', 'Nominal']],
+          head: [['ID', 'Tanggal', 'Unit Usaha', 'Metode', 'Tipe', 'Kategori & Keterangan', 'Nominal']],
           body: monthUnitTrx.length > 0 ? monthUnitTrx.map(t => [
+            t.id,
             formatDate(t.tanggal),
             t.akun,
             normalizeMetode(t.metode),
             t.tipe,
             `${t.kategori} - ${t.keterangan}`,
             `${t.tipe === 'MASUK' ? '+' : '-'} ${formatCurr(t.nominal)}`
-          ]) : [['-', '-', '-', '-', 'Tidak ada transaksi unit usaha pada periode ini', 'Rp 0']],
+          ]) : [['-', '-', '-', '-', '-', 'Tidak ada transaksi unit usaha pada periode ini', 'Rp 0']],
           theme: 'striped',
-          styles: { fontSize: 8 }
+          styles: { fontSize: 7.5 }
         });
 
         doc.save(`Rekapitulasi_Unit_Usaha_${selectedMonth}.pdf`);
       } else if (activeRekapModule === 'ipl') {
-        const iplTrx = unitTransaksiList.filter(t => t.akun === 'IPL Warga');
         let iplIn = 0, iplOut = 0;
-        iplTrx.forEach(t => {
+        iplTransaksiList.forEach(t => {
           if (t.tipe === 'MASUK') iplIn += Number(t.nominal) || 0;
           else iplOut += Number(t.nominal) || 0;
         });
@@ -2082,13 +2195,59 @@
       closeModal('modal-rekap-pdf');
     }
 
+    function parseTransactionRowsFromSheet(rows, fallbackPrefix) {
+      if (!Array.isArray(rows) || rows.length <= 1) return [];
+      const parsed = rows.slice(1).map((row, idx) => {
+        const rawId = String(row[0] || '').trim();
+        const rawTanggal = formatDate(row[1]);
+        const rawTipe = String(row[2] || '').trim();
+        const rawAkun = String(row[3] || '').trim();
+        const rawKategori = String(row[4] || '').trim();
+        const rawNominal = Number(row[5]) || 0;
+        const rawKeterangan = String(row[6] || '').trim();
+        const rawCol7 = String(row[7] || '').trim();
+        const rawCol8 = String(row[8] || '').trim();
+
+        // Abaikan baris kosong
+        if (!rawId && !rawKeterangan && rawNominal === 0) return null;
+
+        // Kompatibilitas pembacaan kolom metode (kolom ke-9 / index 8)
+        let pelapor = rawCol7 || 'System';
+        let metode = 'Cash';
+        if (rawCol8) {
+          if (['cash', 'transfer'].includes(rawCol8.toLowerCase())) {
+            metode = normalizeMetode(rawCol8);
+          } else {
+            pelapor = rawCol8;
+            metode = normalizeMetode(rawCol7);
+          }
+        } else if (['cash', 'transfer'].includes(rawCol7.toLowerCase())) {
+          metode = normalizeMetode(rawCol7);
+          pelapor = 'System';
+        }
+
+        return {
+          id: rawId || `${fallbackPrefix}-LEGACY-${idx + 1}`,
+          tanggal: rawTanggal && rawTanggal !== '-' ? rawTanggal : '2026-11-20',
+          tipe: rawTipe || 'MASUK',
+          akun: rawAkun || 'Kas RW',
+          kategori: rawKategori || 'Lain-lain',
+          nominal: rawNominal,
+          keterangan: rawKeterangan,
+          pelapor: pelapor,
+          metode: metode
+        };
+      }).filter(Boolean);
+
+      return deduplicateById(parsed);
+    }
+
     async function loadDataFromCloud() {
       try {
-        const syncBadge = document.getElementById('sync-status');
-        if (syncBadge) syncBadge.textContent = "Syncing...";
+        setSyncStatus('syncing', 'Syncing...');
         
-        let response = await fetch(`${API_URL}?action=getData`);
-        let result = await response.json();
+        const response = await fetch(`${API_URL}?action=getData`);
+        const result = await response.json();
         
         if (result.status === "success") {
           if (result.warga && result.warga.length > 1) {
@@ -2130,39 +2289,19 @@
           }
 
           if (result.transaksi && result.transaksi.length > 1) {
-            transaksiList = result.transaksi.slice(1).map((row) => {
-              const rawCol8 = String(row[8] || '').trim();
-              const isMetodeCol8 = ['cash', 'transfer'].includes(rawCol8.toLowerCase());
-              return {
-                id: row[0] || `TRX-${Date.now()}`,
-                tanggal: formatDate(row[1]) || '2026-11-20',
-                tipe: row[2] || 'MASUK',
-                akun: row[3] || 'Kas RW',
-                kategori: row[4] || 'Operasional RW',
-                nominal: Number(row[5]) || 0,
-                keterangan: row[6] || '',
-                pelapor: isMetodeCol8 ? (row[7] || 'System') : (rawCol8 || row[7] || 'System'),
-                metode: isMetodeCol8 ? normalizeMetode(rawCol8) : normalizeMetode(row[7])
-              };
-            }).filter(t => t.keterangan !== '');
+            transaksiList = parseTransactionRowsFromSheet(result.transaksi, 'TRX');
           }
 
-          if (result.unitTransaksi && result.unitTransaksi.length > 1) {
-            unitTransaksiList = result.unitTransaksi.slice(1).map((row) => {
-              const rawCol8 = String(row[8] || '').trim();
-              const isMetodeCol8 = ['cash', 'transfer'].includes(rawCol8.toLowerCase());
-              return {
-                id: row[0] || `UTX-${Date.now()}`,
-                tanggal: formatDate(row[1]) || '2026-11-20',
-                tipe: row[2] || 'MASUK',
-                akun: row[3] || 'IPL Warga',
-                kategori: row[4] || '',
-                nominal: Number(row[5]) || 0,
-                keterangan: row[6] || '',
-                pelapor: isMetodeCol8 ? (row[7] || 'System') : (rawCol8 || row[7] || 'System'),
-                metode: isMetodeCol8 ? normalizeMetode(rawCol8) : normalizeMetode(row[7])
-              };
-            }).filter(t => t.keterangan !== '');
+          // Pisahkan data Unit Usaha dan Module IPL
+          const rawUnitParsed = parseTransactionRowsFromSheet(result.unitTransaksi, 'UTX');
+          if (result.iplTransaksi && result.iplTransaksi.length > 1) {
+            // Jika sheet Transaksi_IPL sudah terisi terpisah di Google Sheet
+            iplTransaksiList = parseTransactionRowsFromSheet(result.iplTransaksi, 'IPL');
+            unitTransaksiList = rawUnitParsed.filter(t => !t.akun.toLowerCase().includes('ipl'));
+          } else {
+            // Migrasi otomatis satu kali dari data lama yang masih tergabung
+            iplTransaksiList = rawUnitParsed.filter(t => t.akun.toLowerCase().includes('ipl'));
+            unitTransaksiList = rawUnitParsed.filter(t => !t.akun.toLowerCase().includes('ipl'));
           }
 
           if (result.users && result.users.length > 1) {
@@ -2184,11 +2323,7 @@
           }
 
           ensureGuestUserInList();
-
-          if (syncBadge) {
-            syncBadge.textContent = "Connected";
-            syncBadge.className = "text-emerald-400 font-medium";
-          }
+          setSyncStatus('connected', 'Connected');
           initLoginSelect();
           applyRolePermissions();
           refreshAll();
@@ -2196,42 +2331,58 @@
       } catch (err) {
         console.error("Gagal terhubung ke Cloud Google Sheets:", err);
         ensureGuestUserInList();
-        const syncBadge = document.getElementById('sync-status');
-        if (syncBadge) {
-          syncBadge.textContent = "Offline Mode";
-          syncBadge.className = "text-rose-400 font-medium";
+        setSyncStatus('error', 'Offline Mode');
+      }
+    }
+
+    async function postToCloud(payloadObj) {
+      if (isCloudSaving) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+      isCloudSaving = true;
+      setSyncStatus('syncing', 'Menyimpan...');
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify(payloadObj)
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          setSyncStatus('connected', 'Tersimpan');
+          setTimeout(() => setSyncStatus('connected', 'Connected'), 2000);
+        } else {
+          console.error('Server error:', data.message);
+          setSyncStatus('error', 'Gagal Simpan');
         }
+      } catch (err) {
+        console.error("Error saat POST ke Google Sheets:", err);
+        setSyncStatus('error', 'Offline / Error');
+      } finally {
+        isCloudSaving = false;
       }
     }
 
     async function saveDataToCloud() {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "saveWarga", wargaList: wargaList }) });
-      } catch (err) { console.error(err); }
-    }
-
-    async function addTransaksiCloud(newTrx) {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "saveTransaksi", transaksi: newTrx }) });
-      } catch (err) { console.error(err); }
+      await postToCloud({ action: "saveWarga", wargaList: wargaList });
     }
 
     async function syncAllTransaksiCloud() {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "saveAllTransaksi", transaksiList: transaksiList }) });
-      } catch (err) { console.error(err); }
+      transaksiList = deduplicateById(transaksiList);
+      await postToCloud({ action: "saveAllTransaksi", transaksiList: transaksiList });
     }
 
     async function syncAllUnitTransaksiCloud() {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "saveAllUnitTransaksi", unitTransaksiList: unitTransaksiList }) });
-      } catch (err) { console.error(err); }
+      unitTransaksiList = deduplicateById(unitTransaksiList);
+      await postToCloud({ action: "saveAllUnitTransaksi", unitTransaksiList: unitTransaksiList });
+    }
+
+    async function syncAllIplTransaksiCloud() {
+      iplTransaksiList = deduplicateById(iplTransaksiList);
+      await postToCloud({ action: "saveAllIplTransaksi", iplTransaksiList: iplTransaksiList });
     }
 
     async function saveUsersToCloud() {
-      try {
-        await fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "saveUsers", userList: userList }) });
-      } catch (err) { console.error(err); }
+      await postToCloud({ action: "saveUsers", userList: userList });
     }
 
     function getStandardKategoriOptions(tipe, selectedCategory = '') {
@@ -2256,6 +2407,13 @@
       katEl.innerHTML = getStandardKategoriOptions(tipeEl.value, selectedCategory);
     }
 
+    function updateIplKategoriOptions(selectedCategory = '') {
+      const tipeEl = document.getElementById('ipl-trx-tipe');
+      const katEl = document.getElementById('ipl-trx-kategori');
+      if (!tipeEl || !katEl) return;
+      katEl.innerHTML = getStandardKategoriOptions(tipeEl.value, selectedCategory);
+    }
+
     function exportWargaExcel() {
       if (!hasPermission('canDownload')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mengunduh data.'); return; }
       const worksheet = XLSX.utils.json_to_sheet(wargaList.map(w => ({
@@ -2269,7 +2427,7 @@
     function exportKasExcel() {
       if (!hasPermission('canDownload')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mengunduh data.'); return; }
       const worksheet = XLSX.utils.json_to_sheet(transaksiList.map(t => ({
-        'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
+        'ID': t.id, 'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
       })));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Buku Kas RW");
@@ -2278,8 +2436,8 @@
 
     function exportUnitTrxExcel() {
       if (!hasPermission('canDownload')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mengunduh data.'); return; }
-      const worksheet = XLSX.utils.json_to_sheet(unitTransaksiList.filter(t => t.akun !== 'IPL Warga').map(t => ({
-        'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
+      const worksheet = XLSX.utils.json_to_sheet(unitTransaksiList.map(t => ({
+        'ID': t.id, 'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
       })));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Transaksi Unit Usaha");
@@ -2288,8 +2446,8 @@
 
     function exportIplModExcel() {
       if (!hasPermission('canDownload')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mengunduh data.'); return; }
-      const worksheet = XLSX.utils.json_to_sheet(unitTransaksiList.filter(t => t.akun === 'IPL Warga').map(t => ({
-        'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
+      const worksheet = XLSX.utils.json_to_sheet(iplTransaksiList.map(t => ({
+        'ID': t.id, 'Tanggal': formatDate(t.tanggal), 'Pos Keuangan': t.akun, 'Metode': normalizeMetode(t.metode), 'Tipe': t.tipe, 'Kategori': t.kategori, 'Keterangan': t.keterangan, 'Pelapor': t.pelapor, 'Nominal (Rp)': t.nominal
       })));
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Transaksi Module IPL");
@@ -2852,7 +3010,7 @@
         pieContainerId: 'dash-expense-pie-container'
       });
 
-      // 3. List Data Transaksi di Halaman Dashboard Kas RW
+      // 3. List Data Transaksi di Halaman Dashboard Kas RW (dengan kolom ID)
       const dashTrxBody = document.getElementById('table-dash-trx-body');
       if (dashTrxBody) {
         const keywordDash = (document.getElementById('search-dash-trx')?.value || '').toLowerCase();
@@ -2867,6 +3025,7 @@
           const matchAkun = akunDashFilter === 'ALL' || t.akun === akunDashFilter;
           const matchMetode = metodeDashFilter === 'ALL' || normMetode === metodeDashFilter;
           const matchKeyword = !keywordDash ||
+            (t.id && t.id.toLowerCase().includes(keywordDash)) ||
             (t.akun && t.akun.toLowerCase().includes(keywordDash)) ||
             (t.kategori && t.kategori.toLowerCase().includes(keywordDash)) ||
             (t.keterangan && t.keterangan.toLowerCase().includes(keywordDash)) ||
@@ -2881,16 +3040,17 @@
           : filteredDashTrx.slice().reverse();
 
         if (displayDashTrx.length === 0) {
-          dashTrxBody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi yang sesuai dengan filter.</td></tr>`;
+          dashTrxBody.innerHTML = `<tr><td colspan="7" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi yang sesuai dengan filter.</td></tr>`;
         } else {
           dashTrxBody.innerHTML = displayDashTrx.map(t => `
             <tr class="hover:bg-slate-50 transition">
-              <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+              <td class="py-3 px-4 text-xs font-mono font-semibold text-slate-600 whitespace-nowrap">${t.id}</td>
+              <td class="py-3 px-4 text-xs font-mono text-slate-500 whitespace-nowrap">${formatDate(t.tanggal)}</td>
               <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
               <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
               <td class="py-3 px-4"><div class="font-medium text-slate-800">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
               <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-              <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+              <td class="py-3 px-4 text-right font-semibold whitespace-nowrap ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
                 ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
               </td>
             </tr>
@@ -2899,7 +3059,7 @@
       }
     }
 
-    // --- MODULE UNIT USAHA ---
+    // --- MODULE UNIT USAHA (TERPISAH DARI IPL) ---
     function renderUnitDashboard() {
       const keyword = document.getElementById('search-unit-trx').value.toLowerCase();
       const metodeFilterEl = document.getElementById('filter-metode-unit');
@@ -2910,17 +3070,17 @@
       const endUnitDate = document.getElementById('filter-date-end-unit')?.value || '';
 
       let filteredTrx = unitTransaksiList.filter(t => {
-        const isIpl = t.akun === 'IPL Warga';
         const normMetode = normalizeMetode(t.metode);
         const matchDate = isDateInRange(t.tanggal, startUnitDate, endUnitDate);
         const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
         const matchKeyword = !keyword ||
+          (t.id && t.id.toLowerCase().includes(keyword)) ||
           (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
           (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           normMetode.toLowerCase().includes(keyword);
-        return !isIpl && matchDate && matchAkun && matchMetode && matchKeyword;
+        return matchDate && matchAkun && matchMetode && matchKeyword;
       });
 
       let unitStats = {
@@ -3051,8 +3211,6 @@
 
       document.getElementById('unit-trend-charts-container').innerHTML = trendContainerHtml;
 
-      const nonIplTrxList = unitTransaksiList.filter(t => t.akun !== 'IPL Warga');
-
       // Komposisi Pemasukan Unit Usaha
       const unitIncomeMonth = document.getElementById('unit-income-filter-month').value || CURRENT_MONTH_KEY;
       const unitIncomePos = document.getElementById('unit-income-filter-pos')?.value || 'ALL';
@@ -3060,7 +3218,7 @@
       document.getElementById('unit-income-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitIncomeMonth)} • Pos: ${unitIncomePosLabel}`;
       let unitIncomeCats = {};
       let totalUnitIncome = 0;
-      nonIplTrxList.forEach(t => {
+      unitTransaksiList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
         let matchPos = unitIncomePos === 'ALL' || t.akun === unitIncomePos;
         if (t.tipe === 'MASUK' && tDate.startsWith(unitIncomeMonth) && matchPos) {
@@ -3088,7 +3246,7 @@
       document.getElementById('unit-expense-filter-subtitle').textContent = `Periode Bulan: ${formatMonthName(unitExpenseMonth)} • Pos: ${unitExpensePosLabel}`;
       let unitExpenseCats = {};
       let totalUnitExpense = 0;
-      nonIplTrxList.forEach(t => {
+      unitTransaksiList.forEach(t => {
         let tDate = formatDate(t.tanggal) || '2026-11-20';
         let matchPos = unitExpensePos === 'ALL' || t.akun === unitExpensePos;
         if (t.tipe === 'KELUAR' && tDate.startsWith(unitExpenseMonth) && matchPos) {
@@ -3121,21 +3279,22 @@
 
       const unitBodyEl = document.getElementById('table-unit-trx-body');
       if (displayUnitTrx.length === 0) {
-        const colSpan = (canEdit || canDelete) ? 7 : 6;
+        const colSpan = (canEdit || canDelete) ? 8 : 7;
         unitBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi unit usaha yang sesuai dengan filter.</td></tr>`;
       } else {
         unitBodyEl.innerHTML = displayUnitTrx.map(t => `
           <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4 text-xs font-mono font-semibold text-slate-600 whitespace-nowrap">${t.id}</td>
+            <td class="py-3 px-4 text-xs font-mono text-slate-500 whitespace-nowrap">${formatDate(t.tanggal)}</td>
             <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
             <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
             <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+            <td class="py-3 px-4 text-right font-semibold whitespace-nowrap ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
               ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
             ${(canEdit || canDelete) ? `
-              <td class="py-3 px-4 text-right no-print space-x-1">
+              <td class="py-3 px-4 text-right no-print space-x-1 whitespace-nowrap">
                 ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
                 ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
               </td>
@@ -3146,7 +3305,7 @@
       lucide.createIcons();
     }
 
-    // --- MODULE IPL ---
+    // --- MODULE IPL (MENGGUNAKAN iplTransaksiList TERPISAH) ---
     function renderIplModule() {
       const keyword = document.getElementById('search-ipl-mod-trx').value.toLowerCase();
       const metodeFilterEl = document.getElementById('filter-metode-ipl');
@@ -3156,14 +3315,13 @@
       const startIplDate = document.getElementById('filter-date-start-ipl')?.value || '';
       const endIplDate = document.getElementById('filter-date-end-ipl')?.value || '';
 
-      let iplTrxList = unitTransaksiList.filter(t => t.akun === 'IPL Warga');
-
-      let filteredTrx = iplTrxList.filter(t => {
+      let filteredTrx = iplTransaksiList.filter(t => {
         const normMetode = normalizeMetode(t.metode);
         const matchDate = isDateInRange(t.tanggal, startIplDate, endIplDate);
         const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
         const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
         const matchKeyword = !keyword ||
+          (t.id && t.id.toLowerCase().includes(keyword)) ||
           (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
           (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
@@ -3176,7 +3334,7 @@
       let yearlyChartData = {};
       let dailyTrendData = {};
 
-      iplTrxList.forEach(t => {
+      iplTransaksiList.forEach(t => {
         const nominal = Number(t.nominal) || 0;
         const tDate = formatDate(t.tanggal) || '2026-11-20';
         const bulanKey = tDate.slice(0, 7);
@@ -3313,7 +3471,7 @@
       let monthlyExpenseCategories = {};
       let totalMonthlyExpense = 0;
 
-      iplTrxList.forEach(t => {
+      iplTransaksiList.forEach(t => {
         const tDate = formatDate(t.tanggal) || '2026-11-20';
         const matchPos = iplExpensePos === 'ALL' || t.akun === iplExpensePos;
         if (t.tipe === 'KELUAR' && tDate.startsWith(expenseMonthInput) && matchPos) {
@@ -3347,23 +3505,24 @@
 
       const iplBodyEl = document.getElementById('table-ipl-mod-trx-body');
       if (displayIplTrx.length === 0) {
-        const colSpan = (canEdit || canDelete) ? 7 : 6;
+        const colSpan = (canEdit || canDelete) ? 8 : 7;
         iplBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi IPL yang sesuai dengan filter.</td></tr>`;
       } else {
         iplBodyEl.innerHTML = displayIplTrx.map(t => `
           <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4 text-xs font-mono font-semibold text-slate-600 whitespace-nowrap">${t.id}</td>
+            <td class="py-3 px-4 text-xs font-mono text-slate-500 whitespace-nowrap">${formatDate(t.tanggal)}</td>
             <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-emerald-50 text-emerald-700 font-medium">${t.akun}</span></td>
             <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
             <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+            <td class="py-3 px-4 text-right font-semibold whitespace-nowrap ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
               ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
             ${(canEdit || canDelete) ? `
-              <td class="py-3 px-4 text-right no-print space-x-1">
-                ${canEdit ? `<button onclick="openEditUnitTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
-                ${canDelete ? `<button onclick="deleteUnitTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+              <td class="py-3 px-4 text-right no-print space-x-1 whitespace-nowrap">
+                ${canEdit ? `<button onclick="openEditIplTrxModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
+                ${canDelete ? `<button onclick="deleteIplTrx('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
               </td>
             ` : ''}
           </tr>
@@ -3372,13 +3531,14 @@
       lucide.createIcons();
     }
 
+    // --- HANDLER TRANSAKSI UNIT USAHA ---
     function openAddUnitTrxModal() {
       if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
       syncPosKeuanganDropdowns();
-      document.getElementById('unit-trx-modal-title').textContent = 'Catat Laporan Keuangan';
+      document.getElementById('unit-trx-modal-title').textContent = 'Catat Laporan Keuangan Unit Usaha';
       document.getElementById('unit-trx-edit-id').value = '';
-      const defaultUnit = posKeuanganList.includes('Unit usaha kolam renang') ? 'Unit usaha kolam renang' : posKeuanganList[0];
-      document.getElementById('unit-trx-akun').value = defaultUnit;
+      const unitSelect = document.getElementById('unit-trx-akun');
+      if (unitSelect.options.length > 0) unitSelect.selectedIndex = 0;
       document.getElementById('unit-trx-tipe').value = 'MASUK';
       document.getElementById('unit-trx-metode').value = 'Cash';
       document.getElementById('unit-trx-tanggal').value = '2026-11-20';
@@ -3390,13 +3550,13 @@
 
     function openEditUnitTrxModal(id) {
       if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
-      const t = unitTransaksiList.find(x => x.id === id);
+      const t = unitTransaksiList.find(x => String(x.id) === String(id));
       if (!t) return;
       syncPosKeuanganDropdowns();
-      document.getElementById('unit-trx-modal-title').textContent = 'Edit Laporan Keuangan';
+      document.getElementById('unit-trx-modal-title').textContent = `Edit Transaksi (${t.id})`;
       document.getElementById('unit-trx-edit-id').value = t.id;
       const akunEl = document.getElementById('unit-trx-akun');
-      if (t.akun && !posKeuanganList.includes(t.akun)) {
+      if (t.akun && !Array.from(akunEl.options).some(o => o.value === t.akun)) {
         akunEl.insertAdjacentHTML('afterbegin', `<option value="${t.akun}">${t.akun}</option>`);
       }
       akunEl.value = t.akun;
@@ -3409,23 +3569,7 @@
       openModal('modal-unit-transaksi');
     }
 
-    function openAddIplModTrxModal() {
-      if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
-      syncPosKeuanganDropdowns();
-      document.getElementById('unit-trx-modal-title').textContent = 'Catat Laporan Keuangan IPL';
-      document.getElementById('unit-trx-edit-id').value = '';
-      const defaultIpl = posKeuanganList.includes('IPL Warga') ? 'IPL Warga' : posKeuanganList[0];
-      document.getElementById('unit-trx-akun').value = defaultIpl;
-      document.getElementById('unit-trx-tipe').value = 'MASUK';
-      document.getElementById('unit-trx-metode').value = 'Cash';
-      document.getElementById('unit-trx-tanggal').value = '2026-11-20';
-      updateUnitKategoriOptions(kategoriMasukList[0] || '');
-      document.getElementById('unit-trx-nominal').value = '';
-      document.getElementById('unit-trx-keterangan').value = '';
-      openModal('modal-unit-transaksi');
-    }
-
-    function handleSaveUnitTransaksi(e) {
+    async function handleSaveUnitTransaksi(e) {
       e.preventDefault();
       const editId = document.getElementById('unit-trx-edit-id').value;
       const akun = document.getElementById('unit-trx-akun').value;
@@ -3434,37 +3578,125 @@
       const tanggal = document.getElementById('unit-trx-tanggal').value;
       const kategori = document.getElementById('unit-trx-kategori').value;
       const nominal = parseInt(document.getElementById('unit-trx-nominal').value, 10);
-      const keterangan = document.getElementById('unit-trx-keterangan').value;
+      const keterangan = document.getElementById('unit-trx-keterangan').value.trim();
 
       if (editId) {
-        const t = unitTransaksiList.find(x => x.id === editId);
-        if (t) { t.akun = akun; t.tipe = tipe; t.metode = metode; t.tanggal = tanggal; t.kategori = kategori; t.nominal = nominal; t.keterangan = keterangan; }
-        alert('Laporan keuangan berhasil diperbarui!');
+        const idx = unitTransaksiList.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          unitTransaksiList[idx] = {
+            ...unitTransaksiList[idx],
+            akun, tipe, metode, tanggal, kategori, nominal, keterangan
+          };
+        }
       } else {
         const newUtx = {
-          id: `UTX-${Date.now().toString().slice(-4)}`,
+          id: generateUniqueTransactionId('UTX'),
           tanggal, tipe, akun, kategori, nominal, keterangan, metode,
           pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
         };
         unitTransaksiList.push(newUtx);
-        alert('Laporan keuangan baru berhasil dicatat!');
       }
 
-      syncAllUnitTransaksiCloud();
-      e.target.reset();
       closeModal('modal-unit-transaksi');
       refreshAll();
+      await syncAllUnitTransaksiCloud();
+      alert(editId ? 'Laporan keuangan Unit Usaha berhasil diperbarui!' : 'Laporan keuangan Unit Usaha baru berhasil dicatat!');
     }
 
-    function deleteUnitTrx(id) {
+    async function deleteUnitTrx(id) {
       if (!hasPermission('canDelete')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk menghapus.'); return; }
-      const idx = unitTransaksiList.findIndex(x => x.id === id);
+      const idx = unitTransaksiList.findIndex(x => String(x.id) === String(id));
       if (idx !== -1) {
-        if (confirm(`Apakah Anda yakin ingin menghapus transaksi ini?`)) {
+        if (confirm(`Apakah Anda yakin ingin menghapus transaksi ${id}?`)) {
           unitTransaksiList.splice(idx, 1);
-          syncAllUnitTransaksiCloud();
           refreshAll();
-          alert('Transaksi berhasil dihapus.');
+          await syncAllUnitTransaksiCloud();
+          alert('Transaksi Unit Usaha berhasil dihapus.');
+        }
+      }
+    }
+
+    // --- HANDLER TRANSAKSI MODULE IPL (TERPISAH) ---
+    function openAddIplModTrxModal() {
+      if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
+      syncPosKeuanganDropdowns();
+      document.getElementById('ipl-trx-modal-title').textContent = 'Catat Laporan Keuangan IPL';
+      document.getElementById('ipl-trx-edit-id').value = '';
+      const iplSelect = document.getElementById('ipl-trx-akun');
+      if (iplSelect.options.length > 0) iplSelect.selectedIndex = 0;
+      document.getElementById('ipl-trx-tipe').value = 'MASUK';
+      document.getElementById('ipl-trx-metode').value = 'Cash';
+      document.getElementById('ipl-trx-tanggal').value = '2026-11-20';
+      updateIplKategoriOptions(kategoriMasukList[0] || '');
+      document.getElementById('ipl-trx-nominal').value = '';
+      document.getElementById('ipl-trx-keterangan').value = '';
+      openModal('modal-ipl-transaksi');
+    }
+
+    function openEditIplTrxModal(id) {
+      if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
+      const t = iplTransaksiList.find(x => String(x.id) === String(id));
+      if (!t) return;
+      syncPosKeuanganDropdowns();
+      document.getElementById('ipl-trx-modal-title').textContent = `Edit Transaksi IPL (${t.id})`;
+      document.getElementById('ipl-trx-edit-id').value = t.id;
+      const akunEl = document.getElementById('ipl-trx-akun');
+      if (t.akun && !Array.from(akunEl.options).some(o => o.value === t.akun)) {
+        akunEl.insertAdjacentHTML('afterbegin', `<option value="${t.akun}">${t.akun}</option>`);
+      }
+      akunEl.value = t.akun;
+      document.getElementById('ipl-trx-tipe').value = t.tipe;
+      document.getElementById('ipl-trx-metode').value = normalizeMetode(t.metode);
+      document.getElementById('ipl-trx-tanggal').value = formatDate(t.tanggal);
+      updateIplKategoriOptions(t.kategori);
+      document.getElementById('ipl-trx-nominal').value = t.nominal;
+      document.getElementById('ipl-trx-keterangan').value = t.keterangan;
+      openModal('modal-ipl-transaksi');
+    }
+
+    async function handleSaveIplTransaksi(e) {
+      e.preventDefault();
+      const editId = document.getElementById('ipl-trx-edit-id').value;
+      const akun = document.getElementById('ipl-trx-akun').value;
+      const tipe = document.getElementById('ipl-trx-tipe').value;
+      const metode = normalizeMetode(document.getElementById('ipl-trx-metode').value);
+      const tanggal = document.getElementById('ipl-trx-tanggal').value;
+      const kategori = document.getElementById('ipl-trx-kategori').value;
+      const nominal = parseInt(document.getElementById('ipl-trx-nominal').value, 10);
+      const keterangan = document.getElementById('ipl-trx-keterangan').value.trim();
+
+      if (editId) {
+        const idx = iplTransaksiList.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          iplTransaksiList[idx] = {
+            ...iplTransaksiList[idx],
+            akun, tipe, metode, tanggal, kategori, nominal, keterangan
+          };
+        }
+      } else {
+        const newIplTrx = {
+          id: generateUniqueTransactionId('IPL'),
+          tanggal, tipe, akun, kategori, nominal, keterangan, metode,
+          pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
+        };
+        iplTransaksiList.push(newIplTrx);
+      }
+
+      closeModal('modal-ipl-transaksi');
+      refreshAll();
+      await syncAllIplTransaksiCloud();
+      alert(editId ? 'Laporan keuangan IPL berhasil diperbarui!' : 'Laporan keuangan IPL baru berhasil dicatat!');
+    }
+
+    async function deleteIplTrx(id) {
+      if (!hasPermission('canDelete')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk menghapus.'); return; }
+      const idx = iplTransaksiList.findIndex(x => String(x.id) === String(id));
+      if (idx !== -1) {
+        if (confirm(`Apakah Anda yakin ingin menghapus transaksi IPL ${id}?`)) {
+          iplTransaksiList.splice(idx, 1);
+          refreshAll();
+          await syncAllIplTransaksiCloud();
+          alert('Transaksi IPL berhasil dihapus.');
         }
       }
     }
@@ -3482,24 +3714,23 @@
       const canDelete = hasPermission('canDelete');
 
       document.getElementById('table-warga-body').innerHTML = filtered.map(w => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4"><div class="font-semibold">${w.id}</div><div class="text-xs text-slate-400 font-mono">${w.nik}</div></td>
+        <tr class="hover:bg-slate-50">
+          <td class="py-3 px-4 font-mono text-xs text-slate-500">${w.nik || w.id}</td>
           <td class="py-3 px-4 font-medium">${w.nama}</td>
-          <td class="py-3 px-4 text-slate-600">${w.blok}</td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs bg-slate-100 rounded">${w.rt}</span></td>
-          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded-full ${w.status==='TETAP'||w.status==='Tetap'?'bg-emerald-50 text-emerald-700':'bg-amber-50 text-amber-700'}">${w.status}</span></td>
-          <td class="py-3 px-4 text-right no-print space-x-1">
-            <button onclick="showQrCard('${w.id}')" class="px-2.5 py-1 text-xs bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg font-medium">QR</button>
-            ${canEdit ? `<button onclick="openEditWargaModal('${w.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
-            ${canDelete ? `<button onclick="deleteWarga('${w.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100">${w.blok}</span></td>
+          <td class="py-3 px-4">${w.rt}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded-full bg-emerald-50 text-emerald-700">${w.status}</span></td>
+          <td class="py-3 px-4 text-right space-x-1 no-print whitespace-nowrap">
+            <button onclick="openQrModal('${w.id}')" class="px-2.5 py-1 text-xs bg-emerald-50 text-emerald-700 rounded-lg font-medium">Kartu QR</button>
+            ${canEdit ? `<button onclick="openEditWargaModal('${w.id}')" class="px-2.5 py-1 text-xs bg-slate-100 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
+            ${canDelete ? `<button onclick="deleteWarga('${w.id}')" class="px-2.5 py-1 text-xs bg-rose-50 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
           </td>
         </tr>
       `).join('');
-      lucide.createIcons();
     }
 
     function openAddWargaModal() {
-      if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk menambah data warga.'); return; }
+      if (!hasPermission('canAdd')) { alert('Akses Ditolak.'); return; }
       document.getElementById('warga-modal-title').textContent = 'Tambah Warga Baru';
       document.getElementById('warga-edit-original-id').value = '';
       document.getElementById('warga-nama').value = '';
@@ -3512,119 +3743,171 @@
 
     function openEditWargaModal(id) {
       if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
-      const w = wargaList.find(x => x.id === id);
+      const w = wargaList.find(x => String(x.id) === String(id));
       if (!w) return;
       document.getElementById('warga-modal-title').textContent = 'Edit Data Warga';
       document.getElementById('warga-edit-original-id').value = w.id;
       document.getElementById('warga-nama').value = w.nama;
-      document.getElementById('warga-nik').value = w.nik;
+      document.getElementById('warga-nik').value = w.nik || w.id;
       document.getElementById('warga-blok').value = w.blok;
       document.getElementById('warga-rt').value = w.rt;
       document.getElementById('warga-status').value = w.status;
       openModal('modal-warga');
     }
 
-    function handleSaveWarga(e) {
+    async function handleSaveWarga(e) {
       e.preventDefault();
-      const originalId = document.getElementById('warga-edit-original-id').value;
-      const newNama = document.getElementById('warga-nama').value;
-      const newNik = document.getElementById('warga-nik').value;
-      const newBlok = document.getElementById('warga-blok').value;
-      const newRt = document.getElementById('warga-rt').value;
-      const newStatus = document.getElementById('warga-status').value;
+      const origId = document.getElementById('warga-edit-original-id').value;
+      const nama = document.getElementById('warga-nama').value.trim();
+      const nik = document.getElementById('warga-nik').value.trim();
+      const blok = document.getElementById('warga-blok').value.trim();
+      const rt = document.getElementById('warga-rt').value;
+      const status = document.getElementById('warga-status').value;
 
-      if (originalId) {
-        const w = wargaList.find(x => x.id === originalId);
-        if (w) { w.id = newNik; w.nik = newNik; w.nama = newNama; w.blok = newBlok; w.rt = newRt; w.status = newStatus; }
-        alert('Data warga berhasil diperbarui!');
+      if (origId) {
+        const idx = wargaList.findIndex(x => String(x.id) === String(origId));
+        if (idx !== -1) {
+          wargaList[idx] = { ...wargaList[idx], id: nik, nik: nik, nama: nama, blok: blok, rt: rt, status: status };
+        }
       } else {
-        wargaList.push({ id: newNik, nik: newNik, nama: newNama, blok: newBlok, rt: newRt, status: newStatus, iuran: {} });
-        alert('Warga baru berhasil ditambahkan!');
+        wargaList.push({ id: nik, nik: nik, nama: nama, blok: blok, rt: rt, status: status, iuran: {} });
       }
-      saveDataToCloud();
       closeModal('modal-warga');
       refreshAll();
+      await saveDataToCloud();
+      alert('Data warga berhasil disimpan & disinkronkan!');
     }
 
-    function deleteWarga(id) {
+    async function deleteWarga(id) {
       if (!hasPermission('canDelete')) { alert('Akses Ditolak.'); return; }
-      const idx = wargaList.findIndex(w => w.id === id);
+      const idx = wargaList.findIndex(x => String(x.id) === String(id));
       if (idx !== -1) {
-        if (confirm(`Apakah Anda yakin ingin menghapus data warga ${wargaList[idx].nama}?`)) {
+        if (confirm(`Apakah Anda yakin ingin menghapus data warga "${wargaList[idx].nama}"?`)) {
           wargaList.splice(idx, 1);
-          saveDataToCloud();
           refreshAll();
+          await saveDataToCloud();
           alert('Data warga berhasil dihapus.');
         }
       }
     }
 
-    function showQrCard(id) {
-      const w = wargaList.find(x => x.id === id);
-      if (!w) return;
-      document.getElementById('qr-nama').textContent = w.nama;
-      document.getElementById('qr-nik').textContent = `${w.id} • NIK`;
-      document.getElementById('qr-blok').textContent = `${w.rt} • ${w.blok}`;
-      let rects = '';
-      for (let r=0; r<7; r++) {
-        for (let c=0; c<7; c++) {
-          if ((r<2&&c<2)||(r<2&&c>4)||(r>4&&c<2) || (r+c)%2===0) { rects += `<rect x="${c*10+5}" y="${r*10+5}" width="8" height="8" fill="#064e3b" rx="1"/>`; }
-        }
+    function renderIuran() {
+      const rtFilter = document.getElementById('filter-rt-iuran').value;
+      const blokFilter = document.getElementById('filter-blok-iuran').value.toLowerCase();
+      const filtered = wargaList.filter(w => {
+        const matchRt = rtFilter === 'ALL' || w.rt === rtFilter;
+        const matchBlok = (w.blok && w.blok.toLowerCase().includes(blokFilter)) || w.nama.toLowerCase().includes(blokFilter);
+        return matchRt && matchBlok;
+      });
+
+      const activeMonths = getActiveIuranMonthsList();
+      const badgeEl = document.getElementById('iuran-active-filter-badge');
+      badgeEl.innerHTML = `Periode Tampil: <strong>${iuranRangeStart} s/d ${iuranRangeEnd}</strong> (${activeMonths.length} Bulan)`;
+
+      const theadRow = document.getElementById('matrix-thead-row');
+      theadRow.innerHTML = `<th class="py-3 px-4 sticky left-0 bg-slate-50 z-10">Warga & Blok</th>` +
+        activeMonths.map(m => `<th class="py-3 px-2 text-center whitespace-nowrap">${m}</th>`).join('');
+
+      document.getElementById('table-iuran-body').innerHTML = filtered.map(w => {
+        let cells = activeMonths.map(m => {
+          const isLunas = w.iuran && w.iuran[m];
+          return `
+            <td class="py-2 px-2 text-center">
+              <button onclick="toggleIuran('${w.id}', '${m}')" class="px-2 py-1 rounded text-xs font-medium transition ${isLunas ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-rose-50 text-rose-700 hover:bg-rose-100'}">
+                ${isLunas ? 'Lunas' : 'Belum'}
+              </button>
+            </td>
+          `;
+        }).join('');
+        return `<tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium sticky left-0 bg-white border-r border-slate-100">${w.nama} <span class="text-xs text-slate-400">(${w.rt} - ${w.blok})</span></td>${cells}</tr>`;
+      }).join('');
+    }
+
+    async function toggleIuran(wargaId, bulan) {
+      if (!hasPermission('canEdit') && !hasPermission('canAdd')) {
+        alert('Akses Ditolak: Anda tidak memiliki izin untuk mengubah status iuran IPL.');
+        return;
       }
-      document.getElementById('qr-svg-container').innerHTML = `<svg width="70" height="70" viewBox="0 0 80 80">${rects}</svg>`;
-      openModal('modal-qr');
+
+      const w = wargaList.find(x => String(x.id) === String(wargaId));
+      if (w) {
+        if (!w.iuran) w.iuran = {};
+        w.iuran[bulan] = !w.iuran[bulan];
+        if (w.iuran[bulan]) {
+          // Catat ke Buku Kas RW dan ke Module IPL secara terpisah
+          const trxIdKas = generateUniqueTransactionId('TRX');
+          const trxIdIpl = generateUniqueTransactionId('IPL');
+          const baseRecord = {
+            tanggal: '2026-11-20',
+            tipe: 'MASUK',
+            akun: 'IPL Warga',
+            kategori: 'IPL Warga',
+            nominal: 100000,
+            keterangan: `IPL ${bulan} - ${w.nama} (${w.blok})`,
+            pelapor: `${currentUser ? currentUser.nama : 'Bendahara'}`,
+            metode: 'Cash'
+          };
+          transaksiList.push({ ...baseRecord, id: trxIdKas });
+          iplTransaksiList.push({ ...baseRecord, id: trxIdIpl });
+        }
+        refreshAll();
+        await saveDataToCloud();
+        await syncAllTransaksiCloud();
+        await syncAllIplTransaksiCloud();
+      }
     }
 
     function renderKas() {
+      const akun = document.getElementById('filter-akun-kas').value;
+      const tipe = document.getElementById('filter-tipe-kas').value;
+      const metode = document.getElementById('filter-metode-kas')?.value || 'ALL';
       const keyword = document.getElementById('search-kas').value.toLowerCase();
-      const akunFilter = document.getElementById('filter-akun-kas').value;
-      const tipeFilter = document.getElementById('filter-tipe-kas').value;
-      const metodeFilterEl = document.getElementById('filter-metode-kas');
-      const metodeFilter = metodeFilterEl ? metodeFilterEl.value : 'ALL';
       const startKasDate = document.getElementById('filter-date-start-kas')?.value || '';
       const endKasDate = document.getElementById('filter-date-end-kas')?.value || '';
 
       const filtered = transaksiList.filter(t => {
         const normMetode = normalizeMetode(t.metode);
         const matchDate = isDateInRange(t.tanggal, startKasDate, endKasDate);
-        const match = !keyword ||
+        const matchAkun = akun === 'ALL' || t.akun === akun;
+        const matchTipe = tipe === 'ALL' || t.tipe === tipe;
+        const matchMetode = metode === 'ALL' || normMetode === metode;
+        const matchKeyword = !keyword ||
+          (t.id && t.id.toLowerCase().includes(keyword)) ||
           (t.keterangan && t.keterangan.toLowerCase().includes(keyword)) ||
-          (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           (t.kategori && t.kategori.toLowerCase().includes(keyword)) ||
+          (t.pelapor && t.pelapor.toLowerCase().includes(keyword)) ||
           normMetode.toLowerCase().includes(keyword);
-        const matchAkun = akunFilter === 'ALL' || t.akun === akunFilter;
-        const matchTipe = tipeFilter === 'ALL' || t.tipe === tipeFilter;
-        const matchMetode = metodeFilter === 'ALL' || normMetode === metodeFilter;
-        return matchDate && match && matchAkun && matchTipe && matchMetode;
+        return matchDate && matchAkun && matchTipe && matchMetode && matchKeyword;
       });
-
       const canEdit = hasPermission('canEdit');
       const canDelete = hasPermission('canDelete');
+
       const thAksi = document.getElementById('th-aksi-kas');
       if (thAksi) thAksi.style.display = (canEdit || canDelete) ? '' : 'none';
 
-      const isKasDefaultUnfiltered = !keyword && akunFilter === 'ALL' && tipeFilter === 'ALL' && metodeFilter === 'ALL' && !startKasDate && !endKasDate;
+      const isKasDefaultUnfiltered = akun === 'ALL' && tipe === 'ALL' && metode === 'ALL' && !keyword && !startKasDate && !endKasDate;
       const displayKasTrx = isKasDefaultUnfiltered
         ? getDefaultLatestMonthRecentTransactions(filtered, 10)
         : filtered.slice().reverse();
 
       const kasBodyEl = document.getElementById('table-kas-body');
       if (displayKasTrx.length === 0) {
-        const colSpan = (canEdit || canDelete) ? 7 : 6;
-        kasBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi kas RW yang sesuai dengan filter.</td></tr>`;
+        const colSpan = (canEdit || canDelete) ? 8 : 7;
+        kasBodyEl.innerHTML = `<tr><td colspan="${colSpan}" class="py-6 text-center text-xs text-slate-400 italic">Tidak ada data transaksi yang sesuai dengan filter.</td></tr>`;
       } else {
         kasBodyEl.innerHTML = displayKasTrx.map(t => `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 text-xs font-mono text-slate-500">${formatDate(t.tanggal)}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100">${t.akun}</span></td>
+          <tr class="hover:bg-slate-50">
+            <td class="py-3 px-4 text-xs font-mono font-semibold text-slate-600 whitespace-nowrap">${t.id}</td>
+            <td class="py-3 px-4 text-xs font-mono text-slate-500 whitespace-nowrap">${formatDate(t.tanggal)}</td>
+            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs rounded bg-slate-100 font-medium">${t.akun}</span></td>
             <td class="py-3 px-4">${renderMetodeBadge(t.metode)}</td>
             <td class="py-3 px-4"><div class="font-medium">${t.kategori}</div><div class="text-xs text-slate-500">${t.keterangan}</div></td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.pelapor}</td>
-            <td class="py-3 px-4 text-right font-semibold ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
+            <td class="py-3 px-4 text-right font-semibold whitespace-nowrap ${t.tipe==='MASUK'?'text-emerald-600':'text-rose-600'}">
               ${t.tipe==='MASUK'?'+':'-'} ${formatCurr(t.nominal)}
             </td>
             ${(canEdit || canDelete) ? `
-              <td class="py-3 px-4 text-right no-print space-x-1">
+              <td class="py-3 px-4 text-right no-print space-x-1 whitespace-nowrap">
                 ${canEdit ? `<button onclick="openEditTransaksiModal('${t.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>` : ''}
                 ${canDelete ? `<button onclick="deleteTransaksi('${t.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>` : ''}
               </td>
@@ -3635,16 +3918,17 @@
     }
 
     function openAddTransaksiModal() {
-      if (!hasPermission('canAdd')) { alert('Akses Ditolak: Anda tidak memiliki izin untuk mencatat transaksi.'); return; }
+      if (!hasPermission('canAdd')) { alert('Akses Ditolak.'); return; }
       syncPosKeuanganDropdowns();
-      document.getElementById('trx-modal-title').textContent = 'Catat Laporan Keuangan';
+      document.getElementById('trx-modal-title').textContent = 'Catat Laporan Keuangan Kas RW';
       document.getElementById('trx-edit-id').value = '';
-      const defaultPos = posKeuanganList.includes('Kas RW') ? 'Kas RW' : posKeuanganList[0];
-      document.getElementById('trx-akun').value = defaultPos;
+      if (posKeuanganList.length > 0) {
+        document.getElementById('trx-akun').value = posKeuanganList[0];
+      }
       document.getElementById('trx-tipe').value = 'MASUK';
       document.getElementById('trx-metode').value = 'Cash';
       document.getElementById('trx-tanggal').value = '2026-11-20';
-      updateKategoriOptions(kategoriMasukList[0] || '');
+      updateKategoriOptions();
       document.getElementById('trx-nominal').value = '';
       document.getElementById('trx-keterangan').value = '';
       openModal('modal-transaksi');
@@ -3652,26 +3936,26 @@
 
     function openEditTransaksiModal(id) {
       if (!hasPermission('canEdit')) { alert('Akses Ditolak.'); return; }
-      const trx = transaksiList.find(t => t.id === id);
-      if (!trx) return;
+      const t = transaksiList.find(x => String(x.id) === String(id));
+      if (!t) return;
       syncPosKeuanganDropdowns();
-      document.getElementById('trx-modal-title').textContent = 'Edit Laporan Keuangan';
-      document.getElementById('trx-edit-id').value = trx.id;
+      document.getElementById('trx-modal-title').textContent = `Edit Transaksi (${t.id})`;
+      document.getElementById('trx-edit-id').value = t.id;
       const akunEl = document.getElementById('trx-akun');
-      if (trx.akun && !posKeuanganList.includes(trx.akun)) {
-        akunEl.insertAdjacentHTML('afterbegin', `<option value="${trx.akun}">${trx.akun}</option>`);
+      if (t.akun && !Array.from(akunEl.options).some(o => o.value === t.akun)) {
+        akunEl.insertAdjacentHTML('afterbegin', `<option value="${t.akun}">${t.akun}</option>`);
       }
-      akunEl.value = trx.akun;
-      document.getElementById('trx-tipe').value = trx.tipe;
-      document.getElementById('trx-metode').value = normalizeMetode(trx.metode);
-      updateKategoriOptions(trx.kategori);
-      document.getElementById('trx-tanggal').value = formatDate(trx.tanggal);
-      document.getElementById('trx-nominal').value = trx.nominal;
-      document.getElementById('trx-keterangan').value = trx.keterangan;
+      akunEl.value = t.akun;
+      document.getElementById('trx-tipe').value = t.tipe;
+      document.getElementById('trx-metode').value = normalizeMetode(t.metode);
+      document.getElementById('trx-tanggal').value = formatDate(t.tanggal);
+      updateKategoriOptions(t.kategori);
+      document.getElementById('trx-nominal').value = t.nominal;
+      document.getElementById('trx-keterangan').value = t.keterangan;
       openModal('modal-transaksi');
     }
 
-    function handleSaveTransaksi(e) {
+    async function handleSaveTransaksi(e) {
       e.preventDefault();
       const editId = document.getElementById('trx-edit-id').value;
       const akun = document.getElementById('trx-akun').value;
@@ -3680,163 +3964,81 @@
       const tanggal = document.getElementById('trx-tanggal').value;
       const kategori = document.getElementById('trx-kategori').value;
       const nominal = parseInt(document.getElementById('trx-nominal').value, 10);
-      const keterangan = document.getElementById('trx-keterangan').value;
+      const keterangan = document.getElementById('trx-keterangan').value.trim();
 
       if (editId) {
-        const trx = transaksiList.find(t => t.id === editId);
-        if (trx) { trx.akun = akun; trx.tipe = tipe; trx.metode = metode; trx.tanggal = tanggal; trx.kategori = kategori; trx.nominal = nominal; trx.keterangan = keterangan; }
-        syncAllTransaksiCloud();
-        alert('Data laporan keuangan berhasil diperbarui!');
+        const idx = transaksiList.findIndex(x => String(x.id) === String(editId));
+        if (idx !== -1) {
+          transaksiList[idx] = {
+            ...transaksiList[idx],
+            akun, tipe, metode, tanggal, kategori, nominal, keterangan
+          };
+        }
       } else {
         const newTrx = {
-          id: `TRX-${Date.now().toString().slice(-4)}`,
+          id: generateUniqueTransactionId('TRX'),
           tanggal, tipe, akun, kategori, nominal, keterangan, metode,
-          pelapor: `${currentUser ? currentUser.nama : 'Admin'} (${currentUser ? currentUser.role : 'Admin'})`
+          pelapor: `${currentUser ? currentUser.nama : 'Bendahara'} (${currentUser ? currentUser.role : 'Admin'})`
         };
         transaksiList.push(newTrx);
-        addTransaksiCloud(newTrx);
-        alert('Laporan keuangan baru berhasil dicatat!');
       }
-      e.target.reset();
       closeModal('modal-transaksi');
       refreshAll();
+      await syncAllTransaksiCloud();
+      alert(editId ? 'Transaksi Kas RW berhasil diperbarui!' : 'Laporan keuangan berhasil dicatat & disinkronkan!');
     }
 
-    function deleteTransaksi(id) {
+    async function deleteTransaksi(id) {
       if (!hasPermission('canDelete')) { alert('Akses Ditolak.'); return; }
-      const idx = transaksiList.findIndex(t => t.id === id);
+      const idx = transaksiList.findIndex(x => String(x.id) === String(id));
       if (idx !== -1) {
-        if (confirm(`Apakah Anda yakin ingin menghapus transaksi ini?`)) {
+        if (confirm(`Apakah Anda yakin ingin menghapus transaksi ${id}?`)) {
           transaksiList.splice(idx, 1);
-          syncAllTransaksiCloud();
           refreshAll();
+          await syncAllTransaksiCloud();
           alert('Transaksi berhasil dihapus.');
         }
       }
     }
 
-    function renderIuran() {
-      const rtFilter = document.getElementById('filter-rt-iuran').value;
-      const blokKeyword = document.getElementById('filter-blok-iuran').value.toLowerCase();
-      const activeMonths = getActiveIuranMonthsList();
-
-      document.getElementById('iuran-active-filter-badge').innerHTML = `Periode Tampil: <strong class="text-slate-800">${iuranRangeStart} s/d ${iuranRangeEnd}</strong>`;
-
-      let theadHtml = `<th class="py-3.5 px-4 sticky left-0 bg-slate-50 z-10">Warga / Blok</th>`;
-      activeMonths.forEach(m => {
-        const [yr, mn] = m.split('-');
-        const monthNames = {'01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'Mei','06':'Jun','07':'Jul','08':'Agu','09':'Sep','10':'Okt','11':'Nov','12':'Des'};
-        theadHtml += `<th class="py-3.5 px-2 text-center text-[11px]">${monthNames[mn]} '${yr.slice(-2)}</th>`;
-      });
-      document.getElementById('matrix-thead-row').innerHTML = theadHtml;
-
-      const filtered = wargaList.filter(w => {
-        const matchRt = rtFilter === 'ALL' || w.rt === rtFilter;
-        const matchBlok = (w.blok && w.blok.toLowerCase().includes(blokKeyword)) || (w.nama && w.nama.toLowerCase().includes(blokKeyword));
-        return matchRt && matchBlok;
-      });
-
-      const canToggle = hasPermission('canAdd') || hasPermission('canEdit');
-
-      document.getElementById('table-iuran-body').innerHTML = filtered.map(w => `
-        <tr class="hover:bg-slate-50 transition">
-          <td class="py-3 px-4 sticky left-0 bg-white font-semibold border-r text-xs">
-            <div>${w.nama}</div>
-            <div class="text-[11px] text-slate-400 font-normal">${w.rt} • ${w.blok}</div>
-          </td>
-          ${activeMonths.map(m => {
-            const isLunas = w.iuran && w.iuran[m] || false;
-            if (canToggle) {
-              return `
-                <td class="py-3 px-1.5 text-center">
-                  <button onclick="toggleIuran('${w.id}', '${m}')" class="px-2 py-0.5 rounded-full text-[11px] font-semibold transition ${
-                    isLunas ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-rose-100 text-rose-700 hover:bg-rose-200'
-                  }">
-                    ${isLunas ? 'Lunas' : 'Belum'}
-                  </button>
-                </td>
-              `;
-            } else {
-              return `
-                <td class="py-3 px-1.5 text-center">
-                  <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                    isLunas ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
-                  }">
-                    ${isLunas ? 'Lunas' : 'Belum'}
-                  </span>
-                </td>
-              `;
-            }
-          }).join('')}
-        </tr>
-      `).join('');
-    }
-
-    function toggleIuran(wargaId, bulanKey) {
-      if (!hasPermission('canAdd') && !hasPermission('canEdit')) {
-        alert('Akses Ditolak: Anda tidak memiliki izin untuk mengubah status iuran.');
-        return;
-      }
-
-      const uniqueMap = new Map();
-      wargaList.forEach(item => {
-        const key = String(item.id || item.nik || '').trim();
-        if (key && item.nama && String(item.nama).trim() !== '') {
-          if (!uniqueMap.has(key)) {
-            uniqueMap.set(key, { ...item, id: key });
-          }
-        }
-      });
-      wargaList = Array.from(uniqueMap.values());
-
-      const warga = wargaList.find(w => String(w.id) === String(wargaId));
-      if (!warga) return;
-
-      if (!warga.iuran || typeof warga.iuran !== 'object') {
-        warga.iuran = {};
-      }
-      warga.iuran[bulanKey] = !warga.iuran[bulanKey];
-
-      refreshAll();
-      saveDataToCloud();
-    }
-
+    // --- RENDER USERS ---
     function renderUsers() {
       ensureGuestUserInList();
-      document.getElementById('table-users-body').innerHTML = userList.map(u => {
-        let isAdmin = u.role && u.role.toLowerCase().includes('admin');
-        let menuLabels = isAdmin ? 'Semua Halaman (Akses Penuh)' : (u.menus || []).map(m => {
-          if (m === 'dashboard') return 'Dashboard';
-          if (m === 'iuran') return 'Matriks IPL';
-          if (m === 'kas') return 'Buku Kas';
-          if (m === 'unit-dashboard') return 'Unit Usaha';
-          if (m === 'ipl') return 'Module IPL';
-          if (m === 'warga') return 'Warga';
-          if (m === 'users') return 'User';
-          return m;
-        }).join(', ');
+      const menuLabels = {
+        'dashboard': 'Dashboard Kas RW',
+        'iuran': 'Matriks Iuran',
+        'kas': 'Buku Kas RW',
+        'unit-dashboard': 'Module Unit Usaha',
+        'ipl': 'Module IPL',
+        'warga': 'Data Warga',
+        'users': 'Manajemen User'
+      };
 
-        let permStr = isAdmin ? 'Edit, Hapus, Download, Catat/Tambah, Rekap PDF (Penuh)' : (() => {
-          let p = u.permissions || {};
-          let permBadges = [];
-          if (p.canEdit) permBadges.push('Edit');
-          if (p.canDelete) permBadges.push('Hapus');
-          if (p.canDownload) permBadges.push('Download');
-          if (p.canAdd) permBadges.push('Catat/Tambah');
-          if (p.canRekapPdf) permBadges.push('Rekap PDF');
-          return permBadges.length > 0 ? permBadges.join(', ') : 'Hanya Lihat';
-        })();
+      document.getElementById('table-users-body').innerHTML = userList.map(u => {
+        const isGuestAccount = u.role === 'Tamu Publik (Guest)' || u.id === 'USR-04';
+        const menuBadges = (u.menus || []).map(m => `<span class="px-2 py-0.5 text-[11px] bg-slate-100 text-slate-700 rounded-md font-medium">${menuLabels[m] || m}</span>`).join(' ');
+        const perms = u.permissions || {};
+        let permList = [];
+        if (perms.canEdit) permList.push('<span class="text-emerald-600 font-semibold">Edit</span>');
+        if (perms.canDelete) permList.push('<span class="text-rose-600 font-semibold">Hapus</span>');
+        if (perms.canDownload) permList.push('<span class="text-blue-600 font-semibold">Unduh/Cetak</span>');
+        if (perms.canAdd) permList.push('<span class="text-amber-600 font-semibold">Input Laporan</span>');
+        if (perms.canRekapPdf) permList.push('<span class="text-purple-600 font-semibold">Rekap PDF</span>');
+        const permStr = permList.length > 0 ? permList.join(' • ') : '<span class="text-slate-400 italic">View Only</span>';
 
         return `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 font-medium">${u.nama}</td>
-            <td class="py-3 px-4 font-mono text-xs text-slate-600">${u.email}</td>
-            <td class="py-3 px-4"><span class="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 rounded">${u.role}</span></td>
-            <td class="py-3 px-4 text-xs text-slate-600 max-w-xs truncate">${menuLabels}</td>
-            <td class="py-3 px-4 text-xs font-medium text-slate-700">${permStr}</td>
-            <td class="py-3 px-4 text-right space-x-1">
+          <tr class="hover:bg-slate-50 ${isGuestAccount ? 'bg-amber-50/40' : ''}">
+            <td class="py-3.5 px-4 font-semibold text-slate-800">${u.nama}</td>
+            <td class="py-3.5 px-4 text-xs font-mono text-slate-500">${u.email}</td>
+            <td class="py-3.5 px-4"><span class="px-2.5 py-1 text-xs rounded-lg ${isGuestAccount ? 'bg-amber-100 text-amber-800' : 'bg-emerald-50 text-emerald-700'} font-semibold">${u.role}</span></td>
+            <td class="py-3.5 px-4"><div class="flex flex-wrap gap-1">${menuBadges}</div></td>
+            <td class="py-3.5 px-4 text-xs">${permStr}</td>
+            <td class="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
               <button onclick="openEditUserModal('${u.id}')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium">Edit</button>
-              <button onclick="deleteUser('${u.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>
+              ${isGuestAccount
+                ? `<span class="px-2.5 py-1 text-[11px] text-slate-400 italic">Role Default</span>`
+                : `<button onclick="deleteUser('${u.id}')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg font-medium">Hapus</button>`
+              }
             </td>
           </tr>
         `;
@@ -3852,33 +4054,43 @@
       document.getElementById('usr-pwd').value = '';
       document.getElementById('usr-role').value = '';
 
-      document.querySelectorAll('#modal-user-form input[id^="chk-menu-"]').forEach(chk => {
-        chk.checked = ['chk-menu-dashboard', 'chk-menu-iuran', 'chk-menu-unit-dashboard', 'chk-menu-ipl'].includes(chk.id);
+      ['dashboard', 'iuran', 'kas', 'unit-dashboard', 'ipl', 'warga', 'users'].forEach(m => {
+        document.getElementById(`chk-menu-${m}`).checked = (m === 'dashboard');
       });
 
-      document.querySelectorAll('#modal-user-form input[id^="chk-feat-"]').forEach(chk => {
-        chk.checked = false;
-      });
+      document.getElementById('chk-feat-edit').checked = false;
+      document.getElementById('chk-feat-delete').checked = false;
+      document.getElementById('chk-feat-download').checked = false;
+      document.getElementById('chk-feat-add').checked = false;
+      document.getElementById('chk-feat-rekap-pdf').checked = false;
 
       openModal('modal-user-form');
     }
 
     function openEditUserModal(id) {
-      const user = userList.find(u => u.id === id);
-      if (!user) return;
-      document.getElementById('user-modal-title').textContent = 'Edit Akun Pengurus & Hak Akses';
-      document.getElementById('usr-edit-id').value = user.id;
-      document.getElementById('usr-nama').value = user.nama;
-      document.getElementById('usr-email').value = user.email;
-      document.getElementById('usr-pwd').value = user.password;
-      document.getElementById('usr-role').value = user.role;
+      const u = userList.find(x => x.id === id);
+      if (!u) return;
+      document.getElementById('user-modal-title').textContent = 'Edit Hak Akses & Profil User';
+      document.getElementById('usr-edit-id').value = u.id;
+      document.getElementById('usr-nama').value = u.nama;
+      document.getElementById('usr-email').value = u.email;
+      document.getElementById('usr-pwd').value = u.password;
 
-      const userMenus = user.menus || [];
-      document.querySelectorAll('#modal-user-form input[id^="chk-menu-"]').forEach(chk => {
-        chk.checked = userMenus.includes(chk.value);
+      const roleSelect = document.getElementById('usr-role');
+      const roleExists = Array.from(roleSelect.options).some(opt => opt.value === u.role);
+      if (!roleExists && u.role) {
+        const customOpt = document.createElement('option');
+        customOpt.value = u.role;
+        customOpt.textContent = u.role;
+        roleSelect.appendChild(customOpt);
+      }
+      roleSelect.value = u.role || '';
+
+      ['dashboard', 'iuran', 'kas', 'unit-dashboard', 'ipl', 'warga', 'users'].forEach(m => {
+        document.getElementById(`chk-menu-${m}`).checked = u.menus && u.menus.includes(m);
       });
 
-      const perms = user.permissions || {};
+      const perms = u.permissions || {};
       document.getElementById('chk-feat-edit').checked = perms.canEdit === true;
       document.getElementById('chk-feat-delete').checked = perms.canDelete === true;
       document.getElementById('chk-feat-download').checked = perms.canDownload === true;
@@ -3888,22 +4100,19 @@
       openModal('modal-user-form');
     }
 
-    function handleSaveUser(e) {
+    async function handleSaveUser(e) {
       e.preventDefault();
       const editId = document.getElementById('usr-edit-id').value;
-      const nama = document.getElementById('usr-nama').value;
-      const email = document.getElementById('usr-email').value;
-      const password = document.getElementById('usr-pwd').value;
-      const role = document.getElementById('usr-role').value;
+      const nama = document.getElementById('usr-nama').value.trim();
+      const email = document.getElementById('usr-email').value.trim();
+      const pwd = document.getElementById('usr-pwd').value;
+      const role = document.getElementById('usr-role').value.trim();
 
-      if (!role) {
-        alert('Silakan pilih Nama Peran (Role) terlebih dahulu.');
-        return;
-      }
-
-      const menus = [];
-      document.querySelectorAll('#modal-user-form input[id^="chk-menu-"]:checked').forEach(chk => {
-        menus.push(chk.value);
+      let selectedMenus = [];
+      ['dashboard', 'iuran', 'kas', 'unit-dashboard', 'ipl', 'warga', 'users'].forEach(m => {
+        if (document.getElementById(`chk-menu-${m}`).checked) {
+          selectedMenus.push(m);
+        }
       });
 
       const permissions = {
@@ -3915,67 +4124,84 @@
       };
 
       if (editId) {
-        const user = userList.find(u => u.id === editId);
-        if (user) {
-          user.nama = nama;
-          user.email = email;
-          user.password = password;
-          user.role = role;
-          user.menus = menus;
-          user.permissions = permissions;
+        const idx = userList.findIndex(x => x.id === editId);
+        if (idx !== -1) {
+          userList[idx] = { id: editId, nama, email, password: pwd, role, menus: selectedMenus, permissions };
+          if (currentUser && currentUser.id === editId) {
+            currentUser = userList[idx];
+            applyRolePermissions();
+          } else if (!currentUser && (role === 'Tamu Publik (Guest)' || editId === 'USR-04')) {
+            applyRolePermissions();
+          }
         }
-        if (currentUser && currentUser.id === editId) {
-          currentUser = user;
-        }
-        alert('Data akun pengurus & hak akses berhasil diperbarui!');
       } else {
-        const newUser = {
-          id: `USR-${Date.now().toString().slice(-4)}`,
-          nama, email, password, role, menus, permissions
-        };
-        userList.push(newUser);
-        alert('Akun pengurus baru berhasil didaftarkan!');
+        const newId = 'USR-0' + (userList.length + 1);
+        userList.push({ id: newId, nama, email, password: pwd, role, menus: selectedMenus, permissions });
       }
 
-      saveUsersToCloud();
       closeModal('modal-user-form');
       initLoginSelect();
-      applyRolePermissions();
       refreshAll();
+      await saveUsersToCloud();
+      alert('Data user & hak akses berhasil disimpan ke Google Sheets!');
     }
 
-    function deleteUser(id) {
-      const idx = userList.findIndex(u => u.id === id);
-      if (idx !== -1) {
-        if (confirm(`Apakah Anda yakin ingin menghapus akun ${userList[idx].nama}?`)) {
-          userList.splice(idx, 1);
-          saveUsersToCloud();
-          refreshAll();
-          initLoginSelect();
-          alert('Akun berhasil dihapus.');
-        }
+    async function deleteUser(id) {
+      const targetUser = userList.find(x => x.id === id);
+      if (targetUser && (targetUser.role === 'Tamu Publik (Guest)' || targetUser.id === 'USR-04')) {
+        alert('Akun role default "Tamu Publik (Guest)" tidak dapat dihapus. Anda dapat mengubah hak aksesnya melalui tombol Edit.');
+        return;
       }
+      if (currentUser && id === currentUser.id) {
+        alert('Tidak dapat menghapus akun yang sedang digunakan login.');
+        return;
+      }
+      if (confirm('Apakah Anda yakin ingin menghapus akun pengurus ini?')) {
+        userList = userList.filter(x => x.id !== id);
+        initLoginSelect();
+        refreshAll();
+        await saveUsersToCloud();
+        alert('Akun pengurus berhasil dihapus.');
+      }
+    }
+
+    function openQrModal(id) {
+      const w = wargaList.find(x => String(x.id) === String(id));
+      if (!w) return;
+      document.getElementById('qr-nama').textContent = w.nama;
+      document.getElementById('qr-nik').textContent = w.nik || w.id;
+      document.getElementById('qr-blok').textContent = `${w.rt} • Blok ${w.blok}`;
+      document.getElementById('qr-svg-container').innerHTML = `
+        <svg class="w-20 h-20 text-slate-900" viewBox="0 0 100 100" fill="currentColor">
+          <rect x="10" y="10" width="25" height="25" fill="none" stroke="currentColor" stroke-width="5"/><rect x="17" y="17" width="11" height="11"/>
+          <rect x="65" y="10" width="25" height="25" fill="none" stroke="currentColor" stroke-width="5"/><rect x="72" y="17" width="11" height="11"/>
+          <rect x="10" y="65" width="25" height="25" fill="none" stroke="currentColor" stroke-width="5"/><rect x="17" y="72" width="11" height="11"/>
+          <rect x="45" y="45" width="15" height="15"/><rect x="70" y="70" width="20" height="20"/>
+        </svg>
+      `;
+      openModal('modal-qr');
     }
 
     function refreshAll() {
-      syncPosKeuanganDropdowns();
       renderDashboard();
+      renderWarga();
       renderIuran();
       renderKas();
       renderUnitDashboard();
       renderIplModule();
-      renderWarga();
       renderUsers();
+      lucide.createIcons();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', () => {
       loadMasterFinanceOptions();
       syncPosKeuanganDropdowns();
-      updateKategoriOptions(kategoriMasukList[0] || '');
-      updateUnitKategoriOptions(kategoriMasukList[1] || kategoriMasukList[0] || '');
+      updateKategoriOptions();
+      updateUnitKategoriOptions();
+      updateIplKategoriOptions();
       initLoginSelect();
       applyRolePermissions();
-      switchTab('dashboard');
+      refreshAll();
       loadDataFromCloud();
     });
   </script>
