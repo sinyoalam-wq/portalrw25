@@ -1823,12 +1823,60 @@
       return latestMonthItems.slice().reverse().slice(0, limit);
     }
 
+    function toIsoDateLocal(dateObj) {
+      if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return '';
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
     function formatDate(dateString) {
       if (!dateString) return '-';
-      if (typeof dateString === 'string' && dateString.includes('T')) {
-        return dateString.split('T')[0];
+      if (dateString instanceof Date) {
+        const iso = toIsoDateLocal(dateString);
+        return iso || '-';
       }
-      return String(dateString).trim();
+
+      const raw = String(dateString).trim();
+      if (!raw || raw === '-') return '-';
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+        return raw;
+      }
+
+      const ymdSlash = raw.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+      if (ymdSlash) {
+        return `${ymdSlash[1]}-${ymdSlash[2].padStart(2, '0')}-${ymdSlash[3].padStart(2, '0')}`;
+      }
+
+      const dmyMatch = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+      if (dmyMatch) {
+        const day = dmyMatch[1].padStart(2, '0');
+        const month = dmyMatch[2].padStart(2, '0');
+        const year = dmyMatch[3];
+        return `${year}-${month}-${day}`;
+      }
+
+      if (/^\d{4}-\d{2}-\d{2}T/.test(raw)) {
+        const parsed = new Date(raw);
+        if (!isNaN(parsed.getTime())) {
+          return toIsoDateLocal(parsed);
+        }
+        return raw.split('T')[0];
+      }
+
+      const fallbackDate = new Date(raw);
+      if (!isNaN(fallbackDate.getTime())) {
+        return toIsoDateLocal(fallbackDate);
+      }
+
+      return raw;
+    }
+
+    function normalizeDateForInput(dateString, fallback = '2026-11-20') {
+      const formatted = formatDate(dateString);
+      return /^\d{4}-\d{2}-\d{2}$/.test(formatted) ? formatted : fallback;
     }
 
     function isDateInRange(dateStr, startDate, endDate) {
@@ -3562,7 +3610,7 @@
       akunEl.value = t.akun;
       document.getElementById('unit-trx-tipe').value = t.tipe;
       document.getElementById('unit-trx-metode').value = normalizeMetode(t.metode);
-      document.getElementById('unit-trx-tanggal').value = formatDate(t.tanggal);
+      document.getElementById('unit-trx-tanggal').value = normalizeDateForInput(t.tanggal);
       updateUnitKategoriOptions(t.kategori);
       document.getElementById('unit-trx-nominal').value = t.nominal;
       document.getElementById('unit-trx-keterangan').value = t.keterangan;
@@ -3647,7 +3695,7 @@
       akunEl.value = t.akun;
       document.getElementById('ipl-trx-tipe').value = t.tipe;
       document.getElementById('ipl-trx-metode').value = normalizeMetode(t.metode);
-      document.getElementById('ipl-trx-tanggal').value = formatDate(t.tanggal);
+      document.getElementById('ipl-trx-tanggal').value = normalizeDateForInput(t.tanggal);
       updateIplKategoriOptions(t.kategori);
       document.getElementById('ipl-trx-nominal').value = t.nominal;
       document.getElementById('ipl-trx-keterangan').value = t.keterangan;
@@ -3948,7 +3996,7 @@
       akunEl.value = t.akun;
       document.getElementById('trx-tipe').value = t.tipe;
       document.getElementById('trx-metode').value = normalizeMetode(t.metode);
-      document.getElementById('trx-tanggal').value = formatDate(t.tanggal);
+      document.getElementById('trx-tanggal').value = normalizeDateForInput(t.tanggal);
       updateKategoriOptions(t.kategori);
       document.getElementById('trx-nominal').value = t.nominal;
       document.getElementById('trx-keterangan').value = t.keterangan;
